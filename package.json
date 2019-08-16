@@ -1,0 +1,29 @@
+{
+  "name": "agent-black",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlipperLP/agent-black.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FlipperLP/agent-black/issues"
+  },
+  "homepage": "https://github.com/FlipperLP/agent-black#readme",
+  "description": ""
+}
