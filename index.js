@@ -11,12 +11,14 @@ const config = require('./config/main.json');
 config.env = new Discord.Collection();
 
 // bot and mysql login
+// also setting inDev var
 let token;
 let host;
 let user;
 let password;
 let database;
 if (fs.existsSync('./config/test_token.json')) {
+  config.env.set('inDev', true);
   const dev = require('./config/test_token.json');
   token = dev.token;
   host = dev.DB_host;
@@ -24,6 +26,7 @@ if (fs.existsSync('./config/test_token.json')) {
   password = dev.DB_passw;
   database = dev.DB_name;
 } else {
+  config.env.set('inDev', false);
   token = process.env.BotToken;
   host = process.env.DB_host;
   user = process.env.DB_user;
