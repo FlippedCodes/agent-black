@@ -1,3 +1,5 @@
+const { RichEmbed } = require('discord.js');
+
 const toTime = require('pretty-ms');
 
 const startupTime = +new Date();
@@ -6,24 +8,13 @@ module.exports.run = async (client, config, DB, fs) => {
   if (config.env.get('inDev')) return console.log(`[${config.name}] Bot is in testing and will not post offline Stat.`);
   DB.query('SELECT * FROM setup_offlineStat WHERE entry = \'1\'', async (err, rows) => {
     if (err) throw err;
-    const embed = {
-      title: 'Bot back online!',
-      fields: [{
-        name: 'The time the bot was offline:',
-        value: `${toTime(startupTime - rows[0].time * 1)}`,
-      },
-      {
-        name: 'The bot went offline at:',
-        value: new Date(rows[0].time * 1),
-      },
-      ],
-      color: 4296754,
-      timestamp: new Date(),
-      footer: {
-        icon_url: client.user.displayAvatarURL,
-        text: client.user.tag,
-      },
-    };
+    let embed = new RichEmbed()
+      .setTitle('Bot back online!')
+      .setColor(4296754)
+      .addField('The time the bot was offline:', `${toTime(startupTime - rows[0].time * 1)}`, false)
+      .addField('The bot went offline at:', new Date(rows[0].time * 1), false)
+      .setFooter(client.user.tag, client.user.displayAvatarURL)
+      .setTimestamp();
     client.channels.get(config.logStatusChannel).send({ embed });
   });
 
