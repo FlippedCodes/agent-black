@@ -70,6 +70,10 @@ client.on('ready', async () => {
   // set bot player status
   client.functions.get('setup_status').run(client, fs, config)
     .then(() => console.log(`[${config.name}] Set status!`));
+
+  // Load and posting bot status
+  console.log(`[${config.name}] Posting bot status message!`);
+  client.functions.get('setup_offlineStat').run(client, config, DB, fs);
 });
 
 client.on('message', async (message) => {
