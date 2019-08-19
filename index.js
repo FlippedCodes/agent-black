@@ -86,9 +86,9 @@ client.on('message', async (message) => {
 
   // checking if staffmember
   if (message.member.roles.find(role => role.id === config.team)) config.env.set('isTeam', true);
-
-  // cease function call
-  client.functions.get('cease').run(client, message, DB, config);
+  // put needed user permission-IDs into DB
+  // with permissions on what CMDs
+  // TODO: Permission System
 
   // put comamnd in array
   let messageArray = message.content.split(/\s+/g);
