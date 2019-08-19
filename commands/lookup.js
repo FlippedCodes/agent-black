@@ -22,6 +22,11 @@ module.exports.run = async (client, message, args, DB, config) => {
 
   if (!id) return message.channel.send('Please provide ID!');
 
+  let embed = new RichEmbed()
+    .setColor(message.member.displayColor)
+    .setFooter(client.user.tag, client.user.displayAvatarURL)
+    .setTimestamp();
+
   let request = {
     method: 'GET',
     uri: `${uri}${id}`,
@@ -32,20 +37,21 @@ module.exports.run = async (client, message, args, DB, config) => {
   };
   rp(request)
     .then((user) => {
-      // TODO: Create image endingfinder
-      // let avatar = `https://cdn.discordapp.com/avatars/172031697355800577/a_6c8c60b9e5def254160f249bb195c605.gif`;
       let creationDate = (user.id / 4194304) + 1420070400000;
-      let embed = new RichEmbed()
-        .setAuthor(`Usertag: ${user.username}#${user.discriminator}`)
-        .setColor(message.member.displayColor)
-        // .setThumbnail(member.user.displayAvatarURL)
-        .addField('Account Creation Date', new Date(creationDate), true)
-        .setFooter(client.user.tag, client.user.displayAvatarURL)
-        .setTimestamp();
+      embed
+        .addField('Usertag', `\`${user.username}#${user.discriminator}\``)
+        .addField('ID', `\`${user.id}\``)
+        .addField('Account Creation Date', new Date(creationDate), true);
+      message.channel.send({ embed });
+    })
+    .catch((err) => {
+      if (err.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
+      else embed.setAuthor('An error occurred!');
+      embed.addField('Stopcode', err.message);
       message.channel.send({ embed });
     });
-  // joined servers
-  // banned servers
+  // joined servers with dates on reaction press, if to many (use .length)
+  // banned servers with dates on reaction press, if to many (use .length)
   // userinfo through discord api
 };
 
