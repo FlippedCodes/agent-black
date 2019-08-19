@@ -1,4 +1,7 @@
 {
     "name": "Agent Black",
-    "prefix": "+"
+    "prefix": "+",
+    "logStatusChannel": "565267609415712778",
+
+    "team": "610413088549765135"
 }
