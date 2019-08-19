@@ -15,6 +15,7 @@ module.exports.run = async (client, message, args, DB, config) => {
                 DB.query(`INSERT INTO bannedUsers (userID, serverID, reason, time) VALUES ('${user.id}', '${message.guild.id}', '${reason}', '')`);
               }
             });
+            // .catch(() => message.channel.send({ embed: new RichEmbed().setAuthor('Something went wrong!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678069-sign-error-512.png') }));
           });
         }).then(() => msg.edit({ embed: new RichEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }));
     });
