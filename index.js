@@ -105,7 +105,7 @@ client.on('message', async (message) => {
   if (cmd) {
     cmd.run(client, message, args, DB, config)
       .catch(console.log);
-  } else message.channel.send(`Sry, but \`${message.content}\` doesn't exist...\nTry \`${config.prefix}help\` to find out what I can do for you!`);
+  }
 });
 
 // logging errors
