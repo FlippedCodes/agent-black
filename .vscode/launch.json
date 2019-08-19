@@ -8,6 +8,12 @@
             "type": "node",
             "request": "launch",
             "name": "Start Bot",
+            "program": "${workspaceFolder}/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start Bot loop",
             "runtimeExecutable": "nodemon",
             "program": "${workspaceFolder}/index.js",
             "restart": true,
