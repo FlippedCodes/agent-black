@@ -12,7 +12,7 @@ if (fs.existsSync('../config/test_token.json')) {
   const api = require('../config/test_token.json');
   tokenAPI = api.token;
 } else {
-  tokenAPI = process.env.APItoken;
+  tokenAPI = process.env.BotTokenAgentBlack;
 }
 
 module.exports.run = async (client, message, args, DB, config) => {

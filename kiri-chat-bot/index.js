@@ -24,11 +24,11 @@ if (fs.existsSync('./kiri-chat-bot/config/test_token.json')) {
   password = dev.DB_passw;
   database = dev.DB_name;
 } else {
-  token = process.env.BotToken;
-  host = process.env.DB_host;
-  user = process.env.DB_user;
-  password = process.env.DB_passw;
-  database = process.env.DB_name;
+  token = process.env.BotTokenKiriChatBot;
+  host = process.env.DBHost;
+  user = process.env.DBNameKiriChatBot;
+  password = process.env.DBPasswKiriChatBot;
+  database = process.env.DBNameKiriChatBot;
 }
 client.login(token);
 let DB = mysql.createConnection({ host, user, password, database });

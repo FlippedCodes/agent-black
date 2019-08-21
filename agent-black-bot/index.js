@@ -27,11 +27,11 @@ if (fs.existsSync('./agent-black-bot/config/test_token.json')) {
   database = dev.DB_name;
 } else {
   config.env.set('inDev', false);
-  token = process.env.BotToken;
-  host = process.env.DB_host;
-  user = process.env.DB_user;
-  password = process.env.DB_passw;
-  database = process.env.DB_name;
+  token = process.env.BotTokenAgentBlack;
+  host = process.env.DBHost;
+  user = process.env.DBNameAgentBlack;
+  password = process.env.DBPasswAgentBlack;
+  database = process.env.DBNameAgentBlack;
 }
 client.login(token);
 let DB = mysql.createConnection({ host, user, password, database });
