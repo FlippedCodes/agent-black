@@ -9,10 +9,12 @@ module.exports.run = async (client, message, args, DB, config) => {
           bans.forEach(({ user, reason }) => {
             DB.query(`SELECT * FROM bannedUsers WHERE userID = '${user.id}' AND serverID = '${message.guild.id}'`, (err, rows) => {
               if (err) throw err;
+              let fixedReason = reason;
+              if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
               if (rows[0]) {
-                DB.query(`UPDATE bannedUsers SET reason = '${reason}' WHERE userID = '${user.id}' AND serverID = '${message.guild.id}'`);
+                DB.query(`UPDATE bannedUsers SET reason = '${fixedReason}' WHERE userID = '${user.id}' AND serverID = '${message.guild.id}'`);
               } else {
-                DB.query(`INSERT INTO bannedUsers (userID, serverID, reason, time) VALUES ('${user.id}', '${message.guild.id}', '${reason}', '')`);
+                DB.query(`INSERT INTO bannedUsers (userID, serverID, reason, time) VALUES ('${user.id}', '${message.guild.id}', '${fixedReason}', '')`);
               }
             });
           });
