@@ -7,18 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Start Bot",
-            "program": "${workspaceFolder}/index.js"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Start Bot loop",
-            "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/index.js",
-            "restart": true,
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
+            "name": "Start Agent Black",
+            "program": "${workspaceFolder}/agent-black-bot/index.js"
         }
     ]
 }
