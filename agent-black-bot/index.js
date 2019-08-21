@@ -19,7 +19,7 @@ let host;
 let user;
 let password;
 let database;
-if (fs.existsSync('../agent-black-bot/config/test_token.json')) {
+if (fs.existsSync('./agent-black-bot/config/test_token.json')) {
   config.env.set('inDev', true);
   const dev = require('../agent-black-bot/config/test_token.json');
   token = dev.token;
@@ -40,13 +40,13 @@ let DB = mysql.createConnection({ host, user, password, database });
 
 // command lister
 client.commands = new Discord.Collection();
-fs.readdir('../agent-black/commands/', (err, files) => {
+fs.readdir('./agent-black-bot/commands/', (err, files) => {
   if (err) console.error(err);
   let jsfiles = files.filter(f => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No CMD(s) to load!');
   console.log(`Loading ${jsfiles.length} command(s)...`);
   jsfiles.forEach((f, i) => {
-    let probs = require(`../agent-black/commands/${f}`);
+    let probs = require(`../agent-black-bot/commands/${f}`);
     console.log(`    ${i + 1}) Loaded: ${f}!`);
     client.commands.set(probs.help.name, probs);
   });
@@ -55,13 +55,13 @@ fs.readdir('../agent-black/commands/', (err, files) => {
 
 // function lister
 client.functions = new Discord.Collection();
-fs.readdir('../agent-black/functions/', (err, files) => {
+fs.readdir('./agent-black-bot/functions/', (err, files) => {
   if (err) console.error(err);
   let jsfiles = files.filter(f => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No function(s) to load!');
   console.log(`Loading ${jsfiles.length} function(s)...`);
   jsfiles.forEach((f, i) => {
-    let probs = require(`../agent-black/functions/${f}`);
+    let probs = require(`../agent-black-bot/functions/${f}`);
     console.log(`    ${i + 1}) Loaded: ${f}!`);
     client.functions.set(probs.help.name, probs);
   });
