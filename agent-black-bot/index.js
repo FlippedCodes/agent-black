@@ -6,7 +6,7 @@ const mysql = require('mysql');
 
 const fs = require('fs');
 
-const config = require('./config/main.json');
+const config = require('../agent-black-bot/config/main.json');
 
 config.env = new Discord.Collection();
 

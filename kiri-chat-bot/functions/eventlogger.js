@@ -1,6 +1,6 @@
 const { RichEmbed } = require('discord.js');
 
-const config = require('../config/main.json');
+const config = require('../../kiri-chat-bot/config/main.json');
 
 module.exports.run = async (message, eventname, eventdescription, color) => {
   let embed = new RichEmbed()
