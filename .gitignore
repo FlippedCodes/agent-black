@@ -1,3 +1,4 @@
 /node_modules
-agent-black-bot/config/test_token.json
+.eslintrc.json
+test_token.json
 .eslintrc.json
