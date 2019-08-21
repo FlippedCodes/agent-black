@@ -8,8 +8,6 @@ const fs = require('fs');
 
 const config = require('./config/main.json');
 
-const test = require('./config/test_token.json');
-
 config.env = new Discord.Collection();
 
 // bot and mysql login
