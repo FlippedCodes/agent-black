@@ -75,8 +75,8 @@ client.on('ready', async () => {
     .then(() => console.log('Set status!'));
 
   // Load and posting bot status
-  // console.log('Posting bot status message!');
-  // client.functions.get('setup_offlineStat').run(client, config, DB, fs);
+  console.log('Posting bot status message!');
+  client.functions.get('setup_offlineStat').run(client, config, DB, fs);
 });
 
 client.on('message', async (message) => {
