@@ -1,0 +1,7 @@
+**About:**
+
+I got made by **Phil | Flipper#3621** for Kiri's chat server.
+
+The MySQL Database im working with is provided by **remotemysql.com**.
+
+For more Information, please contact **Phil | Flipper#3621**.
