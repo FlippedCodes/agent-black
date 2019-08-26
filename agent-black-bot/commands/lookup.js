@@ -16,7 +16,7 @@ if (fs.existsSync('../config/test_token.json')) {
 }
 
 module.exports.run = async (client, message, args, DB, config) => {
-  if (!config.env.get('isTeam')) return message.react('❌');
+  // if (!config.env.get('isTeam')) return message.react('❌');
 
   let [id] = args;
 
