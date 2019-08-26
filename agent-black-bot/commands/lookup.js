@@ -8,7 +8,7 @@ const uri = 'https://discordapp.com/api/users/';
 
 let tokenAPI;
 
-if (fs.existsSync('../config/test_token.json')) {
+if (fs.existsSync('./agent-black-bot/config/test_token.json')) {
   const api = require('../config/test_token.json');
   tokenAPI = api.token;
 } else {
@@ -41,7 +41,8 @@ module.exports.run = async (client, message, args, DB, config) => {
       embed
         .addField('Usertag', `\`${user.username}#${user.discriminator}\``)
         .addField('ID', `\`${user.id}\``)
-        .addField('Account Creation Date', new Date(creationDate), true);
+        .addField('Account Creation Date', new Date(creationDate), true)
+        .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`);
       message.channel.send({ embed });
     })
     .catch((err) => {
