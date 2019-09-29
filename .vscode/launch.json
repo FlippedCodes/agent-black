@@ -7,14 +7,8 @@
     {
         "type": "node",
         "request": "launch",
-        "name": "Kiri Chat Bot",
-        "program": "${workspaceFolder}/kiri-chat-bot/index.js"
-    },
-    {
-        "type": "node",
-        "request": "launch",
         "name": "Agent Black",
-        "program": "${workspaceFolder}/agent-black-bot/index.js"
+        "program": "${workspaceFolder}/index.js"
     }
     ]
 }
