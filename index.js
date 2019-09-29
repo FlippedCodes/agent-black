@@ -11,37 +11,40 @@ const config = require('./config/main.json');
 config.env = new Discord.Collection();
 
 // bot and mysql login
+// also setting inDev var
 let token;
 let host;
 let user;
 let password;
 let database;
-if (fs.existsSync('./kiri-chat-bot/config/test_token.json')) {
-  const dev = require('../kiri-chat-bot/config/test_token.json');
+if (fs.existsSync('./agent-black-bot/config/test_token.json')) {
+  config.env.set('inDev', true);
+  const dev = require('./config/test_token.json');
   token = dev.token;
   host = dev.DB_host;
   user = dev.DB_user;
   password = dev.DB_passw;
   database = dev.DB_name;
 } else {
-  token = process.env.BotTokenKiriChatBot;
+  config.env.set('inDev', false);
+  token = process.env.BotTokenAgentBlack;
   host = process.env.DBHost;
-  user = process.env.DBNameKiriChatBot;
-  password = process.env.DBPasswKiriChatBot;
-  database = process.env.DBNameKiriChatBot;
+  user = process.env.DBNameAgentBlack;
+  password = process.env.DBPasswAgentBlack;
+  database = process.env.DBNameAgentBlack;
 }
 client.login(token);
 let DB = mysql.createConnection({ host, user, password, database });
 
 // command lister
 client.commands = new Discord.Collection();
-fs.readdir('./kiri-chat-bot/commands/', (err, files) => {
+fs.readdir('./agent-black-bot/commands/', (err, files) => {
   if (err) console.error(err);
   let jsfiles = files.filter(f => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No CMD(s) to load!');
   console.log(`Loading ${jsfiles.length} command(s)...`);
   jsfiles.forEach((f, i) => {
-    let probs = require(`../kiri-chat-bot/commands/${f}`);
+    let probs = require(`./commands/${f}`);
     console.log(`    ${i + 1}) Loaded: ${f}!`);
     client.commands.set(probs.help.name, probs);
   });
@@ -50,13 +53,13 @@ fs.readdir('./kiri-chat-bot/commands/', (err, files) => {
 
 // function lister
 client.functions = new Discord.Collection();
-fs.readdir('./kiri-chat-bot/functions/', (err, files) => {
+fs.readdir('./agent-black-bot/functions/', (err, files) => {
   if (err) console.error(err);
   let jsfiles = files.filter(f => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No function(s) to load!');
   console.log(`Loading ${jsfiles.length} function(s)...`);
   jsfiles.forEach((f, i) => {
-    let probs = require(`../kiri-chat-bot/functions/${f}`);
+    let probs = require(`./functions/${f}`);
     console.log(`    ${i + 1}) Loaded: ${f}!`);
     client.functions.set(probs.help.name, probs);
   });
@@ -70,6 +73,10 @@ client.on('ready', async () => {
   // set bot player status
   client.functions.get('setup_status').run(client, fs, config)
     .then(() => console.log('Set status!'));
+
+  // Load and posting bot status
+  console.log('Posting bot status message!');
+  client.functions.get('setup_offlineStat').run(client, config, DB, fs);
 });
 
 client.on('message', async (message) => {
@@ -79,9 +86,9 @@ client.on('message', async (message) => {
 
   // checking if staffmember
   if (message.member.roles.find(role => role.id === config.team)) config.env.set('isTeam', true);
-
-  // cease function call
-  client.functions.get('cease').run(client, message, DB, config);
+  // put needed user permission-IDs into DB
+  // with permissions on what CMDs
+  // TODO: Permission System
 
   // put comamnd in array
   let messageArray = message.content.split(/\s+/g);
@@ -98,7 +105,7 @@ client.on('message', async (message) => {
   if (cmd) {
     cmd.run(client, message, args, DB, config)
       .catch(console.log);
-  } else message.channel.send(`Sry, but \`${message.content}\` doesn't exist...\nTry \`${config.prefix}help\` to find out what I can do for you!`);
+  }
 });
 
 // logging errors
