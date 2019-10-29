@@ -1,8 +1,9 @@
 {
     "name": "Agent Black",
     "prefix": "++",
-    "logStatusChannel": "613689823776997377",
     "functionsFolder": "functions",
+    "commandsFolder": "commands",
 
-    "team": "610413088549765135"
+    "teamRole": "610413088549765135",
+    "logStatusChannel": "638793508202741790"
 }
