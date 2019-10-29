@@ -1,4 +1,4 @@
-module.exports.run = async (Discord, client, fs, config) => {
+module.exports.run = async (client, fs, config) => {
   const functionsFolder = config.functionsFolder;
   // read directory with functions
   fs.readdir(`./${functionsFolder}`, (err, files) => {
