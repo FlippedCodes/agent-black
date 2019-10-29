@@ -8,16 +8,26 @@ const fs = require('fs');
 
 const config = require('./config/main.json');
 
+// create new environment variable collection in config
 config.env = new Discord.Collection();
 
+// create new functions collection in client
+client.functions = new Discord.Collection();
+
+// import Function importer
+const initFunctions = require('./functions/SETUP_initFunctions.js');
+
+// get functions
+initFunctions.run(Discord, client, fs, config);
+
 // bot and mysql login
-// also setting inDev var
 const testToken = './config/test_token.json';
 let token;
 let host;
 let user;
 let password;
 let database;
+// setting inDev var
 if (fs.existsSync(testToken)) {
   config.env.set('inDev', true);
   const dev = require(testToken);
@@ -34,6 +44,7 @@ if (fs.existsSync(testToken)) {
   password = process.env.DBPasswAgentBlack;
   database = process.env.DBNameAgentBlack;
 }
+
 client.login(token);
 let DB = mysql.createConnection({
   host, user, password, database,
@@ -54,32 +65,17 @@ fs.readdir('./commands/', (err, files) => {
   console.log(`Loaded ${jsfiles.length} command(s)!`);
 });
 
-// function lister
-client.functions = new Discord.Collection();
-fs.readdir('./functions/', (err, files) => {
-  if (err) console.error(err);
-  let jsfiles = files.filter((f) => f.split('.').pop() === 'js');
-  if (jsfiles.length <= 0) return console.log('No function(s) to load!');
-  console.log(`Loading ${jsfiles.length} function(s)...`);
-  jsfiles.forEach((f, i) => {
-    let probs = require(`./functions/${f}`);
-    console.log(`    ${i + 1}) Loaded: ${f}!`);
-    client.functions.set(probs.help.name, probs);
-  });
-  console.log(`Loaded ${jsfiles.length} function(s)!`);
-});
-
 client.on('ready', async () => {
   // confirm user logged in
   console.log(`Logged in as ${client.user.tag}!`);
 
   // set bot player status
-  client.functions.get('setup_status').run(client, fs, config)
+  client.functions.get('SETUP_status').run(client, fs, config)
     .then(() => console.log('Set status!'));
 
   // Load and posting bot status
   console.log('Posting bot status message!');
-  client.functions.get('setup_offlineStat').run(client, config, DB, fs);
+  client.functions.get('SETUP_offlineStat').run(client, config, DB, fs);
 });
 
 client.on('message', async (message) => {

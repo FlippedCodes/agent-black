@@ -2,6 +2,7 @@
     "name": "Agent Black",
     "prefix": "++",
     "logStatusChannel": "613689823776997377",
+    "functionsFolder": "functions",
 
     "team": "610413088549765135"
 }
