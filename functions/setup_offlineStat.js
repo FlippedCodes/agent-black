@@ -36,5 +36,5 @@ module.exports.run = async (client, config, DB, fs) => {
 };
 
 module.exports.help = {
-  name: 'setup_offlineStat',
+  name: 'SETUP_offlineStat',
 };

@@ -4,5 +4,5 @@ module.exports.run = async (client, fs, config) => {
 };
 
 module.exports.help = {
-  name: 'setup_status',
+  name: 'SETUP_status',
 };
