@@ -12,14 +12,15 @@ config.env = new Discord.Collection();
 
 // bot and mysql login
 // also setting inDev var
+const testToken = './config/test_token.json';
 let token;
 let host;
 let user;
 let password;
 let database;
-if (fs.existsSync('./config/test_token.json')) {
+if (fs.existsSync(testToken)) {
   config.env.set('inDev', true);
-  const dev = require('./config/test_token.json');
+  const dev = require(testToken);
   token = dev.token;
   host = dev.DB_host;
   user = dev.DB_user;
@@ -34,13 +35,15 @@ if (fs.existsSync('./config/test_token.json')) {
   database = process.env.DBNameAgentBlack;
 }
 client.login(token);
-let DB = mysql.createConnection({ host, user, password, database });
+let DB = mysql.createConnection({
+  host, user, password, database,
+});
 
 // command lister
 client.commands = new Discord.Collection();
 fs.readdir('./commands/', (err, files) => {
   if (err) console.error(err);
-  let jsfiles = files.filter(f => f.split('.').pop() === 'js');
+  let jsfiles = files.filter((f) => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No CMD(s) to load!');
   console.log(`Loading ${jsfiles.length} command(s)...`);
   jsfiles.forEach((f, i) => {
@@ -55,7 +58,7 @@ fs.readdir('./commands/', (err, files) => {
 client.functions = new Discord.Collection();
 fs.readdir('./functions/', (err, files) => {
   if (err) console.error(err);
-  let jsfiles = files.filter(f => f.split('.').pop() === 'js');
+  let jsfiles = files.filter((f) => f.split('.').pop() === 'js');
   if (jsfiles.length <= 0) return console.log('No function(s) to load!');
   console.log(`Loading ${jsfiles.length} function(s)...`);
   jsfiles.forEach((f, i) => {
@@ -85,7 +88,7 @@ client.on('message', async (message) => {
   if (message.channel.type === 'dm') return;
 
   // checking if staffmember
-  if (message.member.roles.find(role => role.id === config.team)) config.env.set('isTeam', true);
+  if (message.member.roles.find((role) => role.id === config.team)) config.env.set('isTeam', true);
   // put needed user permission-IDs into DB
   // with permissions on what CMDs
   // TODO: Permission System
@@ -109,5 +112,5 @@ client.on('message', async (message) => {
 });
 
 // logging errors
-client.on('error', e => console.error(e));
-client.on('warn', e => console.warn(e));
+client.on('error', (e) => console.error(e));
+client.on('warn', (e) => console.warn(e));
