@@ -9,12 +9,10 @@ const fs = require('fs');
 // init config
 const config = require('./config/main.json');
 
-// create new environment variable collection in config
-config.env = new Discord.Collection();
-
-// create new functions and commands collection in client
+// create new collections in client and config
 client.functions = new Discord.Collection();
 client.commands = new Discord.Collection();
+config.env = new Discord.Collection();
 
 // import Functions and Commands
 config.setup.startupFunctions.forEach((FCN) => {
