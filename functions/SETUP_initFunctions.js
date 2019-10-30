@@ -1,5 +1,5 @@
 module.exports.run = async (client, fs, config) => {
-  const functionsFolder = config.functionsFolder;
+  const functionsFolder = config.setup.moduleFolders.functionsFolder;
   // read directory with functions
   fs.readdir(`./${functionsFolder}`, (err, files) => {
     // error if fails

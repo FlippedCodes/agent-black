@@ -1,9 +1,20 @@
 {
     "name": "Agent Black",
     "prefix": "++",
-    "functionsFolder": "functions",
-    "commandsFolder": "commands",
-
-    "teamRole": "610413088549765135",
+    "setup": {
+        "moduleFolders": {
+            "functionsFolder": "functions",
+            "commandsFolder": "commands"
+        },
+        "startupFunctions": [
+            "SETUP_initCommands",
+            "SETUP_initFunctions"
+        ],
+        "setupFunctions": [
+            "SETUP_status",
+            "SETUP_offlineStat"
+        ]
+    },
+    "teamRole": "638670637052854282",
     "logStatusChannel": "638793508202741790"
 }
