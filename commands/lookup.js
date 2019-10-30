@@ -15,7 +15,7 @@ if (fs.existsSync('./config/test_token.json')) {
   tokenAPI = process.env.BotTokenAgentBlack;
 }
 
-module.exports.run = async (client, message, args, DB, config) => {
+module.exports.run = async (client, message, args, config) => {
   // if (!config.env.get('isTeam')) return message.react('❌');
 
   let [id] = args;

@@ -1,6 +1,6 @@
 const { RichEmbed } = require('discord.js');
 
-module.exports.run = async (client, message, args, DB, config) => {
+module.exports.run = async (client, message, args, config) => {
   // prepare title and user CMDs
   let embed = new RichEmbed()
     .setTitle('Halp')

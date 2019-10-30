@@ -31,15 +31,16 @@ client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   // set bot player status
   config.setup.setupFunctions.forEach((FCN) => {
-    client.functions.get(FCN).run(client, config, DB);
+    client.functions.get(FCN).run(client, config);
   });
+});
 
 client.on('guildBanAdd', async (guild, user) => {
   client.functions.get('EVENT_guildBanAdd').run(client, guild, user, config);
 });
 
 client.on('message', async (message) => {
-  client.functions.get('EVENT_message').run(client, message, DB, config);
+  client.functions.get('EVENT_message').run(client, message, config);
 });
 
 // logging errors

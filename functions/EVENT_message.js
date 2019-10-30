@@ -1,4 +1,4 @@
-module.exports.run = async (client, message, DB, config) => {
+module.exports.run = async (client, message, config) => {
   // return if unwanted
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
@@ -23,7 +23,7 @@ module.exports.run = async (client, message, DB, config) => {
 
   // run cmd if existent
   if (cmd) {
-    cmd.run(client, message, args, DB, config)
+    cmd.run(client, message, args, config)
       .catch(console.log);
   }
 };
