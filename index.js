@@ -37,6 +37,9 @@ client.on('ready', async () => {
   config.setup.setupFunctions.forEach((FCN) => {
     client.functions.get(FCN).run(client, config, DB);
   });
+
+client.on('guildBanAdd', async (guild, user) => {
+  client.functions.get('EVENT_guildBanAdd').run(client, guild, user, config);
 });
 
 client.on('message', async (message) => {
