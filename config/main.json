@@ -12,8 +12,7 @@
             "STARTUP_envPrep"
         ],
         "setupFunctions": [
-            "SETUP_status",
-            "SETUP_offlineStat"
+            "SETUP_status"
         ]
     },
     "teamRole": "638670637052854282",
