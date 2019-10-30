@@ -26,5 +26,5 @@ module.exports.run = async (client, fs, config) => {
 };
 
 module.exports.help = {
-  name: 'SETUP_initFunctions',
+  name: 'STARTUP_initFunctions',
 };

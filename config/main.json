@@ -7,8 +7,8 @@
             "commandsFolder": "commands"
         },
         "startupFunctions": [
-            "SETUP_initCommands",
-            "SETUP_initFunctions"
+            "STARTUP_initCommands",
+            "STARTUP_initFunctions",
         ],
         "setupFunctions": [
             "SETUP_status",
