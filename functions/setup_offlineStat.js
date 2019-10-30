@@ -4,8 +4,10 @@ const toTime = require('pretty-ms');
 
 const startupTime = +new Date();
 
-module.exports.run = async (client, config, DB, fs) => {
-  if (config.env.get('inDev')) return console.log('Bot is in testing and will not post offline Stat.');
+module.exports.run = async (client, config, DB) => {
+  if (!config.env.get('inDev')) {
+    console.log('Posting bot status message!');
+  } else return console.log('Bot is in debugging-mode and will not post bot status message.');
   DB.query('SELECT * FROM setup_offlineStat WHERE entry = \'1\'', async (err, rows) => {
     if (err) throw err;
     let embed = new RichEmbed()
