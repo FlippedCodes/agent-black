@@ -21,30 +21,8 @@ config.setup.startupFunctions.forEach((FCN) => {
   INIT.run(client, fs, config);
 });
 
-// bot and mysql login
-const testToken = './config/test_token.json';
-let token;
-let host;
-let user;
-let password;
-let database;
-// setting inDev var
-if (fs.existsSync(testToken)) {
-  config.env.set('inDev', true);
-  const dev = require(testToken);
-  token = dev.token;
-  host = dev.DB_host;
-  user = dev.DB_user;
-  password = dev.DB_passw;
-  database = dev.DB_name;
-} else {
-  config.env.set('inDev', false);
-  token = process.env.BotTokenAgentBlack;
-  host = process.env.DBHost;
-  user = process.env.DBNameAgentBlack;
-  password = process.env.DBPasswAgentBlack;
-  database = process.env.DBNameAgentBlack;
-}
+// create conenction to DB
+require('./database/SETUP_DBConnection');
 
 let DB = mysql.createConnection({
   host, user, password, database,
