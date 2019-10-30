@@ -9,6 +9,7 @@
         "startupFunctions": [
             "STARTUP_initCommands",
             "STARTUP_initFunctions",
+            "STARTUP_envPrep"
         ],
         "setupFunctions": [
             "SETUP_status",
