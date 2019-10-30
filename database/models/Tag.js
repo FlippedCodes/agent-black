@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = global.sequelize.define('Tag', {
+module.exports = DB.define('Tag', {
   tagID: {
     type: Sequelize.INTEGER(11),
     allowNull: false,
