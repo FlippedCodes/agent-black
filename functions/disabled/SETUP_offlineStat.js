@@ -4,12 +4,15 @@ const toTime = require('pretty-ms');
 
 const startupTime = +new Date();
 
-module.exports.run = async (client, config, DB) => {
+const OfflineStat = require('../../database/models/OfflineStat');
+
+module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
-    console.log('Posting bot status message!');
-  } else return console.log('Bot is in debugging-mode and will not post bot status message.');
+    console.log(`[${module.exports.help.name}] Posting bot status message!`);
+  } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will not post bot status message.`);
   DB.query('SELECT * FROM setup_offlineStat WHERE entry = \'1\'', async (err, rows) => {
     if (err) throw err;
+    // OfflineStat
     let embed = new RichEmbed()
       .setTitle('Bot back online!')
       .setColor(4296754)
@@ -31,7 +34,7 @@ module.exports.run = async (client, config, DB) => {
         const carc = rows[0].time * 1 + 5000;
         DB.query(`UPDATE setup_offlineStat SET time = '${carc}' WHERE entry = '1'`);
       } else {
-        console.log('Something went wrong while sending statupdate: It wasn\'t found!');
+        console.log(`[${module.exports.help.name}] Something went wrong while sending statupdate: It wasn't found!`);
       }
     });
   }, 1 * 5000);
