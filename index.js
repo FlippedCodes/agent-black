@@ -28,7 +28,7 @@ let DB = mysql.createConnection({
 });
 
 // Login the bot
-client.login(token);
+client.login(config.env.get('token'));
 
 client.on('ready', async () => {
   // confirm user logged in
