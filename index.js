@@ -23,10 +23,6 @@ config.setup.startupFunctions.forEach((FCN) => {
 // create conenction to DB
 require('./database/SETUP_DBConnection');
 
-let DB = mysql.createConnection({
-  host, user, password, database,
-});
-
 // Login the bot
 client.login(config.env.get('token'));
 
