@@ -2,6 +2,11 @@ const { RichEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
+const errHander = (err) => {
+  console.error('ERROR:', err);
+  msg.edit({ embed: new RichEmbed().setAuthor('❌ Something went wrong, please check the logs!') });
+};
+
 module.exports.run = async (client, message, args, config) => {
   if (message.author.id !== '172031697355800577') return message.react('❌');
   message.channel.send({ embed: new RichEmbed().setAuthor('Processing banns...') })
@@ -11,19 +16,19 @@ module.exports.run = async (client, message, args, config) => {
           bans.forEach(async ({ user, reason }) => {
             let fixedReason = reason;
             if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
-            Ban.find({ where: { userID: user.id } })
+            Ban.findAll({ limit: 1, where: { userID: user.id } })
               .on('success', (ban) => {
                 if (ban) {
                   Ban.update({
                     reason: fixedReason,
-                  }).catch((err) => console.error(err));
+                  }).catch(errHander);
                 } else {
                   Ban.create({
                     userID: user.id,
                     serverID: message.guild.id,
                     userTag: user.tag,
                     reason: fixedReason,
-                  }).catch((err) => console.error(err));
+                  }).catch(errHander);
                 }
               });
           });
