@@ -13,6 +13,7 @@ module.exports.run = async (client, message, args, config) => {
       message.guild.fetchBans(true)
         .then(async (bans) => {
           bans.forEach(async ({ user, reason }) => {
+            // TODO: make emojis disapear
             let regex = config.emojiLayout;
             let userTag = user.tag.replace(regex, 'X');
             let fixedReason = reason;
