@@ -14,21 +14,23 @@ module.exports.run = async (client, message, args, config) => {
       message.guild.fetchBans(true)
         .then(async (bans) => {
           bans.forEach(async ({ user, reason }) => {
+            let regex = config.emojiLayout;
+            let userTag = user.tag.replace(regex, 'X');
             let fixedReason = reason;
             if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
-            Ban.findAll({ limit: 1, where: { userID: user.id } })
-              .on('success', (ban) => {
-                if (ban) {
-                  Ban.update({
-                    reason: fixedReason,
-                  }).catch(errHander);
-                } else {
+            Ban.findAll({ limit: 1, where: { userID: user.id, serverID: message.guild.id } }).catch(errHander)
+              .then((ban) => {
+                if (ban.length === 0) {
                   Ban.create({
                     userID: user.id,
                     serverID: message.guild.id,
-                    userTag: user.tag,
+                    userTag,
                     reason: fixedReason,
                   }).catch(errHander);
+                } else {
+                  Ban.update({ reason: fixedReason },
+                    { where: { userID: user.id, serverID: message.guild.id } })
+                    .catch(errHander);
                 }
               });
           });

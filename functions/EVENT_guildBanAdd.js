@@ -9,10 +9,18 @@ module.exports.run = async (client, guild, user, config) => {
       const userTag = user.tag;
       const serverID = guild.id;
       const reason = ban.reason;
-      // TODO: check in fan is already is on list and update
-      await Ban.create({
-        userID, serverID, userTag, reason,
-      }).catch((err) => console.error(err));
+      Ban.findAll({ limit: 1, where: { userID, serverID } }).catch((err) => console.error(err))
+        .then((ban) => {
+          if (ban.length === 0) {
+            Ban.create({
+              userID, serverID, userTag, reason,
+            }).catch((err) => console.error(err));
+          } else {
+            Ban.update({ reason },
+              { where: { userID, serverID } })
+              .catch((err) => console.error(err));
+          }
+        });
     });
 };
 
