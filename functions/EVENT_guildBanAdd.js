@@ -9,6 +9,7 @@ module.exports.run = async (client, guild, user, config) => {
       const userTag = user.tag;
       const serverID = guild.id;
       const reason = ban.reason;
+      // TODO: check in fan is already is on list and update
       await Ban.create({
         userID, serverID, userTag, reason,
       }).catch((err) => console.error(err));
