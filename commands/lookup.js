@@ -8,8 +8,8 @@ const uri = 'https://discordapp.com/api/users/';
 
 let tokenAPI;
 
-if (fs.existsSync('./config/test_token.json')) {
-  const api = require('../config/test_token.json');
+if (fs.existsSync('./config/config.json')) {
+  const api = require('../config/config.json');
   tokenAPI = api.token;
 } else {
   tokenAPI = process.env.BotTokenAgentBlack;

@@ -1,4 +1,4 @@
-const testToken = './config/test_token.json';
+const testToken = './config/config.json';
 
 module.exports.run = async (client, fs, config) => {
   // setting inDev var
