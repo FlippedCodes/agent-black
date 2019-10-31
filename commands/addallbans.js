@@ -36,7 +36,7 @@ module.exports.run = async (client, message, args, config) => {
           });
         }).then(() => msg.edit({ embed: new RichEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }));
     })
-    .catch(() => console.error('Missing permissions!'));
+    .catch(errHander);
 };
 
 module.exports.help = {
