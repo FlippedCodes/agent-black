@@ -22,7 +22,7 @@ if (config.env.get('inDev')) {
   host = process.env.DBHost;
 }
 const sequelize = new Sequelize(
-  database, user, password, { host, dialect: 'mysql', logging: false },
+  database, user, password, { host, dialect: 'mysql', logging: config.env.get('inDev') },
 );
 // console.log(`[${module.exports.help.name}] Connected!`);
 
