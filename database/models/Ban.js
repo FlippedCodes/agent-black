@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = DB.define('Ban', {
+module.exports = sequelize.define('Ban', {
   banID: {
     type: Sequelize.INTEGER(11),
     allowNull: false,

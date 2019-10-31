@@ -27,4 +27,4 @@ const sequelize = new Sequelize(
 // console.log(`[${module.exports.help.name}] Connected!`);
 
 module.exports = sequelize;
-global.DB = sequelize;
+global.sequelize = sequelize;

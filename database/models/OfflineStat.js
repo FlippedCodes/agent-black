@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = DB.define('OfflineStat', {
+module.exports = sequelize.define('OfflineStat', {
   time: {
     type: Sequelize.INTEGER(30),
     allowNull: false,
