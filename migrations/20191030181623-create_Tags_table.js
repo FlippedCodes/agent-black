@@ -6,8 +6,9 @@ module.exports = {
       autoIncrement: true,
     },
     name: {
-      type: Sequelize.TEXT('tiny'),
+      type: Sequelize.STRING(15),
       allowNull: false,
+      unique: true,
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,

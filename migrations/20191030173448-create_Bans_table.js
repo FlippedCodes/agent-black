@@ -17,7 +17,13 @@ module.exports = {
     reason: Sequelize.TEXT,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
+  },
+  {
+    uniqueKeys: {
+      banUnique: {
+        fields: ['userID', 'serverID'],
+      },
+    },
   }),
-
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Bans'),
 };

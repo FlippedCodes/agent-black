@@ -11,6 +11,13 @@ module.exports = {
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
+  },
+  {
+    uniqueKeys: {
+      banTagUnique: {
+        fields: ['banID', 'tagID'],
+      },
+    },
   }),
 
   down: (queryInterface, Sequelize) => queryInterface.dropTable('BanAssignedTags'),
