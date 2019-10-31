@@ -4,7 +4,6 @@ const Ban = require('../database/models/Ban');
 
 const errHander = (err) => {
   console.error('ERROR:', err);
-  msg.edit({ embed: new RichEmbed().setAuthor('❌ Something went wrong, please check the logs!') });
 };
 
 module.exports.run = async (client, message, args, config) => {
