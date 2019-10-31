@@ -2,7 +2,6 @@ module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Tags', {
     tagID: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
