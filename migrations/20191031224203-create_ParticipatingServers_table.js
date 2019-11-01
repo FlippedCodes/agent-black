@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('ParticipatingServers', {
     serverID: {
-      type: Sequelize.INTEGER(30),
+      type: Sequelize.STRING(30),
       primaryKey: true,
       unique: true,
     },

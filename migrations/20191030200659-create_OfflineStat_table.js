@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('OfflineStats', {
     time: {
-      type: Sequelize.INTEGER(30),
+      type: Sequelize.STRING(30),
       primaryKey: true,
     },
     createdAt: Sequelize.DATE,
