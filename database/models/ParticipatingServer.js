@@ -6,4 +6,13 @@ module.exports = sequelize.define('ParticipatingServer', {
     primaryKey: true,
     unique: true,
   },
+  logChannelID: Sequelize.STRING(30),
+  serverName: Sequelize.TEXT('tiny'),
+},
+{
+  uniqueKeys: {
+    banTagUnique: {
+      fields: ['serverID', 'logChannelID'],
+    },
+  },
 });
