@@ -9,18 +9,17 @@ module.exports.run = async (client, guild, user, config) => {
       const userTag = user.tag;
       const serverID = guild.id;
       const reason = ban.reason;
-      Ban.findAll({ limit: 1, where: { userID, serverID } }).catch((err) => console.error(err))
-        .then((ban) => {
-          if (ban.length === 0) {
-            Ban.create({
-              userID, serverID, userTag, reason,
-            }).catch((err) => console.error(err));
-          } else {
-            Ban.update({ reason },
-              { where: { userID, serverID } })
-              .catch((err) => console.error(err));
-          }
-        });
+      let fixedReason = reason;
+      if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
+      const [banEntry] = await Ban.findOrCreate({
+        where: { userID, serverID },
+        defaults: { reason: fixedReason },
+      }).catch(errHander);
+      if (!banEntry.isNewRecord) {
+        Ban.update({ reason: fixedReason, userTag },
+          { where: { userID, serverID } })
+          .catch(errHander);
+      }
     });
 };
 
