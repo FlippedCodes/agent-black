@@ -9,7 +9,7 @@ module.exports.run = async (client, fs, config) => {
     const jsfiles = files.filter((f) => f.split('.').pop() === 'js');
 
     // check if commands are there
-    if (jsfiles.length <= 0) return console.log('No command(s) to load!');
+    if (jsfiles.length <= 0) return console.log(`[${module.exports.help.name}] No command(s) to load!`);
 
     if (config.env.get('inDev')) console.log(`[${module.exports.help.name}] Loading ${jsfiles.length} command(s)...`);
 
@@ -21,7 +21,7 @@ module.exports.run = async (client, fs, config) => {
       client.commands.set(probs.help.name, probs);
     });
 
-    console.log(`Loaded ${jsfiles.length} command(s)!`);
+    console.log(`[${module.exports.help.name}] Loaded ${jsfiles.length} command(s)!`);
   });
 };
 
