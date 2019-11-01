@@ -12,6 +12,7 @@
             "STARTUP_envPrep"
         ],
         "setupFunctions": [
+            "SETUP_offlineStat",
             "SETUP_status"
         ]
     },
