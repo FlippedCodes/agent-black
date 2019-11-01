@@ -4,7 +4,7 @@ const testToken = '../config/config.json';
 
 const config = require('../config/main.json');
 
-// console.log(`[${module.exports.help.name}] Connecting...`);
+console.log('[DB] Connecting...');
 let database;
 let user;
 let password;
@@ -24,7 +24,7 @@ if (config.env.get('inDev')) {
 const sequelize = new Sequelize(
   database, user, password, { host, dialect: 'mysql', logging: config.env.get('inDev') },
 );
-// console.log(`[${module.exports.help.name}] Connected!`);
+console.log('[DB] Connected!');
 
 module.exports = sequelize;
 global.sequelize = sequelize;
