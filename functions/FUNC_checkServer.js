@@ -1,8 +1,7 @@
-module.exports.run = async (client, config) => {
-  client.user.setStatus('online');
-  client.user.setActivity(`with ${config.prefix}help`)
-    .then(() => console.log('Set status!'));
-};
+const ParticipatingServer = require('../database/models/ParticipatingServer');
+
+module.exports.run = async (serverID) => ParticipatingServer.find({ where: { serverID } })
+  .catch((err) => console.error(err));
 
 module.exports.help = {
   name: 'FUNC_checkServer',
