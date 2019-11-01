@@ -11,12 +11,12 @@ module.exports.run = async (client, fs, config) => {
     // check if commands are there
     if (jsfiles.length <= 0) return console.log('No command(s) to load!');
 
-    console.log(`Loading ${jsfiles.length} command(s)...`);
+    if (config.env.get('inDev')) console.log(`[${module.exports.help.name}] Loading ${jsfiles.length} command(s)...`);
 
     // adding all commands
     jsfiles.forEach((f, i) => {
       let probs = require(`../${commandsFolder}/${f}`);
-      console.log(`    ${i + 1}) Loaded: ${f}!`);
+      if (config.env.get('inDev')) console.log(`[${module.exports.help.name}]     ${i + 1}) Loaded: ${f}!`);
       // adding command to collection
       client.commands.set(probs.help.name, probs);
     });
