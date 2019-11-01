@@ -11,7 +11,7 @@ module.exports = sequelize.define('ParticipatingServer', {
 },
 {
   uniqueKeys: {
-    banTagUnique: {
+    serverEntry: {
       fields: ['serverID', 'logChannelID'],
     },
   },

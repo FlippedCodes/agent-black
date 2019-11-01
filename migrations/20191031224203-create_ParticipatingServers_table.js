@@ -12,7 +12,7 @@ module.exports = {
   },
   {
     uniqueKeys: {
-      banTagUnique: {
+      serverEntry: {
         fields: ['serverID', 'logChannelID'],
       },
     },
