@@ -36,7 +36,9 @@ client.on('ready', async () => {
 });
 
 client.on('guildBanAdd', async (guild, user) => {
+  if (await client.functions.get('FUNC_checkServer').run(guild.id)) {
   client.functions.get('EVENT_guildBanAdd').run(client, guild, user, config);
+  }
 });
 
 client.on('message', async (message) => {
