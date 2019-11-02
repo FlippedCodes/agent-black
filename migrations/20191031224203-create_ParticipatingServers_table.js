@@ -5,17 +5,16 @@ module.exports = {
       primaryKey: true,
       unique: true,
     },
-    logChannelID: Sequelize.STRING(30),
-    serverName: Sequelize.TEXT('tiny'),
+    logChannelID: {
+      type: Sequelize.STRING(30),
+      allowNull: false,
+    },
+    serverName: {
+      type: Sequelize.TEXT('tiny'),
+      allowNull: false,
+    },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
-  },
-  {
-    uniqueKeys: {
-      serverEntry: {
-        fields: ['serverID', 'logChannelID'],
-      },
-    },
   }),
 
   down: (queryInterface, Sequelize) => queryInterface.dropTable('ParticipatingServers'),
