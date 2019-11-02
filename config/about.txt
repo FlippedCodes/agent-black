@@ -1,0 +1,5 @@
+A bot used to manage bans of multiple servers.
+
+The MySQL Database im working with is provided by **remotemysql.com**.
+
+For more Information, please contact **Phil | Flipper#3621**.
