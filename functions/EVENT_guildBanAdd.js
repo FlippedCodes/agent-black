@@ -1,7 +1,6 @@
 const Ban = require('../database/models/Ban');
 
-module.exports.run = async (client, guild, user, config) => {
-  // getting infomration needed
+module.exports.run = async (guild, user) => {
   // getting newly added ban
   guild.fetchBan(user)
     .then(async (ban) => {
@@ -13,11 +12,11 @@ module.exports.run = async (client, guild, user, config) => {
       if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
       const [banEntry] = await Ban.findOrCreate({
         where: { userID, serverID },
-        defaults: { reason: fixedReason },
+        defaults: { userTag, reason: fixedReason },
       }).catch(errHander);
       if (!banEntry.isNewRecord) {
         Ban.update({ reason: fixedReason, userTag },
-          { where: { userID, serverID } })
+          { where: { userTag, userID, serverID } })
           .catch(errHander);
       }
     });
