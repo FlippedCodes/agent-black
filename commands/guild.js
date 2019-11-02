@@ -39,8 +39,7 @@ async function findServer(ParticipatingServer, serverID) {
 
 module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
-  const [subcmd, serverID, logChannelID] = args;
-  const serverName = await args.join(' ').slice(subcmd.length + 1 + serverID.length + 1 + logChannelID.length + 1);
+  const [subcmd, serverID, logChannelID, serverName] = args;
 
   // TODO: make admin table for permissions to use this command
   // TODO: make sure id is a serverID/nummeric ID and give comment usage if wrong
@@ -56,6 +55,7 @@ module.exports.run = async (client, message, args, config) => {
           \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} SERVERNAME\`\`\``);
         return;
       }
+      const slicedServerName = await args.join(' ').slice(subcmd.length + 1 + serverID.length + 1 + logChannelID.length + 1);
       const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, slicedServerName);
       if (serverAdded) {
         messageSuccess(client, message,
