@@ -1,4 +1,5 @@
 const ParticipatingServer = require('../database/models/ParticipatingServer');
+
 // creates a embed messagetemplate for succeded actions
 function messageSuccess(client, message, body) {
   client.functions.get('FUNC_richEmbedMessage')
@@ -19,7 +20,6 @@ async function addServer(ParticipatingServer, serverID, logChannelID, serverName
       defaults: { logChannelID, serverName },
     },
   ).catch((err) => console.error(err));
-  // FIXME: always returns false
   const created = await added[1];
   return created;
 }
@@ -41,22 +41,35 @@ module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
   const [subcmd, serverID, logChannelID, serverName] = args;
 
-  // TODO: make admin table for permissions to use this command
-  // TODO: make sure id is a serverID/nummeric ID and give comment usage if wrong
-  // TODO: check if all craterias is given
-  // TODO: (check if bot is on server and serverID can be resolved)
+  // check userpermissions
+  if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
+    messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
+    return;
+  }
 
   switch (subcmd) {
     // adds a serverentry
     case 'add':
+      // check provided information
       if (!serverID || !logChannelID || !serverName) {
         messageFail(client, message,
           `Command usage: 
           \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} SERVERNAME\`\`\``);
         return;
       }
+      if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'server')) {
+        messageFail(client, message, `The channel with the ID \`${logChannelID}\` doesnt exist!`);
+        return;
+      }
+      if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
+        messageFail(client, message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
+        return;
+      }
+      // slice servername
       const slicedServerName = await args.join(' ').slice(subcmd.length + 1 + serverID.length + 1 + logChannelID.length + 1);
+      // add server
       const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, slicedServerName);
+      // post outcome
       if (serverAdded) {
         messageSuccess(client, message,
           `\`${serverName}\` with the ID \`${serverID}\` got added to the participating Servers list.`);
@@ -71,7 +84,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!serverID) {
         messageFail(client, message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'}\`\`\``);
+          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverRemoved = await removeServer(ParticipatingServer, serverID);
@@ -86,6 +99,12 @@ module.exports.run = async (client, message, args, config) => {
 
     // shows info about a serverentry
     case 'info':
+      if (!serverID) {
+        messageFail(client, message,
+          `Command usage: 
+          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+        return;
+      }
       const serverFound = await findServer(ParticipatingServer, serverID);
       if (serverFound) {
         messageSuccess(client, message,
@@ -102,11 +121,12 @@ module.exports.run = async (client, message, args, config) => {
     default:
       messageFail(client, message,
         `Command usage: 
-        \`\`\`${config.prefix}${module.exports.help.name} add|remove|info\`\`\``);
+        \`\`\`${config.prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };
 
 module.exports.help = {
   name: 'guild',
+  usage: 'add|remove|info',
 };
