@@ -5,12 +5,12 @@ module.exports.run = async (client, message, args, con, config) => {
   if (message.guild.iconURL) pic = message.guild.iconURL;
 
   message.guild.fetchMember(userID)
-  .then((member) => {
-    let embed = new RichEmbed()
-      .setColor(member.displayColor)
-      .setImage(member.user.avatarURL);
-    message.channel.send({ embed });
-  });
+    .then((member) => {
+      let embed = new RichEmbed()
+        .setColor(member.displayColor)
+        .setImage(member.user.avatarURL);
+      message.channel.send({ embed });
+    });
 
   const embed = {
     color: message.member.displayColor,
