@@ -15,6 +15,8 @@ if (fs.existsSync('./config/config.json')) {
   tokenAPI = process.env.BotTokenAgentBlack;
 }
 
+// TODO: make function out of command (more accessable from other commands)
+
 module.exports.run = async (client, message, args, config) => {
   // if (!config.env.get('isTeam')) return message.react('❌');
 
