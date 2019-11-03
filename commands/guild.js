@@ -58,7 +58,7 @@ module.exports.run = async (client, message, args, config) => {
           \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} SERVERNAME\`\`\``);
         return;
       }
-      if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'server')) {
+      if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'channel')) {
         messageFail(client, message, `The channel with the ID \`${logChannelID}\` doesnt exist!`);
         return;
       }
