@@ -29,7 +29,7 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
   if (!serverID) {
-    messageFail(CommandUsage(config.prefix, module.exports.help.name));
+    messageFail(client, message, CommandUsage(config.prefix, module.exports.help.name));
     return;
   }
   if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
