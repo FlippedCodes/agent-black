@@ -6,6 +6,9 @@ const errHander = (err) => {
   console.error('ERROR:', err);
 };
 
+// TODO: use server ID instead (can be run remotely)
+// TODO: ^ Update help
+
 module.exports.run = async (client, message, args, config) => {
   if (message.author.id !== '172031697355800577') return message.react('❌');
   message.channel.send({ embed: new RichEmbed().setAuthor('Processing banlist...') })
