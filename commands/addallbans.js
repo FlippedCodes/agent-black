@@ -6,17 +6,43 @@ const errHander = (err) => {
   console.error('ERROR:', err);
 };
 
+// prepares command usage message
+function CommandUsage(prefix, cmdName) {
+  return `Command usage: 
+    \`\`\`${prefix}${cmdName} USERID\`\`\``;
+}
+
+// creates a embed messagetemplate for failed actions
+function messageFail(client, message, body) {
+  client.functions.get('FUNC_richEmbedMessage')
+    .run(client.user, message.channel, body, '', 16449540, false);
+}
+
 // TODO: use server ID instead (can be run remotely)
 // TODO: ^ Update help
 
 module.exports.run = async (client, message, args, config) => {
-  if (message.author.id !== '172031697355800577') return message.react('❌');
+  const [serverID] = args;
+
+  if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
+    messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    return;
+  }
+  if (!serverID) {
+    messageFail(CommandUsage(config.prefix, module.exports.help.name));
+    return;
+  }
+  if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
+    messageFail(client, message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
+    return;
+  }
+
   message.channel.send({ embed: new RichEmbed().setAuthor('Processing banlist...') })
     .then(async (msg) => {
-      message.guild.fetchBans(true)
+      client.guilds.find((server) => server.id === serverID).fetchBans(true)
         .then((bans) => {
           bans.forEach(async ({ user, reason }) => {
-          // TODO: make emojis disapear
+            // TODO: make emojis disapear
             let regex = config.emojiLayout;
             let userTag = user.tag.replace(regex, 'X');
             let fixedReason = reason;
