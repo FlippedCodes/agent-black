@@ -21,4 +21,5 @@ module.exports.run = async (client, message, args, config) => {
 
 module.exports.help = {
   name: 'help',
+  desc: 'Displays the help of usable commands for the corrent user.',
 };

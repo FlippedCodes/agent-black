@@ -121,4 +121,5 @@ module.exports.run = async (client, message, args, config) => {
 module.exports.help = {
   name: 'maintainer',
   usage: 'add|remove|info',
+  desc: 'Manages the maintainers.',
 };
