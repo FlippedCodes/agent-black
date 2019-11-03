@@ -4,7 +4,7 @@ module.exports.run = async (client, message, config) => {
   if (message.channel.type === 'dm') return;
 
   // checking if staffmember
-  // TODO: foreach, with more roles (same for users)
+  // TODO: foreach, with more roles
   if (message.member.roles.find((role) => role.id === config.teamRole)) config.env.set('isTeam', true);
   // put needed user permission-IDs into DB
   // with permissions on what CMDs
