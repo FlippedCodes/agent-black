@@ -20,8 +20,8 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "phil",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FlipperLP/agent-black.git"
