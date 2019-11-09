@@ -10,6 +10,10 @@ module.exports = sequelize.define('ParticipatingServer', {
     type: Sequelize.STRING(30),
     allowNull: false,
   },
+  teamRoleID: {
+    type: Sequelize.STRING(30),
+    allowNull: false,
+  },
   serverName: {
     type: Sequelize.TEXT('tiny'),
     allowNull: false,
