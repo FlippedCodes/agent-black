@@ -13,11 +13,11 @@ function messageFail(client, message, body) {
 }
 
 // adds a server to the ParticipatingServers table
-async function addServer(ParticipatingServer, serverID, logChannelID, serverName) {
+async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
   const added = await ParticipatingServer.findOrCreate(
     {
       where: { serverID },
-      defaults: { logChannelID, serverName },
+      defaults: { logChannelID, teamRoleID, serverName },
     },
   ).catch((err) => console.error(err));
   const created = await added[1];
@@ -39,7 +39,7 @@ async function findServer(ParticipatingServer, serverID) {
 
 module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
-  const [subcmd, serverID, logChannelID, serverName] = args;
+  const [subcmd, serverID, logChannelID, teamRoleID, serverName] = args;
   // TODO: add teamrole argument (more sucurity command and banwise)
 
   // check userpermissions
@@ -52,10 +52,10 @@ module.exports.run = async (client, message, args, config) => {
     // adds a serverentry
     case 'add':
       // check provided information
-      if (!serverID || !logChannelID || !serverName) {
+      if (!serverID || !logChannelID || !teamRoleID || !serverName) {
         messageFail(client, message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} SERVERNAME\`\`\``);
+          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} ${teamRoleID || 'TEAMROLEID'} SERVERNAME\`\`\``);
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'channel')) {
@@ -67,9 +67,9 @@ module.exports.run = async (client, message, args, config) => {
         return;
       }
       // slice servername
-      const slicedServerName = await args.join(' ').slice(subcmd.length + 1 + serverID.length + 1 + logChannelID.length + 1);
+      const slicedServerName = await args.join(' ').slice(subcmd.length + 1 + serverID.length + 1 + logChannelID.length + 1 + teamRoleID.length + 1);
       // add server
-      const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, slicedServerName);
+      const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, slicedServerName);
       // post outcome
       if (serverAdded) {
         messageSuccess(client, message,
@@ -112,6 +112,7 @@ module.exports.run = async (client, message, args, config) => {
           `Servername: \`${serverFound.serverName}\`
           Server ID: \`${serverFound.serverID}\`
           Log Channel: <#${serverFound.logChannelID}> (\`${serverFound.logChannelID}\`)
+          Team Role ID: \`${serverFound.teamRoleID}\`
           Participating Server since \`${serverFound.createdAt}\``);
       } else {
         messageFail(client, message,
