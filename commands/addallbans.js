@@ -7,9 +7,9 @@ const errHander = (err) => {
 };
 
 // prepares command usage message
-function CommandUsage(prefix, cmdName) {
+function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
-    \`\`\`${prefix}${cmdName} USERID\`\`\``;
+    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
 // creates a embed messagetemplate for failed actions
@@ -29,7 +29,8 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
   if (!serverID) {
-    messageFail(client, message, CommandUsage(config.prefix, module.exports.help.name));
+    const info = module.exports.help;
+    messageFail(client, message, CommandUsage(config.prefix, info.name, info.usage));
     return;
   }
   if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
@@ -68,5 +69,6 @@ module.exports.run = async (client, message, args, config) => {
 
 module.exports.help = {
   name: 'addallbans',
+  usage: 'SERVERID',
   desc: 'Adds all bans drom the current server its beeing used in.',
 };
