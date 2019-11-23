@@ -41,6 +41,12 @@ client.on('guildBanAdd', async (guild, user) => {
   }
 });
 
+client.on('guildBanRemove', async (guild, user) => {
+  if (await client.functions.get('FUNC_checkServer').run(guild.id)) {
+    client.functions.get('EVENT_guildBanRemove').run(guild, user);
+  }
+});
+
 client.on('guildMemberAdd', async (member) => {
   if (await client.functions.get('FUNC_checkServer').run(member.guild.id)) {
     client.functions.get('EVENT_guildMemberAdd').run(member);
