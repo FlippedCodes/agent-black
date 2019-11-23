@@ -2,6 +2,10 @@ const Ban = require('../database/models/Ban');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
+const errHander = (err) => {
+  console.error('ERROR:', err);
+};
+
 module.exports.run = async (member) => {
 
   // // getting newly added ban
