@@ -30,5 +30,6 @@ module.exports.run = async (client, message, args, config) => {
 
 module.exports.help = {
   name: 'avatar',
+  usage: 'USERID',
   desc: 'Retrieves the profile picture of the provided user ID.',
 };
