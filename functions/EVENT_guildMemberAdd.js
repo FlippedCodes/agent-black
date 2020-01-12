@@ -1,32 +1,52 @@
+const { RichEmbed } = require('discord.js');
+
 const Ban = require('../database/models/Ban');
 
-const ParticipatingServer = require('../database/models/ParticipatingServer');
-
+// error Handler
 const errHander = (err) => {
   console.error('ERROR:', err);
 };
 
-module.exports.run = async (member) => {
+// const server = (serverID) => {
+//   return client.functions.get('FUNC_checkServer').run(serverID);
+// }
 
-  // // getting newly added ban
-  // guild.fetchBan(user)
-  //   .then(async (ban) => {
-  //     const userID = user.id;
-  //     const userTag = user.tag;
-  //     const serverID = guild.id;
-  //     const reason = ban.reason;
-  //     let fixedReason = reason;
-  //     if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
-  //     const [banEntry] = await Ban.findOrCreate({
-  //       where: { userID, serverID },
-  //       defaults: { userTag, reason: fixedReason },
-  //     }).catch(errHander);
-  //     if (!banEntry.isNewRecord) {
-  //       Ban.update({ reason: fixedReason, userTag },
-  //         { where: { userTag, userID, serverID } })
-  //         .catch(errHander);
-  //     }
-  //   });
+function getServerEntry(client, serverID) {
+  return client.functions.get('FUNC_checkServer').run(serverID);
+}
+
+function findLogChannel(client, logChannelID) {
+  return client.channels.find((channel) => channel.id === logChannelID);
+}
+
+// send message
+async function sendMessage(client, serverID, userID, ammountOfBans) {
+  const server = await getServerEntry(client, serverID);
+  let logChannelID = server.logChannelID;
+  let logChannel = await findLogChannel(client, logChannelID);
+  let serverName = server.serverName;
+  client.functions.get('FUNC_richEmbedMessage')
+    .run(client.user, logChannel,
+      'This is a text placeholder',
+      `Banned user joined ${serverName}!`,
+      16739072, true);
+}
+
+// TODO: Update userTag in DB if not a deleted username
+// TODO: Add reactions for banning
+// TODO: Add banned user logs
+
+module.exports.run = async (client, member) => {
+  let userID = member.id;
+  let serverID = member.guild.id;
+
+  const userBans = await Ban.findAll({
+    where: {
+      userID,
+    },
+  }).catch(errHander);
+
+  if (userBans.length !== 0) sendMessage(client, serverID, userID, userBans.length);
 };
 
 module.exports.help = {
