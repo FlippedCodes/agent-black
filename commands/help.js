@@ -14,7 +14,7 @@ module.exports.run = async (client, message, args, config) => {
     );
   });
   // set footer
-  // disabled due to design choice
+  // DISABLED: due to design choice
   // embed
   //   .setFooter(message.client.user.tag, message.client.user.displayAvatarURL)
   //   .setTimestamp();
