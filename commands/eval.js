@@ -22,5 +22,6 @@ module.exports.run = async (client, message, args, config) => {
 
 module.exports.help = {
   name: 'eval',
+  usage: 'CODELINE',
   desc: 'Command used to run snippets of code. [ADMINISTRATOR ONLY]',
 };

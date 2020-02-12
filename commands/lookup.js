@@ -20,45 +20,31 @@ if (fs.existsSync('./config/config.json')) {
 module.exports.run = async (client, message, args, config) => {
   // if (!config.env.get('isTeam')) return message.react('❌');
 
-  let [id] = args;
+  let [userID] = args;
 
-  if (!id) return message.channel.send('Please provide ID!');
+  if (!userID) return message.channel.send('Please provide ID!');
 
-  let embed = new RichEmbed()
-    .setColor(message.member.displayColor)
-    .setFooter(client.user.tag, client.user.displayAvatarURL)
-    .setTimestamp();
+  let user = await client.functions.get('FUNC_userLookup').run(userID);
 
-  let request = {
-    method: 'GET',
-    uri: `${uri}${id}`,
-    headers: {
-      Authorization: `Bot ${tokenAPI}`,
-    },
-    json: true,
-  };
-  rp(request)
-    .then((user) => {
-      let creationDate = (user.id / 4194304) + 1420070400000;
-      embed
-        .addField('Usertag', `\`${user.username}#${user.discriminator}\``)
-        .addField('ID', `\`${user.id}\``)
-        .addField('Account Creation Date', new Date(creationDate), true)
-        .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`);
-      message.channel.send({ embed });
-    })
-    .catch((err) => {
-      if (err.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
-      else embed.setAuthor('An error occurred!');
-      embed.addField('Stopcode', err.message);
-      message.channel.send({ embed });
-    });
-  // joined servers with dates on reaction press, if to many (use .length)
-  // banned servers with dates on reaction press, if to many (use .length)
-  // userinfo through discord api
+  let embed = new RichEmbed().setColor(message.member.displayColor);
+
+  if (user.err) {
+    if (err.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
+    else embed.setAuthor('An error occurred!');
+    embed.addField('Stopcode', err.message);
+    return message.channel.send({ embed });
+  }
+
+  embed
+    .addField('Usertag', `\`${user.username}\``)
+    .addField('ID', `\`${userID}\``)
+    .addField('Account Creation Date', user.creationDate, true)
+    .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`);
+  message.channel.send({ embed });
 };
 
 module.exports.help = {
   name: 'lookup',
+  usage: 'USERID',
   desc: 'Uses the Discord API to lookup userinformaiton',
 };

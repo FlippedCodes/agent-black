@@ -46,18 +46,20 @@ module.exports.run = async (client, message, args, config) => {
             // TODO: make emojis disapear
             let regex = config.emojiLayout;
             let userTag = user.tag.replace(regex, 'X');
+            let userBanned = true;
+            let userID = user.id;
             let fixedReason = reason;
             if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
             const [banEntry] = await Ban.findOrCreate({
               where: {
-                userID: user.id,
-                serverID: message.guild.id,
+                userID,
+                serverID,
               },
-              defaults: { reason: fixedReason, userTag },
+              defaults: { reason: fixedReason, userTag, userBanned },
             }).catch(errHander);
             if (!banEntry.isNewRecord) {
-              Ban.update({ reason: fixedReason },
-                { where: { userID: user.id, serverID: message.guild.id } })
+              Ban.update({ reason: fixedReason, userBanned },
+                { where: { userID, serverID } })
                 .catch(errHander);
             }
           });

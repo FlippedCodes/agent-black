@@ -1,6 +1,7 @@
 const Handlebars = require('handlebars');
 
-const lang = require('../config/lang.json');
+// DISABLED: due to error in code because different path
+// const lang = require('../config/lang.json');
 
 function configToTemplate(lang) {
   if (typeof lang === 'string') return Handlebars.compile(lang);

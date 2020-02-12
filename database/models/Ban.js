@@ -16,6 +16,7 @@ module.exports = sequelize.define('Ban', {
   },
   userTag: Sequelize.TEXT('tiny'),
   reason: Sequelize.TEXT,
+  userBanned: Sequelize.BOOLEAN,
 },
 {
   uniqueKeys: {

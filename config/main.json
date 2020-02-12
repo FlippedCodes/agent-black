@@ -1,6 +1,6 @@
 {
     "name": "Agent Black",
-    "prefix": "a!",
+    "prefix": "b!",
     "setup": {
         "moduleFolders": {
             "functionsFolder": "functions",

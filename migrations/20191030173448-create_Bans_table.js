@@ -15,6 +15,7 @@ module.exports = {
     },
     userTag: Sequelize.TEXT('tiny'),
     reason: Sequelize.TEXT,
+    userBanned: Sequelize.BOOLEAN,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   },

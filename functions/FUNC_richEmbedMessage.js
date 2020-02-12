@@ -12,7 +12,7 @@ module.exports.run = async (user, channel, body, title, color, footer) => {
   if (title) embed.setTitle(title);
   if (color) embed.setColor(color);
 
-  channel.send(embed);
+  return channel.send(embed);
 };
 
 module.exports.help = {
