@@ -11,10 +11,12 @@ const errHander = (err) => {
 //   return client.functions.get('FUNC_checkServer').run(serverID);
 // }
 
+// get participating server
 function getServerEntry(client, serverID) {
   return client.functions.get('FUNC_checkServer').run(serverID);
 }
 
+// get log channel of server
 function findLogChannel(client, logChannelID) {
   return client.channels.find((channel) => channel.id === logChannelID);
 }
