@@ -7,7 +7,7 @@ module.exports.run = async (guild, user) => {
       const userID = user.id;
       const userTag = user.tag;
       const serverID = guild.id;
-      const userBanned = true;
+      const userBanned = '1';
       const reason = ban.reason;
       let fixedReason = reason;
       if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
