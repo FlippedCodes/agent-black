@@ -1,5 +1,9 @@
 const Ban = require('../database/models/Ban');
 
+const errHander = (err) => {
+  console.error('ERROR:', err);
+};
+
 module.exports.run = async (guild, user) => {
   // getting newly added ban
   guild.fetchBan(user)
