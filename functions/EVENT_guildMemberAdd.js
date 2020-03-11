@@ -7,10 +7,6 @@ const errHander = (err) => {
   console.error('ERROR:', err);
 };
 
-// const server = (serverID) => {
-//   return client.functions.get('FUNC_checkServer').run(serverID);
-// }
-
 // checks if server is partisipating server
 function getServerEntry(client, serverID) {
   return client.functions.get('FUNC_checkServer').run(serverID);
