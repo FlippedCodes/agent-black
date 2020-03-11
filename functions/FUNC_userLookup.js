@@ -28,6 +28,7 @@ module.exports.run = async (userID) => {
       return {
         username: `${user.username}#${user.discriminator}`,
         joinDate: `${new Date(creationDate)}`,
+        avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
         err: null,
       };
     })
