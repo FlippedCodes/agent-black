@@ -18,33 +18,34 @@ function findLogChannel(client, logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(client, serverID, userID, ammountOfBans) {
+async function sendMessage(client, serverID, userID, userTag, ammountOfBans) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(client, logChannelID);
   const serverName = server.serverName;
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, logChannel,
-      `ID: \`${userID}\`
-      userBans: \`${ammountOfBans}\`
-      For more information use `,
-      `Banned user joined ${serverName}!`,
+      `tag: \`${userTag}\`
+      ID: \`${userID}\`
+      bans: \`${ammountOfBans}\`
+      For more information use \`not done yet\``,
+      `Banned user joined '${serverName}'`,
       16739072, false);
+  // TODO: Add command to see more information for user
 }
 
 // check if user is banned on some server
-async function checkBannedUser(client, serverID, userID, ammountOfBans) {
+async function checkBannedUser(client, member) {
+  const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
   const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
-  if (userBans.length !== 0) sendMessage(client, serverID, userID, userBans.length);
+  if (userBans.length !== 0) sendMessage(client, serverID, userID, userTag, userBans.length);
 }
 
 // TODO: Update userTag in DB if not a deleted username
 // TODO: Add reactions for banning
 // TODO: Add banned user logs
 
-module.exports.run = async (client, member) => {
-  checkBannedUser(client, member.guild.id, member.id);
-};
+module.exports.run = async (client, member) => checkBannedUser(client, member);
 
 module.exports.help = {
   name: 'EVENT_guildMemberAdd',
