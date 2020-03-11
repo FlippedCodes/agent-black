@@ -21,7 +21,7 @@ function findLogChannel(client, logChannelID) {
   return client.channels.find((channel) => channel.id === logChannelID);
 }
 
-// send message
+// send message when user is banned
 async function sendMessage(client, serverID, userID, ammountOfBans) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
