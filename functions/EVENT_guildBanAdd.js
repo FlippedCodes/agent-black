@@ -23,7 +23,7 @@ module.exports.run = async (guild, user) => {
         defaults: { userTag, reason: fixedReason, userBanned },
       }).catch(errHander);
       // check if entry is already on DB
-      if (!banEntry.isNewRecord) {
+      if (await !banEntry.isNewRecord) {
         // update DB entry
         Ban.update({ reason: fixedReason, userTag, userBanned },
           { where: { userTag, userID, serverID } })
