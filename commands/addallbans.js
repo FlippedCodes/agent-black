@@ -51,10 +51,7 @@ module.exports.run = async (client, message, args, config) => {
             let fixedReason = reason;
             if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
             const [banEntry] = await Ban.findOrCreate({
-              where: {
-                userID,
-                serverID,
-              },
+              where: { userID, serverID },
               defaults: { reason: fixedReason, userTag, userBanned },
             }).catch(errHander);
             if (!banEntry.isNewRecord) {
