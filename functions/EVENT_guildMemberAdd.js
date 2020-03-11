@@ -31,7 +31,11 @@ async function sendMessage(client, serverID, userID, ammountOfBans) {
     .run(client.user, logChannel,
       'This is a text placeholder',
       `Banned user joined ${serverName}!`,
-      16739072, true);
+
+// check if user is banned on some server
+async function checkBannedUser(client, serverID, userID, ammountOfBans) {
+  const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
+  if (userBans.length !== 0) sendMessage(client, serverID, userID, userBans.length);
 }
 
 // TODO: Update userTag in DB if not a deleted username
@@ -39,16 +43,7 @@ async function sendMessage(client, serverID, userID, ammountOfBans) {
 // TODO: Add banned user logs
 
 module.exports.run = async (client, member) => {
-  let userID = member.id;
-  let serverID = member.guild.id;
-
-  const userBans = await Ban.findAll({
-    where: {
-      userID,
-    },
-  }).catch(errHander);
-
-  if (userBans.length !== 0) sendMessage(client, serverID, userID, userBans.length);
+  checkBannedUser(client, member.guild.id, member.id);
 };
 
 module.exports.help = {
