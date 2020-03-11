@@ -24,9 +24,9 @@ function findLogChannel(client, logChannelID) {
 // send message
 async function sendMessage(client, serverID, userID, ammountOfBans) {
   const server = await getServerEntry(client, serverID);
-  let logChannelID = server.logChannelID;
-  let logChannel = await findLogChannel(client, logChannelID);
-  let serverName = server.serverName;
+  const logChannelID = server.logChannelID;
+  const logChannel = await findLogChannel(client, logChannelID);
+  const serverName = server.serverName;
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, logChannel,
       'This is a text placeholder',
