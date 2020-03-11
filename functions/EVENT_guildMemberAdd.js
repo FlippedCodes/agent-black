@@ -29,8 +29,12 @@ async function sendMessage(client, serverID, userID, ammountOfBans) {
   const serverName = server.serverName;
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, logChannel,
-      'This is a text placeholder',
+      `ID: \`${userID}\`
+      userBans: \`${ammountOfBans}\`
+      For more information use `,
       `Banned user joined ${serverName}!`,
+      16739072, false);
+}
 
 // check if user is banned on some server
 async function checkBannedUser(client, serverID, userID, ammountOfBans) {
