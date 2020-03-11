@@ -14,7 +14,7 @@ if (fs.existsSync('./config/config.json')) {
 }
 
 module.exports.run = async (userID) => {
-  let request = {
+  const request = {
     method: 'GET',
     uri: `${uri}${userID}`,
     headers: {
@@ -24,7 +24,7 @@ module.exports.run = async (userID) => {
   };
   rp(request)
     .then((user) => {
-      let creationDate = (user.id / 4194304) + 1420070400000;
+      const creationDate = (user.id / 4194304) + 1420070400000;
       return {
         username: `${user.username}#${user.discriminator}`,
         joinDate: `${new Date(creationDate)}`,

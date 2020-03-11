@@ -20,13 +20,13 @@ if (fs.existsSync('./config/config.json')) {
 module.exports.run = async (client, message, args, config) => {
   // if (!config.env.get('isTeam')) return message.react('❌');
 
-  let [userID] = args;
+  const [userID] = args;
 
   if (!userID) return message.channel.send('Please provide ID!');
 
-  let user = await client.functions.get('FUNC_userLookup').run(userID);
+  const user = await client.functions.get('FUNC_userLookup').run(userID);
 
-  let embed = new RichEmbed().setColor(message.member.displayColor);
+  const embed = new RichEmbed().setColor(message.member.displayColor);
 
   if (user.err) {
     if (err.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');

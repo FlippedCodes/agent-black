@@ -11,9 +11,9 @@ module.exports.run = async (client, message, config) => {
   // TODO: Permission System
 
   // put comamnd in array
-  let messageArray = message.content.split(/\s+/g);
-  let command = messageArray[0];
-  let args = messageArray.slice(1);
+  const messageArray = message.content.split(/\s+/g);
+  const command = messageArray[0];
+  const args = messageArray.slice(1);
 
   // return if not prefix
   if (!command.startsWith(config.prefix)) return;
@@ -24,7 +24,7 @@ module.exports.run = async (client, message, config) => {
   if (!await client.functions.get('FUNC_checkServer').run(serverID)) return;
 
   // remove prefix and lowercase
-  let cmd = client.commands.get(command.slice(config.prefix.length).toLowerCase());
+  const cmd = client.commands.get(command.slice(config.prefix.length).toLowerCase());
 
   // run cmd if existent
   if (cmd) {
