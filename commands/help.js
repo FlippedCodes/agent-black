@@ -2,7 +2,7 @@ const { RichEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, config) => {
   // prepare title and desc for embed
-  let embed = new RichEmbed()
+  const embed = new RichEmbed()
     .setTitle('Halp')
     .setColor(message.member.displayColor)
     .setDescription('For additional Info, please ask `Phil | Flipper#3621`');
