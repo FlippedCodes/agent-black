@@ -28,10 +28,10 @@ module.exports.run = async (client, message, args, config) => {
 
   const embed = new RichEmbed().setColor(message.member.displayColor);
 
-  if (user.err) {
-    if (err.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
+  if (user.error) {
+    if (user.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
     else embed.setAuthor('An error occurred!');
-    embed.addField('Stopcode', err.message);
+    embed.addField('Stopcode', user.message);
     return message.channel.send({ embed });
   }
 
@@ -39,7 +39,7 @@ module.exports.run = async (client, message, args, config) => {
     .addField('Usertag', `\`${user.username}\``)
     .addField('ID', `\`${userID}\``)
     .addField('Account Creation Date', user.creationDate, true)
-    .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`);
+    .setThumbnail(user.avatar);
   message.channel.send({ embed });
 };
 
