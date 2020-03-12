@@ -16,7 +16,7 @@ config.env = new Discord.Collection();
 
 // import Functions and Commands
 config.setup.startupFunctions.forEach((FCN) => {
-  let INIT = require(`./functions/${FCN}.js`);
+  const INIT = require(`./functions/${FCN}.js`);
   INIT.run(client, fs, config);
 });
 
