@@ -14,6 +14,7 @@ if (fs.existsSync('./config/config.json')) {
 }
 
 module.exports.run = async (userID) => {
+  let info;
   const request = {
     method: 'GET',
     uri: `${uri}${userID}`,
@@ -22,17 +23,17 @@ module.exports.run = async (userID) => {
     },
     json: true,
   };
-  rp(request)
-    .then((user) => {
-      const creationDate = (user.id / 4194304) + 1420070400000;
-      return {
-        username: `${user.username}#${user.discriminator}`,
-        joinDate: `${new Date(creationDate)}`,
-        avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-        err: null,
-      };
-    })
-    .catch((err) => [null, null, err]);
+  // const user = await rp(request).catch((err) => info = [null, null, null, err]);
+  const user = await rp(request).catch((err) => info = err);
+  if (!info) {
+    const creationDate = (user.id / 4194304) + 1420070400000;
+    info = await {
+      username: `${user.username}#${user.discriminator}`,
+      creationDate: new Date(creationDate),
+      avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
+    };
+  }
+  return info;
 };
 
 module.exports.help = {
