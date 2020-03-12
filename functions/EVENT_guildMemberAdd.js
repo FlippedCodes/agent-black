@@ -2,6 +2,8 @@ const { RichEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
+const config = require('../config/main.json');
+
 // error Handler
 const errHander = (err) => {
   console.error('ERROR:', err);
@@ -28,7 +30,7 @@ async function sendMessage(client, serverID, userID, userTag, ammountOfBans) {
       `tag: \`${userTag}\`
       ID: \`${userID}\`
       bans: \`${ammountOfBans}\`
-      For more information use \`not done yet\``,
+      For more information use \`${config.prefix}lookup ${userID}\``,
       `Banned user joined '${serverName}'`,
       16739072, false);
   // TODO: Add command to see more information for user
