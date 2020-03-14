@@ -4,7 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "handlebars": "^4.4.3",
+    "handlebars": "^4.7.3",
     "mysql2": "^2.0.0",
     "pretty-ms": "^5.0.0",
     "request": "^2.88.0",
