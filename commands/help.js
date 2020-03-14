@@ -13,11 +13,6 @@ module.exports.run = async (client, message, args, config) => {
       CMD.help.desc, false,
     );
   });
-  // set footer
-  // DISABLED: due to design choice
-  // embed
-  //   .setFooter(message.client.user.tag, message.client.user.displayAvatarURL)
-  //   .setTimestamp();
   message.channel.send(embed);
   return;
 };
