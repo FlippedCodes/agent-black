@@ -22,7 +22,7 @@ module.exports.run = async (client, message, args, config) => {
 
   const [userID] = args;
 
-  if (!userID) return message.channel.send('Please provide ID!');
+  if (!userID) return message.channel.send('Please provide an ID!');
 
   const user = await client.functions.get('FUNC_userLookup').run(userID);
 
