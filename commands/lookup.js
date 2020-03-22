@@ -24,22 +24,21 @@ module.exports.run = async (client, message, args, config) => {
 
   if (!userID) return message.channel.send('Please provide an ID!');
 
-  const user = await client.functions.get('FUNC_userLookup').run(userID);
-
   const embed = new RichEmbed().setColor(message.member.displayColor);
 
-  if (user.error) {
-    if (user.statusCode === 404) embed.setAuthor('This user doesn\'t exist.');
-    else embed.setAuthor('An error occurred!');
-    embed.addField('Stopcode', user.message);
-    return message.channel.send({ embed });
-  }
+  const discordMember = await client.fetchUser(userID, false)
+    .catch((err) => {
+      if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
+      else embed.setAuthor('An error occurred!');
+      embed.addField('Stopcode', err.message);
+      return message.channel.send({ embed });
+    });
 
   embed
-    .addField('Usertag', `\`${user.username}\``)
+    .addField('Usertag', `\`${discordMember.tag}\``)
     .addField('ID', `\`${userID}\``)
-    .addField('Account Creation Date', user.creationDate, true)
-    .setThumbnail(user.avatar);
+    .addField('Account Creation Date', discordMember.createdAt, true)
+    .setThumbnail(discordMember.avatarURL);
   message.channel.send({ embed });
 };
 
