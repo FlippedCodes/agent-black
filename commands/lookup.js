@@ -14,8 +14,8 @@ if (fs.existsSync('./config/config.json')) {
 module.exports.run = async (client, message, args, config) => {
   if (!config.env.get('isTeam')) return message.react('❌');
 
-  const [userID] = args;
-  if (!userID) return message.channel.send('Please provide an ID!');
+  let [userID] = args;
+  if (!userID) userID = message.author.id;
 
   const embed = new RichEmbed().setColor(message.member.displayColor);
   const discordMember = await client.fetchUser(userID, false)
