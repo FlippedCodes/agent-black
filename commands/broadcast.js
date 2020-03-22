@@ -7,9 +7,11 @@ function getChannels() {
 
 async function sendMessages(client, message, body) {
   const channels = await getChannels();
-  channels.forEach((channel) => {
-    const channelID = channel.logChannelID;
-    client.channels.find((channel) => channel.id === channelID);
+  channels.forEach((DBchannel) => {
+    const channelID = DBchannel.logChannelID;
+    const channel = client.channels.find((channel) => channel.id === channelID);
+    client.functions.get('FUNC_richEmbedMessage')
+      .run(client.user, channel, body, '', 4182379, false);
   });
 }
 
