@@ -7,7 +7,7 @@ function getChannels() {
 
 async function sendMessages(client, message, body) {
   const channels = await getChannels();
-  channels.forEach(channel => {
+  channels.forEach((channel) => {
     const channelID = channel.logChannelID;
     client.channels.find((channel) => channel.id === channelID);
   });
