@@ -7,24 +7,20 @@ function messageFail(client, message, body) {
 }
 
 module.exports.run = async (client, message, args, config) => {
-  const [userID] = args;
+  let [userID] = args;
+  if (!userID) userID = message.author.id;
 
-  // TODO: check if user is part of the team
+  const embed = new RichEmbed().setColor(message.member.displayColor);
+  const discordMember = await client.fetchUser(userID, false)
+    .catch((err) => {
+      if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
+      else embed.setAuthor('An error occurred!');
+      embed.addField('Stopcode', err.message);
+      return message.channel.send({ embed });
+    });
 
-  // check if user is charing a server
-  if (!await client.functions.get('FUNC_checkID').run(userID, client, 'user')) {
-    // TODO: when lookup is a function, retrieve pic from that
-    messageFail(client, message, `The user with the ID \`${userID}\` doesn't share a server with this bot or doesn't exist. Running \`${config.prefix}lookup\` command for you.`);
-    client.commands.get('lookup')
-      .run(client, message, args, config);
-    return;
-  }
-
-  const user = await client.users.find((user) => user.id === userID);
-
-  if (!user.avatarURL) messageFail(client, message, 'This user doesn\'t have a profile picture');
-
-  const embed = new RichEmbed().setImage(user.avatarURL);
+  if (discordMember.avatarURL) embed.setImage(discordMember.avatarURL);
+  else embed.setImage('https://cdn.discordapp.com/embed/avatars/4.png');
   message.channel.send({ embed });
 };
 
