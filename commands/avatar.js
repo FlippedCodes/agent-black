@@ -11,7 +11,7 @@ module.exports.run = async (client, message, args, config) => {
   if (!userID) userID = message.author.id;
 
   const embed = new RichEmbed().setColor(message.member.displayColor);
-  const discordMember = await client.fetchUser(userID, false)
+  const discordUser = await client.fetchUser(userID, false)
     .catch((err) => {
       if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
       else embed.setAuthor('An error occurred!');
@@ -19,7 +19,7 @@ module.exports.run = async (client, message, args, config) => {
       return message.channel.send({ embed });
     });
 
-  if (discordMember.avatarURL) embed.setImage(discordMember.avatarURL);
+  if (discordUser.avatarURL) embed.setImage(discordUser.avatarURL);
   else embed.setImage('https://cdn.discordapp.com/embed/avatars/4.png');
   message.channel.send({ embed });
 };

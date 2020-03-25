@@ -18,7 +18,7 @@ module.exports.run = async (client, message, args, config) => {
   if (!userID) userID = message.author.id;
 
   const embed = new RichEmbed().setColor(message.member.displayColor);
-  const discordMember = await client.fetchUser(userID, false)
+  const discordUser = await client.fetchUser(userID, false)
     .catch((err) => {
       if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
       else embed.setAuthor('An error occurred!');
@@ -26,10 +26,10 @@ module.exports.run = async (client, message, args, config) => {
       return message.channel.send({ embed });
     });
   embed
-    .addField('Usertag', `\`${discordMember.tag}\``)
+    .addField('Usertag', `\`${discordUser.tag}\``)
     .addField('ID', `\`${userID}\``)
-    .addField('Account Creation Date', discordMember.createdAt, true)
-    .setThumbnail(discordMember.avatarURL);
+    .addField('Account Creation Date', discordUser.createdAt, true)
+    .setThumbnail(discordUser.avatarURL);
   message.channel.send({ embed });
 };
 
