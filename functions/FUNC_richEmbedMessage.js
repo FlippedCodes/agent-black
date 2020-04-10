@@ -1,8 +1,9 @@
 const { RichEmbed } = require('discord.js');
 
-const embed = new RichEmbed();
-
 module.exports.run = async (user, channel, body, title, color, footer) => {
+  // needs to be local as settings overlap from dofferent embed-requests
+  const embed = new RichEmbed();
+
   if (footer) {
     embed
       .setFooter(user.tag, user.displayAvatarURL)
