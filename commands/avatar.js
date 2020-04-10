@@ -19,6 +19,7 @@ module.exports.run = async (client, message, args, config) => {
       return message.channel.send({ embed });
     });
 
+  embed.setAuthor(discordUser.tag, null, discordUser.avatarURL);
   if (discordUser.avatarURL) embed.setImage(discordUser.avatarURL);
   else embed.setImage('https://cdn.discordapp.com/embed/avatars/4.png');
   message.channel.send({ embed });
