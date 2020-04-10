@@ -5,13 +5,13 @@ function getChannels() {
     .catch((err) => console.error(err));
 }
 
-async function sendMessages(client, message, body) {
+async function sendMessages(client, author, body) {
   const channels = await getChannels();
   channels.forEach((DBchannel) => {
     const channelID = DBchannel.logChannelID;
     const channel = client.channels.find((channel) => channel.id === channelID);
     client.functions.get('FUNC_richEmbedMessage')
-      .run(client.user, channel, body, '', 4182379, false);
+      .run(client.user, channel, body, `${author} broadcasted`, 4182379, false);
   });
 }
 
@@ -27,7 +27,7 @@ module.exports.run = async (client, message, args, config) => {
     messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${body}\``);
     return;
   }
-  sendMessages(client, message, body);
+  sendMessages(client, message.author.tag, body);
 };
 
 module.exports.help = {
