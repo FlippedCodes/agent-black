@@ -14,7 +14,7 @@ module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
     console.log(`[${module.exports.help.name}] Posting bot status message!`);
   } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
-  let embed = new RichEmbed()
+  const embed = new RichEmbed()
     .setTitle('Bot back online!')
     .setColor(4296754)
     .setFooter(client.user.tag, client.user.displayAvatarURL)
