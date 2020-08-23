@@ -56,6 +56,7 @@ module.exports.run = async (client, message, args, config) => {
     case 'add':
       // check provided information
       if (!userID) {
+        // FIXME: Does this actully work?cause not the correct parameters are passed along...
         messageFail(CommandUsage(config.prefix, module.exports.help.name, subcmd));
         return;
       }
