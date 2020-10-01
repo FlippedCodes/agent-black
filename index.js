@@ -29,8 +29,15 @@ client.login(config.env.get('token'));
 client.on('ready', async () => {
   // confirm user logged in
   console.log(`[${config.name}] Logged in as "${client.user.tag}"!`);
-  // set bot player status
+  // run startup functions
   config.setup.setupFunctions.forEach((FCN) => {
+    client.functions.get(FCN).run(client, config);
+  });
+});
+
+client.once('ready', async () => {
+  // set bot player status
+  config.setup.setupFunctionsOnce.forEach((FCN) => {
     client.functions.get(FCN).run(client, config);
   });
 });
