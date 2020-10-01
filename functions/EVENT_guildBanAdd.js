@@ -15,14 +15,14 @@ function getServerEntry(client, serverID) {
 
 // creates a embed messagetemplate for succeded actions
 async function messageBanSuccess(client, channelID, body) {
-  const channel = await client.channels.get(channelID);
+  const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel, body, 'A user has been banned!', 4296754, false);
 }
 
 // creates a embed messagetemplate for failed actions
 async function messageBannedUserInGuild(client, channelID, userTag, userID, serverName) {
-  const channel = await client.channels.get(channelID);
+  const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
       `tag: \`${userTag}\`

@@ -27,7 +27,7 @@ module.exports.run = async (client, config) => {
   } else {
     embed.setDescription('The time that the bot was offline, is missing. A new entry got created!');
   }
-  client.channels.get(config.logStatusChannel).send({ embed });
+  client.channels.cache.get(config.logStatusChannel).send({ embed });
 };
 
 module.exports.help = {
