@@ -15,7 +15,7 @@ module.exports.run = async (client, fs, config) => {
 
     // adding all commands
     jsfiles.forEach((f, i) => {
-      let probs = require(`../${commandsFolder}/${f}`);
+      const probs = require(`../${commandsFolder}/${f}`);
       if (config.env.get('inDev')) console.log(`[${module.exports.help.name}]     ${i + 1}) Loaded: ${f}!`);
       // adding command to collection
       client.commands.set(probs.help.name, probs);

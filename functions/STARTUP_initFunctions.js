@@ -15,7 +15,7 @@ module.exports.run = async (client, fs, config) => {
 
     // adding all functions
     jsfiles.forEach((f, i) => {
-      let probs = require(`../${functionsFolder}/${f}`);
+      const probs = require(`../${functionsFolder}/${f}`);
       if (config.env.get('inDev')) console.log(`[${module.exports.help.name}]     ${i + 1}) Loaded: ${f}!`);
       // adding function to collection
       client.functions.set(probs.help.name, probs);
