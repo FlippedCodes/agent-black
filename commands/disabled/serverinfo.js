@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, con, config) => {
   let pic = 'https://pbs.twimg.com/profile_images/715852271389655041/s-VdeDI5_400x400.jpg';
@@ -6,7 +6,7 @@ module.exports.run = async (client, message, args, con, config) => {
 
   message.guild.fetchMember(userID)
     .then((member) => {
-      let embed = new RichEmbed()
+      let embed = new MessageEmbed()
         .setColor(member.displayColor)
         .setImage(member.user.avatarURL);
       message.channel.send({ embed });

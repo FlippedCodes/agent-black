@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
@@ -16,7 +16,7 @@ function getServerEntry(client, serverID) {
 
 // get log channel of server
 function findLogChannel(client, logChannelID) {
-  return client.channels.find((channel) => channel.id === logChannelID);
+  return client.channels.cache.find((channel) => channel.id === logChannelID);
 }
 
 // send message when user is banned

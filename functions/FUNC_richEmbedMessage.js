@@ -1,8 +1,8 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (user, channel, body, title, color, footer) => {
   // needs to be local as settings overlap from dofferent embed-requests
-  const embed = new RichEmbed();
+  const embed = new MessageEmbed();
 
   if (footer) {
     embed

@@ -9,7 +9,7 @@ async function sendMessages(client, author, body) {
   const channels = await getChannels();
   channels.forEach((DBchannel) => {
     const channelID = DBchannel.logChannelID;
-    const channel = client.channels.find((channel) => channel.id === channelID);
+    const channel = client.channels.cache.find((channel) => channel.id === channelID);
     client.functions.get('FUNC_richEmbedMessage')
       .run(client.user, channel, body, `${author} broadcasted`, 4182379, false);
   });

@@ -1,8 +1,8 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, config) => {
   // prepare title and desc for embed
-  const embed = new RichEmbed()
+  const embed = new MessageEmbed()
     .setTitle('Halp')
     .setColor(message.member.displayColor)
     .setDescription('For additional Info, please ask `Phil | Flipper#3621`');

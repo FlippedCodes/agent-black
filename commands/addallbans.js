@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
@@ -38,9 +38,9 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
 
-  message.channel.send({ embed: new RichEmbed().setAuthor('Processing banlist...') })
+  message.channel.send({ embed: new MessageEmbed().setAuthor('Processing banlist...') })
     .then(async (msg) => {
-      client.guilds.find((server) => server.id === serverID).fetchBans(true)
+      client.guilds.cache.find((server) => server.id === serverID).fetchBans(true)
         .then((bans) => {
           bans.forEach(async ({ user, reason }) => {
             // TODO: make emojis disapear
@@ -61,7 +61,7 @@ module.exports.run = async (client, message, args, config) => {
             }
           });
         })
-        .then(() => msg.edit({ embed: new RichEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }))
+        .then(() => msg.edit({ embed: new MessageEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }))
         .catch(errHander);
     }).catch(errHander);
 };

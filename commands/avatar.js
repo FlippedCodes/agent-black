@@ -1,32 +1,29 @@
-const { RichEmbed } = require('discord.js');
-
-// creates a embed messagetemplate for failed actions
-function messageFail(client, message, body) {
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false);
-}
+const { MessageEmbed } = require('discord.js');
 
 module.exports.run = async (client, message, args, config) => {
   let [userID] = args;
   if (!userID) userID = message.author.id;
 
-  const embed = new RichEmbed().setColor(message.member.displayColor);
-  const discordUser = await client.fetchUser(userID, false)
+  const embed = new MessageEmbed().setColor(message.member.displayColor);
+  const discordUser = await client.users.fetch(userID, false)
     .catch((err) => {
       if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
       else embed.setAuthor('An error occurred!');
       embed.addField('Stopcode', err.message);
-      return message.channel.send({ embed });
     });
 
-  embed.setAuthor(discordUser.tag, null, discordUser.avatarURL);
-  if (discordUser.avatarURL) embed.setImage(discordUser.avatarURL);
-  else embed.setImage('https://cdn.discordapp.com/embed/avatars/4.png');
+  if (discordUser) {
+    const pfp = discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 });
+    embed.setAuthor(discordUser.tag, null, pfp);
+    embed.setImage(pfp);
+  }
+
   message.channel.send({ embed });
 };
 
 module.exports.help = {
   name: 'avatar',
+  title: 'Get Avatar',
   usage: 'USERID',
   desc: 'Retrieves the profile picture of the provided user ID.',
 };
