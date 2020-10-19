@@ -62,7 +62,7 @@ module.exports.run = async (guild, user) => {
       const bannedGuild = await getServerEntry(user.client, serverID);
       messageBanSuccess(user.client, bannedGuild.logChannelID, `User \`${userTag}\` with the ID \`${userID}\` has been banned from this server. The ban has been recorded and other servers are getting warned!`);
     });
-  user.client.guilds.forEach(async (toTestGuild) => {
+  user.client.guilds.cache.forEach(async (toTestGuild) => {
     if (guild.id === toTestGuild.id) return;
     const serverMember = toTestGuild.members.get(user.id);
     if (serverMember) {
