@@ -44,10 +44,10 @@ module.exports.run = async (client, message, args, config) => {
         .then((bans) => {
           bans.forEach(async ({ user, reason }) => {
             // TODO: make emojis disapear
-            let regex = config.emojiLayout;
-            let userTag = user.tag.replace(regex, 'X');
-            let userBanned = true;
-            let userID = user.id;
+            const regex = config.emojiLayout;
+            const userTag = user.tag.replace(regex, 'X');
+            const userBanned = true;
+            const userID = user.id;
             let fixedReason = reason;
             if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
             const [banEntry] = await Ban.findOrCreate({

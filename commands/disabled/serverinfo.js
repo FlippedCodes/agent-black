@@ -6,7 +6,7 @@ module.exports.run = async (client, message, args, con, config) => {
 
   message.guild.fetchMember(userID)
     .then((member) => {
-      let embed = new MessageEmbed()
+      const embed = new MessageEmbed()
         .setColor(member.displayColor)
         .setImage(member.user.avatarURL);
       message.channel.send({ embed });

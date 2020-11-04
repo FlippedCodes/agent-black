@@ -8,8 +8,8 @@ function kickoff(client, message) {
 
 // message for data return
 function editedMessage(sentMessage, message) {
-  let api_latency = Math.round(sentMessage.client.ping);
-  let body = `📥 Pong!
+  const api_latency = Math.round(sentMessage.client.ping);
+  const body = `📥 Pong!
   Latency is \`${sentMessage.createdTimestamp - message.createdTimestamp}\`ms.
   API Latency is \`${api_latency}\`ms`;
   return new MessageEmbed()
