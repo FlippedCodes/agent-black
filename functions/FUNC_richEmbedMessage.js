@@ -4,11 +4,7 @@ module.exports.run = async (user, channel, body, title, color, footer) => {
   // needs to be local as settings overlap from dofferent embed-requests
   const embed = new MessageEmbed();
 
-  if (footer) {
-    embed
-      .setFooter(user.tag, user.displayAvatarURL)
-      .setTimestamp();
-  }
+  if (footer) embed.setFooter(footer);
   if (body) embed.setDescription(body);
   if (title) embed.setTitle(title);
   if (color) embed.setColor(color);
