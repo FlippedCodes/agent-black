@@ -5,6 +5,7 @@ module.exports.run = async (client, message, config) => {
 
   // checking if staffmember
   // TODO: foreach, with more roles
+  // DEPRECATED: use function with permissions instead
   if (message.member.roles.cache.find((role) => role.id === config.teamRole)) config.env.set('isTeam', true);
   // put needed user permission-IDs into DB
   // with permissions on what CMDs
