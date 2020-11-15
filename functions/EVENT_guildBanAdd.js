@@ -25,11 +25,12 @@ async function messageBannedUserInGuild(client, channelID, userTag, userID, serv
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
-      `tag: \`${userTag}\`
+      `Tag: \`${userTag}\`
       ID: \`${userID}\`
-      For more information use \`${config.prefix}lookup ${userID}\``,
+      Reason: \`${banReason || 'none'}\``,
       `A user on your server has been banned on '${serverName}'!`,
-      16739072, false);
+      16739072,
+      `For more information and other bans use '${config.prefix}lookup ${userID}'`);
 }
 
 module.exports.run = async (guild, user) => {
