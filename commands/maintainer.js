@@ -60,7 +60,7 @@ module.exports.run = async (client, message, args, config) => {
         messageFail(CommandUsage(config.prefix, module.exports.help.name, subcmd));
         return;
       }
-      if (!await client.functions.get('FUNC_checkID').run(userID, client, 'user')) {
+      if (!await client.functions.get('FUNC_checkID').run(userID, client, 'sharedUser')) {
         messageFail(client, message, `The user with the ID \`${userID}\` doesn't exist or the bot is not sharing a server with them.`);
         return;
       }
