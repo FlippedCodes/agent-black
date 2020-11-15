@@ -21,7 +21,7 @@ async function messageBanSuccess(client, channelID, body) {
 }
 
 // creates a embed messagetemplate for failed actions
-async function messageBannedUserInGuild(client, channelID, userTag, userID, serverName) {
+async function messageBannedUserInGuild(client, channelID, userTag, userID, banReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
@@ -34,9 +34,11 @@ async function messageBannedUserInGuild(client, channelID, userTag, userID, serv
 }
 
 module.exports.run = async (guild, user) => {
-  // outside of ban due to following code
+  // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;
+  // declaring so ban reason can be used in foreach loop
+  let banReason;
   // getting newly added ban
   guild.fetchBan(user)
     .then(async (ban) => {
@@ -59,6 +61,7 @@ module.exports.run = async (guild, user) => {
           { where: { userTag, userID, serverID } })
           .catch(errHander);
       }
+      banReason = fixedReason;
       const bannedGuild = await getServerEntry(user.client, serverID);
       messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
     });
@@ -68,7 +71,7 @@ module.exports.run = async (guild, user) => {
     if (serverMember) {
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(user.client, serverID);
-      messageBannedUserInGuild(user.client, infectedGuild.logChannelID, userTag, userID, guild.name);
+      messageBannedUserInGuild(user.client, infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
     }
   });
 };
