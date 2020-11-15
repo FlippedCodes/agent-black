@@ -6,8 +6,14 @@ module.exports.run = async (ID, client, type) => {
       if (client.guilds.cache.find((server) => server.id === ID)) existingID = true;
       return existingID;
 
-    case 'user':
+    case 'sharedUser':
       if (client.users.cache.find((user) => user.id === ID)) existingID = true;
+      return existingID;
+
+    case 'user':
+      existingID = true;
+      await client.users.fetch(ID, false)
+        .catch(() => existingID = false);
       return existingID;
 
     case 'channel':
