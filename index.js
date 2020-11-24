@@ -20,6 +20,7 @@ config.setup.startupFunctions.forEach((FCN) => {
   INIT.run(client, fs, config);
 });
 
+// DEPRECATED: moved to functions
 // create conenction to DB
 // require('./database/SETUP_DBConnection');
 
