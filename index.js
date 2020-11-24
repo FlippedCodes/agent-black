@@ -21,7 +21,7 @@ config.setup.startupFunctions.forEach((FCN) => {
 });
 
 // create conenction to DB
-require('./database/SETUP_DBConnection');
+// require('./database/SETUP_DBConnection');
 
 // Login the bot
 client.login(config.env.get('token'));
