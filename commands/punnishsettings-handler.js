@@ -6,6 +6,6 @@ module.exports.run = async (client, message, args, config) => {
 };
 
 module.exports.help = {
-  name: 'punnishmanager',
+  name: 'punnishsettings',
   desc: 'Managing command for setting up pointslists.',
 };
