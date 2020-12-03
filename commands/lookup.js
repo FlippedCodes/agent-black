@@ -47,6 +47,7 @@ async function getServerName(serverID) {
   // adds a user to the Maintainer table
   const found = await ParticipatingServer.findOne({ where: { serverID } })
     .catch((err) => console.error(err));
+  if (!found) return 'unknown server';
   return found.serverName;
 }
 
@@ -59,8 +60,7 @@ async function postBanns(message, userID) {
       .addField('Reason', `\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('Ban creation date', ban.createdAt, true)
       .addField('Ban updated date', ban.updatedAt, true);
-    let serverName = await getServerName(ban.serverID);
-    if (!serverName) serverName = 'Unknown';
+    const serverName = await getServerName(ban.serverID);
     // check if user is still banned
     if (ban.userBanned) {
       embed
