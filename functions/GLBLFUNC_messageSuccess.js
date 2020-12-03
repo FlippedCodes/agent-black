@@ -1,10 +1,9 @@
-module.exports.run = async (client, config) => {
-  if (!config.env.get('inDev')) {
-    console.log(`[${module.exports.help.name}] Setting status...`);
-  } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will post the bot status-message`);
-  client.user.setStatus('online');
-  client.user.setActivity(`with ${config.prefix}help`)
-    .then(() => console.log(`[${module.exports.help.name}] Status set!`));
+global.messageSuccess = (message, body) => module.exports.run(message, body);
+
+module.exports.run = async (message, body) => {
+  const client = message.client;
+  client.functions.get('FUNC_richEmbedMessage')
+    .run(client.user, message.channel, body, '', 4296754, false);
 };
 
 module.exports.help = {
