@@ -31,7 +31,7 @@ async function postUserinfo(client, message, userID) {
       .addField('Usertag', `\`${discordUser.tag}\``)
       .addField('ID', `\`${userID}\``)
       .addField('Account Creation Date', discordUser.createdAt, true)
-      .setThumbnail(discordUser.avatarURL);
+      .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
     return message.channel.send({ embed });
   }
 }
