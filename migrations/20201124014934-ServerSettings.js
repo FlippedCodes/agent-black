@@ -4,16 +4,20 @@ module.exports = {
       type: Sequelize.STRING(30),
       primaryKey: true,
     },
-    setting: {
-      type: Sequelize.TEXT('tiny'),
-      references: {
-        model: 'PointsList',
-        key: 'ID',
-      },
-    },
-    value: {
-      type: Sequelize.STRING(30),
+    pointsSystemEnabled: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
+    },
+    pointsSystemForceReason: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    pointLifetime: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      defaultValue: true,
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
