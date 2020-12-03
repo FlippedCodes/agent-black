@@ -22,5 +22,5 @@ module.exports.run = async (client, config) => {
 };
 
 module.exports.help = {
-  name: 'SETUP_offlineStatTicker',
+  name: 'TCKR_offlineStat',
 };
