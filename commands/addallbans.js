@@ -12,12 +12,6 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-// creates a embed messagetemplate for failed actions
-function messageFail(client, message, body) {
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false);
-}
-
 // TODO: use server ID instead (can be run remotely)
 // TODO: ^ Update help
 
@@ -25,16 +19,16 @@ module.exports.run = async (client, message, args, config) => {
   const [serverID] = args;
 
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
     return;
   }
   if (!serverID) {
     const info = module.exports.help;
-    messageFail(client, message, CommandUsage(config.prefix, info.name, info.usage));
+    messageFail(message, CommandUsage(config.prefix, info.name, info.usage));
     return;
   }
   if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
-    messageFail(client, message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
+    messageFail(message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
     return;
   }
 

@@ -6,18 +6,6 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd} USERID\`\`\``;
 }
 
-// creates a embed messagetemplate for succeded actions
-function messageSuccess(client, message, body) {
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 4296754, false);
-}
-
-// creates a embed messagetemplate for failed actions
-function messageFail(client, message, body) {
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false);
-}
-
 // adds a user to the Maintainer table
 async function addUser(Maintainer, userID) {
   const added = await Maintainer.findOrCreate(
@@ -47,7 +35,7 @@ module.exports.run = async (client, message, args, config) => {
   const [subcmd, userID] = args;
 
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
+    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
     return;
   }
 
@@ -61,17 +49,17 @@ module.exports.run = async (client, message, args, config) => {
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(userID, client, 'sharedUser')) {
-        messageFail(client, message, `The user with the ID \`${userID}\` doesn't exist or the bot is not sharing a server with them.`);
+        messageFail(message, `The user with the ID \`${userID}\` doesn't exist or the bot is not sharing a server with them.`);
         return;
       }
       // add server
       const userAdded = await addUser(Maintainer, userID);
       // post outcome
       if (userAdded) {
-        messageSuccess(client, message,
+        messageSuccess(message,
           `<@${userID}> with the ID \`${userID}\` got added to the maintainers list.`);
       } else {
-        messageFail(client, message,
+        messageFail(message,
           `The entry for the user <@${userID}> with the ID \`${userID}\` already exists!`);
       }
       return;
@@ -84,10 +72,10 @@ module.exports.run = async (client, message, args, config) => {
       }
       const userRemoved = await removeUser(Maintainer, userID);
       if (userRemoved >= 1) {
-        messageSuccess(client, message,
+        messageSuccess(message,
           `The user with the ID \`${userID}\` got removed from the maintainers list.`);
       } else {
-        messageFail(client, message,
+        messageFail(message,
           `The user with the ID \`${userID}\` couldn't be found of the list.`);
       }
       return;
@@ -101,18 +89,18 @@ module.exports.run = async (client, message, args, config) => {
       const userFound = await findUser(Maintainer, userID);
       if (userFound) {
         const userID = userFound.userID;
-        messageSuccess(client, message,
+        messageSuccess(message,
           `User tag: <@${userID}>
           User ID: \`${userID}\`
           Maintainer since \`${userFound.createdAt}\``);
       } else {
-        messageFail(client, message,
+        messageFail(message,
           `The user with the ID \`${userID}\` couldn't be found in the list.`);
       }
       return;
 
     default:
-      messageFail(client, message,
+      messageFail(message,
         `Command usage: 
         \`\`\`${config.prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
       return;

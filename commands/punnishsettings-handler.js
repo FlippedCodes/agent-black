@@ -4,14 +4,6 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-// creates a embed messagetemplate for failed actions
-function messageFail(message, body) {
-  const client = message.client;
-  client.functions.get('FUNC_MessageEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false)
-    .then((msg) => msg.delete({ timeout: 10000 }));
-}
-
 // is used to configure settings
 // if setting is not set, use default from config
 module.exports.run = async (client, message, args, config) => {

@@ -15,16 +15,10 @@ async function sendMessages(client, author, body) {
   });
 }
 
-// creates a embed messagetemplate for failed actions
-function messageFail(client, message, body) {
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false);
-}
-
 module.exports.run = async (client, message, args, config) => {
   const body = message.content.slice(config.prefix.length + module.exports.help.name.length + 1);
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(client, message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${body}\``);
+    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${body}\``);
     return;
   }
   sendMessages(client, message.author.tag, body);
