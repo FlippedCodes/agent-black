@@ -36,6 +36,7 @@ module.exports.run = async (client, message, args, config) => {
   message.guild.members.cache.map((user) => IDs.push(user.id));
   // get all user bans
   const allBans = await getBanns(IDs);
+  if (allBans.length === 0) return messageSuccess(message, 'Your server is clear! No users banned on other servers have been found.');
   // check if up to 5 entries
   if (allBans.length < 5) return postBans(allBans, config, message);
   // sends pre waring message
