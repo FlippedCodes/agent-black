@@ -10,7 +10,7 @@
             "STARTUP_initCommands",
             "STARTUP_initFunctions",
             "STARTUP_envPrep",
-            "SETUP_DBConnection"
+            "STARTUP_DBConnection"
         ],
         "setupFunctions": [
             "SETUP_offlineStat",
