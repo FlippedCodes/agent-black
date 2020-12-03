@@ -1,3 +1,5 @@
+const ParticipatingServer = require('../database/models/ParticipatingServer');
+
 const Ban = require('../database/models/Ban');
 
 async function getBanns(userID) {
@@ -8,20 +10,30 @@ async function getBanns(userID) {
 }
 
 // send message when user is banned
-async function sendBanMessage(config, message, serverID, userID, userTag) {
+async function sendBanMessage(config, message, serverName, serverID, userID, userTag) {
   const client = message.client;
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, message.channel,
       `serverID: \`${serverID}\`
+      servername: \`${serverName}\`
       userID: \`${userID}\`
       username: \`${userTag}\``,
       '',
       16739072, `For more information use \`${config.prefix}lookup ${userID}\``);
 }
 
+async function getServerName(serverID) {
+  // adds a user to the Maintainer table
+  const found = await ParticipatingServer.findOne({ where: { serverID } })
+    .catch((err) => console.error(err));
+  if (!found) return 'unknown server';
+  return found.serverName;
+}
+
 function postBans(allBans, config, message) {
   allBans.forEach((foundBan) => {
-    sendBanMessage(config, message, foundBan.serverID, foundBan.userID, foundBan.userTag);
+    const serverID = foundBan.serverID;
+    sendBanMessage(config, message, getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
   });
 }
 
