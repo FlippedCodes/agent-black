@@ -31,9 +31,9 @@ async function getServerName(serverID) {
 }
 
 function postBans(allBans, config, message) {
-  allBans.forEach((foundBan) => {
+  allBans.forEach(async (foundBan) => {
     const serverID = foundBan.serverID;
-    sendBanMessage(config, message, getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
+    sendBanMessage(config, message, await getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
   });
 }
 
