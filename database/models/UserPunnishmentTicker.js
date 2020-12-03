@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 
-module.exports = sequelize.define('UserPunnishmentTicker', {
+module.exports = sequelize.define('UserPunishmentTicker', {
   ID: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  punnishmentID: {
+  punishmentID: {
     type: Sequelize.INTEGER,
     allowNull: false,
     references: {

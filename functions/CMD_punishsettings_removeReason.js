@@ -5,6 +5,6 @@ module.exports.run = async (client, message, args, config) => {
 };
 
 module.exports.help = {
-  name: 'CMD_forceReason_punnishsettings',
-  parent: 'punnishsettings',
+  name: 'CMD_removeReason_punishsettings',
+  parent: 'punishsettings',
 };
