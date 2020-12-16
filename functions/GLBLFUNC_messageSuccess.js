@@ -1,6 +1,4 @@
-global.messageSuccess = (message, body) => module.exports.run(message, body);
-
-module.exports.run = async (message, body) => {
+global.messageSuccess = async (message, body) => {
   const client = message.client;
   const sentMessage = await client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, message.channel, body, '', 4296754, false);
