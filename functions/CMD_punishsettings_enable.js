@@ -48,8 +48,12 @@ module.exports.run = async (client, message, args, config) => {
   const serverExist = await checkServer(serverID);
   if (!serverExist) await createServer(serverID);
   // set value
-  if (lowercaseEnable === 'true') await enablePointsSystem(serverID);
-  else await disablePointsSystem(serverID);
+  let messageState = 'disabled';
+  if (lowercaseEnable === 'true') {
+    await enablePointsSystem(serverID);
+    messageState = 'enabled';
+  } else await disablePointsSystem(serverID);
+  messageSuccess(message, `Successfully ${messageState} setting.`);
 };
 
 module.exports.help = {
