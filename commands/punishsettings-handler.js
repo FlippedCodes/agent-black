@@ -17,7 +17,7 @@ module.exports.run = async (client, message, args, config) => {
   const currentCMD = module.exports.help;
   if (commandValues.includes(subcmd)) {
     client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
-      .run(client, message, args, config, MessageEmbed);
+      .run(client, message, args, config);
   } else {
     messageFail(message, CommandUsage(config.prefix, currentCMD.name, commandValues.join('|')));
   }
