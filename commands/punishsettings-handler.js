@@ -22,7 +22,7 @@ module.exports.run = async (client, message, args, config) => {
   // check if user is teammember
   if (!message.member.roles.cache.find(({ id }) => id === config.teamRole)) return messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
   const [subcmd] = args;
-  const commandValues = ['enable', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
+  const commandValues = ['enable', 'listSettings', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
   const currentCMD = module.exports.help;
   if (commandValues.includes(subcmd)) {
     if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
