@@ -39,6 +39,7 @@ module.exports.run = async (client, message, args, config) => {
   } else await disableForceReason(serverID);
   messageSuccess(message, `Successfully ${messageState} setting.`);
 };
+
 module.exports.help = {
   name: 'CMD_punishsettings_forceReason',
   parent: 'punishsettings',
