@@ -14,7 +14,7 @@ module.exports.run = async (client, message, args, config) => {
   const serverSettings = await getSettings(serverID);
   // prepare message
   const embed = new MessageEmbed()
-    .setTitle('Punnishment Settings')
+    .setTitle('Punishment Settings')
     .addFields([
       {
         name: 'enable',
