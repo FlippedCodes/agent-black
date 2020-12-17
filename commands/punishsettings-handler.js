@@ -20,7 +20,6 @@ module.exports.run = async (client, message, args, config) => {
   // check DM
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
   // check if user is teammember
-  // TODO: update message
   if (!message.member.roles.cache.find(({ id }) => id === config.teamRole)) return messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
   const [subcmd] = args;
   const commandValues = ['enable', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
