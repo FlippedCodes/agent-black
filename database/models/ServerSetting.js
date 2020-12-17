@@ -16,8 +16,8 @@ module.exports = sequelize.define('ServerSetting', {
     defaultValue: true,
   },
   pointLifetime: {
-    type: Sequelize.INTEGER(11),
+    type: Sequelize.STRING(30),
     allowNull: false,
-    defaultValue: true,
+    defaultValue: 1210000000,
   },
 });
