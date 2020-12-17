@@ -13,7 +13,7 @@ module.exports.run = async (client, message, args, config) => {
   // check if user is teammember
   if (!message.member.roles.cache.find(({ id }) => id === config.teamRole)) return messageFail(message, 'You don\'t have access to this command! òwó');
   const [subcmd] = args;
-  const commandValues = ['use', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
+  const commandValues = ['enable', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
   const currentCMD = module.exports.help;
   if (commandValues.includes(subcmd)) {
     client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
