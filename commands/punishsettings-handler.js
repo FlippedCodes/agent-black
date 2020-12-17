@@ -29,7 +29,7 @@ module.exports.run = async (client, message, args, config) => {
     if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
       client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
         .run(client, message, args, config);
-    } else messageFail(message, `To use the comamnds, you need to enable the feature first: \n${CommandUsage(config.prefix, currentCMD.name, 'enable true')}`);
+    } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first: \n${CommandUsage(config.prefix, currentCMD.name, 'enable true')}`);
   } else messageFail(message, CommandUsage(config.prefix, currentCMD.name, commandValues.join('|')));
 };
 
