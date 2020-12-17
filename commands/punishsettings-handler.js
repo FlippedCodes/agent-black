@@ -1,7 +1,16 @@
+const ServerSetting = require('../database/models/ServerSetting');
+
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
+}
+
+// check if server has feature enabled.
+async function checkFeature(serverID) {
+  const found = await ServerSetting.findOne({ where: { serverID, pointsSystemEnabled: true } })
+    .catch(errHander);
+  return found;
 }
 
 // is used to configure settings
@@ -15,6 +24,7 @@ module.exports.run = async (client, message, args, config) => {
   const [subcmd] = args;
   const commandValues = ['enable', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
   const currentCMD = module.exports.help;
+  if (subcmd === 'enable' || !await checkFeature(serverID)) return messageFail(message, `To use the comamnds, you need to enable the feature first: \`${CommandUsage(config.prefix, currentCMD.name, 'enable true')}\``);
   if (commandValues.includes(subcmd)) {
     client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
       .run(client, message, args, config);
