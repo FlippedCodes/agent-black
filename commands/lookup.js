@@ -6,15 +6,6 @@ const Ban = require('../database/models/Ban');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
-let tokenAPI;
-
-if (fs.existsSync('./config/config.json')) {
-  const api = require('../config/config.json');
-  tokenAPI = api.token;
-} else {
-  tokenAPI = process.env.BotTokenAgentBlack;
-}
-
 async function postUserinfo(client, message, userID) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
