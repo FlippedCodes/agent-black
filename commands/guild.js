@@ -61,10 +61,10 @@ module.exports.run = async (client, message, args, config) => {
       // post outcome
       if (serverAdded) {
         messageSuccess(message,
-          `\`${serverName}\` with the ID \`${serverID}\` got added to the participating Servers list.`);
+          `\`${slicedServerName}\` with the ID \`${serverID}\` got added to the participating Servers list.`);
       } else {
         messageFail(message,
-          `The entry for the server \`${serverName}\` with the ID \`${serverID}\` already exists!`);
+          `The entry for the server \`${slicedServerName}\` with the ID \`${serverID}\` already exists!`);
       }
       return;
 
