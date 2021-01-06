@@ -48,7 +48,7 @@ async function checkBannedUser(client, member) {
 // TODO: Add banned user logs
 
 module.exports.run = async (client, member) => {
-  userTagRecord(member.id, member.user.tag);
+  client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
   checkBannedUser(client, member);
 };
 

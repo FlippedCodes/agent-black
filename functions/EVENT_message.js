@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, config) => {
-  userTagRecord(message.author.id, message.author.tag);
+  client.functions.get('FUNC_userTagRecord').run(message.author.id, message.author.tag);
   // return if unwanted
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
