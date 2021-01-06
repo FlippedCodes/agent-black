@@ -43,6 +43,7 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
 
+  // TODO: Split into own files
   switch (subcmd) {
     // adds a serverentry
     case 'add':
