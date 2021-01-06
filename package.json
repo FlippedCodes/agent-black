@@ -1,6 +1,6 @@
 {
   "name": "agent-black",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.5.1",
