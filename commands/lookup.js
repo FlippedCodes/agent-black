@@ -4,6 +4,15 @@ const Ban = require('../database/models/Ban');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
+const UserIDAssociation = require('../database/models/UserIDAssociation');
+
+// looksup usertag in list if recorded
+async function checkTag(userTag) {
+  const found = await UserIDAssociation.findOne({ where: { userTag } })
+    .catch(errHander);
+  return found;
+}
+
 async function postUserinfo(client, message, userID) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
