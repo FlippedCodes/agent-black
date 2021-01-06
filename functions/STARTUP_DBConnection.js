@@ -28,9 +28,6 @@ module.exports.run = () => {
   sequelize.query('SET NAMES utf8mb4;');
   console.log('[DB] Connected!');
 
-  // DEPRECATED: gets passed along outside of run function
-  // module.exports = module.exports.help;
-
   global.sequelize = sequelize;
 };
 
