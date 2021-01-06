@@ -35,7 +35,6 @@ async function getBanCount(serverID) {
 module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
   const [subcmd, serverID, logChannelID, teamRoleID, serverName] = args;
-  // TODO: add teamrole argument (more sucurity command and banwise)
 
   // check userpermissions
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
