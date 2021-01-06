@@ -12,9 +12,6 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-// TODO: use server ID instead (can be run remotely)
-// TODO: ^ Update help
-
 module.exports.run = async (client, message, args, config) => {
   const [serverID] = args;
 
