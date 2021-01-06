@@ -1,5 +1,7 @@
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
+const Ban = require('../database/models/Ban');
+
 // adds a server to the ParticipatingServers table
 async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
   const added = await ParticipatingServer.findOrCreate(
@@ -23,6 +25,11 @@ async function findServer(ParticipatingServer, serverID) {
   const found = await ParticipatingServer.findOne({ where: { serverID } })
     .catch((err) => console.error(err));
   return found;
+}
+
+async function getBanCount(serverID) {
+  const result = await Ban.findAndCountAll({ where: { serverID } });
+  return result.count;
 }
 
 module.exports.run = async (client, message, args, config) => {
@@ -101,6 +108,7 @@ module.exports.run = async (client, message, args, config) => {
           Server ID: \`${serverFound.serverID}\`
           Log Channel: <#${serverFound.logChannelID}> (\`${serverFound.logChannelID}\`)
           Team Role ID: \`${serverFound.teamRoleID}\`
+          Submitted Bans: \`${await getBanCount(serverID)}\`
           Participating Server since \`${serverFound.createdAt}\``);
       } else {
         messageFail(message,
