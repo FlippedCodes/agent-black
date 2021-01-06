@@ -1,6 +1,6 @@
 const Ban = require('../database/models/Ban');
 
-const ParticipatingServer = require('../database/models/ParticipatingServer');
+// const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const config = require('../config/main.json');
 
