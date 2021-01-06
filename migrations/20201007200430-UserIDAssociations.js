@@ -15,13 +15,13 @@ module.exports = {
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
-  },
-  {
-    uniqueKeys: {
-      uniqueUserTagID: {
-        fields: ['userTag', 'userID'],
-      },
-    },
+  // },
+  // {
+  //   uniqueKeys: {
+  //     uniqueUserTagID: {
+  //       fields: ['userID', 'userTag'],
+  //     },
+  //   },
   }),
 
   down: (queryInterface, Sequelize) => queryInterface.dropTable('UserIDAssociations'),

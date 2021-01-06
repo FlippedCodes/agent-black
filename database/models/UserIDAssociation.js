@@ -14,11 +14,11 @@ module.exports = sequelize.define('UserIDAssociation', {
     type: Sequelize.TEXT('tiny'),
     allowNull: false,
   },
-},
-{
-  uniqueKeys: {
-    uniqueUserTagID: {
-      fields: ['userTag', 'userID'],
-    },
-  },
+// },
+// {
+//   uniqueKeys: {
+//     uniqueUserTagID: {
+//       fields: ['userTag', 'userID'],
+//     },
+//   },
 });
