@@ -77,6 +77,6 @@ module.exports.run = async (client, message, args, config) => {
 };
 
 module.exports.help = {
-  name: 'checkallbans',
+  name: 'checkallusers',
   desc: 'Checks all users in current server, if found on banlist',
 };
