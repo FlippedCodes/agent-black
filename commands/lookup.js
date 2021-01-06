@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
@@ -73,6 +75,28 @@ async function postBanns(message, userID) {
   });
 }
 
+function getID(message, args) {
+  // check if mention is in content
+  if (message.mentions.members.first()) return message.mentions.members.first().id;
+  // get userID
+  const [userID] = args;
+  // ckeck if content is not NaN
+  if (!isNaN(userID)) return userID;
+}
+
+async function checkUserTag(uTag, IDArr) {
+  // adds a user to the Maintainer table
+  // FIXME: lowercase DB search
+  const results = await UserIDAssociation.findAll({ limit: 4, where: { userTag: { [Op.substring]: uTag } } })
+    .catch((err) => console.error(err));
+  if (!results) return;
+  results.forEach((result) => {
+    if (IDArr.includes(result.userID)) return;
+    IDArr.push(result.userID);
+  });
+  return IDArr;
+}
+
 module.exports.run = async (client, message, args, config) => {
   // check permissions if MANAGE_MESSAGES and if send in DMs
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'MANAGE_MESSAGES')) {
@@ -80,18 +104,29 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
 
-  // get userID
-  let [userID] = args;
-  if (!userID) userID = message.author.id;
+  const IDArr = [];
+  const userID = getID(message, args);
+  if (userID) IDArr.push(userID);
+  else {
+    // parse username
+    const userTag = message.content.slice(config.prefix.length + module.exports.help.name.length + 1);
+    // make DB search
+    await checkUserTag(userTag, IDArr);
+  }
+  // if no info is given, return author ID
+  if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
+  // else return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
-  await postUserinfo(client, message, userID);
-  await postBanns(message, userID);
+  IDArr.forEach(async (ID) => {
+    await postUserinfo(client, message, ID);
+    await postBanns(message, ID);
+  });
 };
 
 module.exports.help = {
   name: 'lookup',
-  usage: 'USERID',
+  usage: 'USERID|USERTAG|USERMENTION|USERSEARCH',
   desc: 'Uses the Discord API to lookup userinformaiton',
 };
