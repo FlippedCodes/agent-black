@@ -1,6 +1,6 @@
 const startupTime = +new Date();
 
-const OfflineStat = require('../../database/models/OfflineStat');
+const OfflineStat = require('../database/models/OfflineStat');
 
 const errHander = (err) => {
   console.error('ERROR:', err);
