@@ -25,6 +25,7 @@ module.exports.run = () => {
   const sequelize = new Sequelize(
     database, user, password, { host, dialect: 'mysql', logging: config.env.get('inDev') },
   );
+  sequelize.query('SET NAMES utf8mb4;');
   console.log('[DB] Connected!');
 
   // DEPRECATED: gets passed along outside of run function
