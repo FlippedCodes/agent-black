@@ -7,8 +7,6 @@ function postMessage(client, message, body, error) {
 }
 
 // creates a embed messagetemplate for failed text retrieving and posts error message into log
-// TODO: put in own errorhandler
-// TODO: make errorlogchannel in server
 function error(client, channel, err) {
   console.error('ERROR: ', err);
   client.functions.get('FUNC_richEmbedMessage')
