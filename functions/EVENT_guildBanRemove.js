@@ -14,7 +14,6 @@ module.exports.run = async (guild, user) => {
   Ban.update({ userBanned },
     { where: { userID, serverID } })
     .catch(errHander);
-  // TODO: check if user is banned left server: post info message with servercount
 };
 
 module.exports.help = {

@@ -5,12 +5,8 @@ module.exports.run = async (client, message, config) => {
   if (message.channel.type === 'dm') return;
 
   // checking if staffmember
-  // TODO: foreach, with more roles
   // DEPRECATED: use function with permissions instead
   if (message.member.roles.cache.find((role) => role.id === config.teamRole)) config.env.set('isTeam', true);
-  // put needed user permission-IDs into DB
-  // with permissions on what CMDs
-  // TODO: Permission System
 
   // put comamnd in array
   const messageArray = message.content.split(/\s+/g);

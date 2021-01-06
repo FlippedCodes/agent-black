@@ -33,7 +33,6 @@ async function sendMessage(client, serverID, userID, userTag, ammountOfBans) {
       For more information use \`${config.prefix}lookup ${userID}\``,
       `Banned user joined '${serverName}'`,
       16739072, false);
-  // TODO: Add command to see more information for user
 }
 
 // check if user is banned on some server
@@ -42,10 +41,6 @@ async function checkBannedUser(client, member) {
   const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
   if (userBans.length !== 0) sendMessage(client, serverID, userID, userTag, userBans.length);
 }
-
-// TODO: Update userTag in DB if not a deleted username
-// TODO: Add reactions for banning
-// TODO: Add banned user logs
 
 module.exports.run = async (client, member) => {
   client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
