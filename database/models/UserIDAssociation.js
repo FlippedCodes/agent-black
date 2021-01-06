@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = sequelize.define('Ban', {
+module.exports = sequelize.define('UserIDAssociation', {
   ID: {
     type: Sequelize.INTEGER,
     primaryKey: true,
