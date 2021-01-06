@@ -47,7 +47,10 @@ async function checkBannedUser(client, member) {
 // TODO: Add reactions for banning
 // TODO: Add banned user logs
 
-module.exports.run = async (client, member) => checkBannedUser(client, member);
+module.exports.run = async (client, member) => {
+  userTagRecord(member.id, member.user.tag);
+  checkBannedUser(client, member);
+};
 
 module.exports.help = {
   name: 'EVENT_guildMemberAdd',
