@@ -49,6 +49,11 @@ module.exports.run = async (client, message, args, config) => {
   // }
   // get complete reason
   const slicedReason = await args.join(' ').slice(userID.length + 1);
+  // check ban reason length for discord max ban reason
+  if (slicedReason.length > 512) {
+    messageFail(message, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
+    return;
+  }
   // exec ban
   const processedBanUser = await message.guild.members.ban(userID, { reason: slicedReason });
   // write confirmation
