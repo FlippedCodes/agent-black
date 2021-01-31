@@ -1,3 +1,13 @@
 A bot used to manage bans of multiple servers.
 
 For more Information, please contact **Phil | Flipper#3621**.
+
+
+@everyone 
+__Bot update - 1.11.0__
+New Stuff:
+- 
+Changes:
+- existing ban reasonsn get updated
+Bug Fixes:
+- added 512 ban reason limit (Discords limit)
