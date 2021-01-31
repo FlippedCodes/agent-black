@@ -40,13 +40,14 @@ module.exports.run = async (client, message, args, config) => {
     }
   }
   // check if user is already banned
-  // FIXME: existingBan is always empty
-  // const banList = await message.guild.fetchBans();
-  // const existingBan = banList.find((user) => user.id === userID);
-  // if (existingBan) {
-  //   messageFail(message, `The user \`${toBanUser.tag}\` has been already banned!`);
-  //   return;
-  // }
+  const banList = await message.guild.fetchBans();
+  const existingBan = await banList.find((ban) => ban.user.id === userID);
+  if (existingBan) {
+    // unbanning so reason gets updated
+    await message.guild.members.unban(userID);
+    // messageFail(message, `The user \`${toBanUser.tag}\` has been already banned!`);
+    // return;
+  }
   // get complete reason
   const slicedReason = await args.join(' ').slice(userID.length + 1);
   // check ban reason length for discord max ban reason
