@@ -1,9 +1,19 @@
 A bot used to manage bans of multiple servers.
 
 For more Information, please contact **Phil | Flipper#3621**.
+############################################
+__Reasonless Bans__
+Please do not ban people without context. We need a tangible reason under someone’s ban, we can’t just have a list of bans which have zero context to them. That defeats the purpose of this project and causes confusion among other servers.
+Note that some bots like Dyno **do not** record a reason. You can use discord built in Discord ban feature or the Agent Black itself. (Agent Black only works with IDs as its meant to be used for users that have already left.) Ofcourse you can use any other bot as long as it has been tested, to add a reason to the ban.
 
-Please do not ban people without context. We need a tangible reason under someone’s ban, we can’t just have a list of bans which have zero context to them. That defeats the purpose of this bot. Please do not use Dyno to ban. Dyno no longer adds ban reasons to the ban list. So, if you were to ban someone with a reason with Dyno, the ban reason will not be given to the bot and no context will be recorded. Other bots should work fine, you can even use the Agent Black itself a!ban <UserID> <reason>. Agent Black currently doesn’t work with tags, just IDs. 
+__Valid Reasons__
+Please don’t ban people for unjustified and no valid reasons. 
+Everyone should be treated and punnished equally, so banning someone because you don't like them is not appropriate.
+By using this bot, you agree that you will consider bans objectively. That means don’t consider your personal feelings on the subject. Be professional with the ban feature, be thorough; we don’t want to see ban reasons that are false.
+**Don’t sugar coat ban reasons, don’t exaggerate, and don’t lie.**
 
-Please don’t ban people for no valid reason. By that, I don’t mean just ban people who you don’t like or ban people with an unjustified reason. By using this bot, you agree that you will consider bans objectively, that means don’t consider your personal feelings on the subject. Be professional with the ban feature, be thorough; we don’t want to see ban reasons that are false. Don’t sugar coat ban reasons, don’t exaggerate, and don’t lie. 
-
-Don’t ban discord bots; and if you remove Agent Black from your server, please have the decency to notify us.
+__Terminating the partnership__
+The partnership can be terminated by voting from other servers or by the other of the partnering server.
+If your server is leaving the Agent Black Agency the owner are obligated to notify an Elite Agent so server can be properly removed from the database and is theirfor no longer part of the agency.
+**The Agent Black Agency gets to keep all bans, that the bot recorded while it was on the server**
+############################################
