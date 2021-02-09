@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-const ServerSetting = require('../../database/models/ServerSetting');
+const ServerSetting = require('../database/models/ServerSetting');
 
 // gets server settings
 async function getSettings(serverID) {

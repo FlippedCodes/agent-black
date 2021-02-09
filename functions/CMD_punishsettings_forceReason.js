@@ -1,4 +1,4 @@
-const ServerSetting = require('../../database/models/ServerSetting');
+const ServerSetting = require('../database/models/ServerSetting');
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
