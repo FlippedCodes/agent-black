@@ -17,6 +17,11 @@ module.exports = {
       type: Sequelize.TEXT('tiny'),
       allowNull: false,
     },
+    active: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   }),
