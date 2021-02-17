@@ -18,4 +18,9 @@ module.exports = sequelize.define('ParticipatingServer', {
     type: Sequelize.TEXT('tiny'),
     allowNull: false,
   },
+  active: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
 });
