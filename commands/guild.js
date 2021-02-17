@@ -89,7 +89,7 @@ module.exports.run = async (client, message, args, config) => {
       const serverRemoved = await removeServer(ParticipatingServer, serverID);
       if (serverRemoved >= 1) {
         messageSuccess(message,
-          `The server with the ID \`${serverID}\` got removed from the participating Servers list.`);
+          `The server with the ID \`${serverID}\` got disabled from the participating Servers list.`);
       } else {
         messageFail(message,
           `The server with the ID \`${serverID}\` couldn't be found of the list.`);
