@@ -4,10 +4,13 @@ const Ban = require('../database/models/Ban');
 
 // adds a server to the ParticipatingServers table
 async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
+  await ParticipatingServer.destroy({ limit: 1, where: { serverID, active: false } });
   const added = await ParticipatingServer.findOrCreate(
     {
       where: { serverID },
-      defaults: { logChannelID, teamRoleID, serverName },
+      defaults: {
+        logChannelID, teamRoleID, serverName, active: true,
+      },
     },
   ).catch((err) => console.error(err));
   const created = await added[1];
@@ -16,7 +19,6 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 
 // removes a server from the ParticipatingServers table
 async function removeServer(ParticipatingServer, serverID) {
-  // const disabled = await ParticipatingServer.destroy({ limit: 1, where: { serverID } });
   const success = await ParticipatingServer.update({ active: false },
     { where: { serverID, active: true } })
     .catch(errHander);
@@ -71,10 +73,10 @@ module.exports.run = async (client, message, args, config) => {
       // post outcome
       if (serverAdded) {
         messageSuccess(message,
-          `\`${slicedServerName}\` with the ID \`${serverID}\` got added to the participating Servers list.`);
+          `\`${slicedServerName}\` with the ID \`${serverID}\` got added to / updated for the participating Servers list.`);
       } else {
         messageFail(message,
-          `The entry for the server \`${slicedServerName}\` with the ID \`${serverID}\` already exists!`);
+          `An active server entry for \`${slicedServerName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
       }
       return;
 
