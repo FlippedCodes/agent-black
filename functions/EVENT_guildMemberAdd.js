@@ -9,9 +9,9 @@ const errHander = (err) => {
   console.error('ERROR:', err);
 };
 
-// checks if server is partisipating server
+// checks if server is participating server
 function getServerEntry(client, serverID) {
-  return client.functions.get('FUNC_checkServer').run(serverID);
+  return client.functions.get('FUNC_checkServer').run(serverID, false);
 }
 
 // get log channel of server

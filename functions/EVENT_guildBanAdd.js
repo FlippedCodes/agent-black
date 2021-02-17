@@ -10,7 +10,7 @@ const errHander = (err) => {
 
 // checks if server is partisipating server
 function getServerEntry(client, serverID) {
-  return client.functions.get('FUNC_checkServer').run(serverID);
+  return client.functions.get('FUNC_checkServer').run(serverID, true);
 }
 
 // creates a embed messagetemplate for succeded actions
@@ -63,7 +63,9 @@ module.exports.run = async (guild, user) => {
       }
       banReason = fixedReason;
       const bannedGuild = await getServerEntry(user.client, serverID);
-      messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
+      if (bannedGuild.logChannelID && bannedGuild.active) {
+        messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
+      }
     });
   user.client.guilds.cache.forEach(async (toTestGuild) => {
     if (guild.id === toTestGuild.id) return;
@@ -71,7 +73,9 @@ module.exports.run = async (guild, user) => {
     if (serverMember) {
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(user.client, serverID);
-      messageBannedUserInGuild(user.client, infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
+      if (infectedGuild.logChannelID && infectedGuild.active) {
+        messageBannedUserInGuild(user.client, infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
+      }
     }
   });
 };

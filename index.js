@@ -41,21 +41,21 @@ client.once('ready', async () => {
 
 // EVENT user gets banned
 client.on('guildBanAdd', async (guild, user) => {
-  if (await client.functions.get('FUNC_checkServer').run(guild.id)) {
+  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
     client.functions.get('EVENT_guildBanAdd').run(guild, user);
   }
 });
 
 // EVENT user gets unbanned
 client.on('guildBanRemove', async (guild, user) => {
-  if (await client.functions.get('FUNC_checkServer').run(guild.id)) {
+  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
     client.functions.get('EVENT_guildBanRemove').run(guild, user);
   }
 });
 
 // user joins the server
 client.on('guildMemberAdd', async (member) => {
-  if (await client.functions.get('FUNC_checkServer').run(member.guild.id)) {
+  if (await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) {
     client.functions.get('EVENT_guildMemberAdd').run(client, member);
   }
 });
