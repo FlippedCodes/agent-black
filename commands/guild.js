@@ -16,8 +16,11 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 
 // removes a server from the ParticipatingServers table
 async function removeServer(ParticipatingServer, serverID) {
-  const destroyed = await ParticipatingServer.destroy({ limit: 1, where: { serverID } });
-  return destroyed;
+  // const disabled = await ParticipatingServer.destroy({ limit: 1, where: { serverID } });
+  const success = await ParticipatingServer.update({ active: false },
+    { where: { serverID, active: true } })
+    .catch(errHander);
+  return success[0];
 }
 
 // finds a server in the ParticipatingServers table
