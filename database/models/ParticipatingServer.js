@@ -6,14 +6,8 @@ module.exports = sequelize.define('ParticipatingServer', {
     primaryKey: true,
     unique: true,
   },
-  logChannelID: {
-    type: Sequelize.STRING(30),
-    allowNull: false,
-  },
-  teamRoleID: {
-    type: Sequelize.STRING(30),
-    allowNull: false,
-  },
+  logChannelID: Sequelize.STRING(30),
+  teamRoleID: Sequelize.STRING(30),
   serverName: {
     type: Sequelize.TEXT('tiny'),
     allowNull: false,
