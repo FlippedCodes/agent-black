@@ -106,13 +106,15 @@ module.exports.run = async (client, message, args, config) => {
       }
       const serverFound = await findServer(ParticipatingServer, serverID);
       if (serverFound) {
-        messageSuccess(message,
-          `Servername: \`${serverFound.serverName}\`
-          Server ID: \`${serverFound.serverID}\`
-          Log Channel: <#${serverFound.logChannelID}> (\`${serverFound.logChannelID}\`)
-          Team Role ID: \`${serverFound.teamRoleID}\`
-          Submitted Bans: \`${await getBanCount(serverID)}\`
-          Participating Server since \`${serverFound.createdAt}\``);
+        let content = `
+        Servername: \`${serverFound.serverName}\`
+        Server ID: \`${serverFound.serverID}\`
+        Log Channel: <#${serverFound.logChannelID}> (\`${serverFound.logChannelID}\`)
+        Team Role ID: \`${serverFound.teamRoleID}\`
+        Submitted Bans: \`${await getBanCount(serverID)}\`
+        Is server part of Assisioation: \`${serverFound.active}\``;
+        if (serverFound.active) content += `\nParticipating Server since \`${serverFound.updatedAt}\``;
+        messageSuccess(message, content);
       } else {
         messageFail(message,
           `The server with the ID \`${serverID}\` couldn't be found in the list.`);
