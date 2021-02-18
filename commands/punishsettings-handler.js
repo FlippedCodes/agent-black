@@ -24,7 +24,7 @@ module.exports.run = async (client, message, args, config) => {
   const [subcmd] = args;
   const commandValues = ['enable', 'listSettings', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
   const currentCMD = module.exports.help;
-  if (commandValues.includes(subcmd)) {
+  if (commandValues.toLowerCase().includes(subcmd)) {
     if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
       client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
         .run(client, message, args, config);
