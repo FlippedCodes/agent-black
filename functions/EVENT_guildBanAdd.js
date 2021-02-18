@@ -40,7 +40,7 @@ module.exports.run = async (guild, user) => {
   // declaring so ban reason can be used in foreach loop
   let banReason;
   // getting newly added ban
-  guild.fetchBan(user)
+  await guild.fetchBan(user)
     .then(async (ban) => {
       // assign simpler values
       const serverID = guild.id;
