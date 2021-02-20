@@ -17,7 +17,6 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    userBanned: Sequelize.BOOLEAN,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   }),

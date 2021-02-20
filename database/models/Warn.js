@@ -18,5 +18,4 @@ module.exports = sequelize.define('Warn', {
     type: Sequelize.TEXT,
     allowNull: false,
   },
-  userBanned: Sequelize.BOOLEAN,
 });
