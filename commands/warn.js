@@ -56,9 +56,9 @@ module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
   const [subcmd, userIDOrWarnID, reasonTesting] = args;
 
-  // check userpermissions
-  if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
+  // check permissions if MANAGE_MESSAGES and if send in DMs
+  if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'MANAGE_MESSAGES')) {
+    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
     return;
   }
 
