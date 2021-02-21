@@ -4,6 +4,8 @@ const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
+const Warn = require('../database/models/Warn');
+
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const UserIDAssociation = require('../database/models/UserIDAssociation');
@@ -43,6 +45,13 @@ async function getBanns(userID) {
   return found;
 }
 
+async function getWarns(userID) {
+  // adds a user to the Maintainer table
+  const found = await Warn.findAll({ where: { userID } })
+    .catch((err) => console.error(err));
+  return found;
+}
+
 async function getServerName(serverID) {
   // adds a user to the Maintainer table
   const found = await ParticipatingServer.findOne({ where: { serverID } })
@@ -51,8 +60,8 @@ async function getServerName(serverID) {
   return found.serverName;
 }
 
-async function postBanns(message, userID) {
-  const banns = await getBanns(userID);
+// final ban posting function
+function postBans(message, banns) {
   banns.forEach(async (ban) => {
     const embed = new MessageEmbed()
       .addField('ServerID', `\`${ban.serverID}\``, true)
@@ -73,6 +82,27 @@ async function postBanns(message, userID) {
     }
     message.channel.send({ embed });
   });
+}
+
+// final warn posting function
+function postWarns(message, warns) {
+  warns.forEach(async (warn) => {
+    const serverName = await getServerName(warn.serverID);
+    const embed = new MessageEmbed()
+      .setColor(16755456) // yellow
+      .setAuthor(`Warned on ${serverName}`)
+      .addField('ServerID', `\`${warn.serverID}\``, true)
+      .addField('Reason', `\`\`\`${warn.reason || 'None'}\`\`\``)
+      .addField('Warning creation date', warn.createdAt, true)
+      .addField('Warning updated date', warn.updatedAt, true);
+    message.channel.send({ embed });
+  });
+}
+
+// prepares for bans and warnings from other servers
+async function postInfractions(message, userID) {
+  postBans(message, await getBanns(userID));
+  postWarns(message, await getWarns(userID));
 }
 
 function getID(message, args) {
@@ -124,7 +154,7 @@ module.exports.run = async (client, message, args, config) => {
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
     await postUserinfo(client, message, ID);
-    await postBanns(message, ID);
+    await postInfractions(message, ID);
   });
 };
 
