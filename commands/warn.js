@@ -2,9 +2,15 @@ const config = require('../config/main.json');
 
 const Warn = require('../database/models/Warn');
 
-// adds a server to the ParticipatingServers table
+// adds a Warn to the warning table
 async function addWarn(serverID, userID, reason) {
   await Warn.create({ userID, serverID, reason })
+    .catch(errHander);
+}
+
+// edits a Warn to the warning table
+async function editWarn(warnID, reason) {
+  Warn.update({ reason }, { where: { warnID } })
     .catch(errHander);
 }
 
@@ -40,6 +46,12 @@ function checkforInfectedGuilds(client, guild, userID, warnReason) {
   });
 }
 
+async function getWarning(warnID) {
+  const found = await Warn.findOne({ where: { warnID } })
+    .catch(errHander);
+  return found;
+}
+
 module.exports.run = async (client, message, args, config) => {
   // get subcmd from args
   const [subcmd, userIDOrWarnID, reasonTesting] = args;
@@ -63,6 +75,7 @@ module.exports.run = async (client, message, args, config) => {
           \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
         return;
       }
+      // check if user exists
       if (!await client.functions.get('FUNC_checkID').run(userIDOrWarnID, client, 'user')) {
         messageFail(message, `The user with the ID \`${userIDOrWarnID}\` doesn't exist.`);
         return;
@@ -84,15 +97,29 @@ module.exports.run = async (client, message, args, config) => {
           \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
         return;
       }
-      if (!await client.functions.get('FUNC_checkID').run(userIDOrWarnID, client, 'user')) {
-        messageFail(message, `The user with the ID \`${userIDOrWarnID}\` doesn't exist.`);
+      // check if user exists
+      if (isNaN(userIDOrWarnID)) {
+        messageFail(message, 'This is not a warn-ID!');
+        return;
+      }
+      const serverID = message.guild.id;
+      const warning = await getWarning(userIDOrWarnID);
+      // check if warn is existent
+      if (!warning) {
+        messageFail(message, 'A Warning with this ID doesn\'t exist!');
+        return;
+      }
+      // check if warn is from the same server
+      if (warning.serverID !== serverID) {
+        messageFail(message, 'You can only edit warnings form the server where they have been issues from.');
         return;
       }
       // slice reason
       slicedReason = await args.join(' ').slice(subcmd.length + 1 + userIDOrWarnID.length + 1);
       // add warn
       await editWarn(userIDOrWarnID, slicedReason);
-      messageSuccess(message, `The user with the ID \`${userIDOrWarnID}\` got a new warning added.\n Warning other servers.`);
+      messageSuccess(message, `The warning with the the ID ${userIDOrWarnID} has been edited. Warning other servers.`);
+      checkforInfectedGuilds(client, message.guild, warning.userID, slicedReason);
       return;
 
     default:
