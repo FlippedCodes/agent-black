@@ -63,7 +63,7 @@ module.exports.run = async (guild, user) => {
       }
       banReason = fixedReason;
       const bannedGuild = await getServerEntry(user.client, serverID);
-      if (bannedGuild.logChannelID && bannedGuild.active) {
+      if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
         messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
       }
     });
