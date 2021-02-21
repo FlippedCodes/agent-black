@@ -2,6 +2,8 @@ const { Op } = require('sequelize');
 
 const { MessageEmbed } = require('discord.js');
 
+const config = require('../config/main.json');
+
 const Ban = require('../database/models/Ban');
 
 const Warn = require('../database/models/Warn');
@@ -29,8 +31,10 @@ async function postUserinfo(client, message, userID) {
       return message.channel.send({ embed });
     });
   if (!failed) {
+    let botBadge = '';
+    if (discordUser.bot) botBadge = config.lookupBotBadge;
     embed
-      .addField('Usertag', `\`${discordUser.tag}\``)
+      .addField('Usertag', `\`${discordUser.tag}\` ${botBadge}`)
       .addField('ID', `\`${userID}\``)
       .addField('Account Creation Date', discordUser.createdAt, true)
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
