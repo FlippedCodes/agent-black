@@ -30,7 +30,7 @@ async function messageBannedUserInGuild(client, channelID, userTag, userID, banR
       Reason: \`${banReason || 'none'}\``,
       `A user on your server has been banned on '${serverName}'!`,
       16739072,
-      `For more information and other bans use '${config.prefix}lookup ${userID}'`);
+      `For more information and other bans and warns use '${config.prefix}lookup ${userID}'`);
 }
 
 module.exports.run = async (guild, user) => {
