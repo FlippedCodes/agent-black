@@ -66,6 +66,7 @@ function postBans(message, banns) {
     const embed = new MessageEmbed()
       .addField('ServerID', `\`${ban.serverID}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
+      .addField('BanID', `\`${ban.banID}\``, true)
       .addField('Reason', `\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('Ban creation date', ban.createdAt, true)
       .addField('Ban updated date', ban.updatedAt, true);
@@ -92,6 +93,7 @@ function postWarns(message, warns) {
       .setColor(16755456) // yellow
       .setAuthor(`Warned on ${serverName}`)
       .addField('ServerID', `\`${warn.serverID}\``, true)
+      .addField('WarnID', `\`${warn.warnID}\``, true)
       .addField('Reason', `\`\`\`${warn.reason || 'None'}\`\`\``)
       .addField('Warning creation date', warn.createdAt, true)
       .addField('Warning updated date', warn.updatedAt, true);
