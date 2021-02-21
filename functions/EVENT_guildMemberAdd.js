@@ -2,6 +2,8 @@ const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
+const Warn = require('../database/models/Warn');
+
 const config = require('../config/main.json');
 
 // error Handler
@@ -20,7 +22,7 @@ function findLogChannel(client, logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(client, serverID, userID, userTag, ammountOfBans) {
+async function sendMessage(client, serverID, userID, userTag, ammount) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(client, logChannelID);
@@ -29,22 +31,23 @@ async function sendMessage(client, serverID, userID, userTag, ammountOfBans) {
     .run(client.user, logChannel,
       `tag: \`${userTag}\`
       ID: \`${userID}\`
-      bans: \`${ammountOfBans}\`
+      bans and warns: \`${ammount}\`
       For more information use \`${config.prefix}lookup ${userID}\``,
       `Banned user joined '${serverName}'`,
       16739072, false);
 }
 
-// check if user is banned on some server
-async function checkBannedUser(client, member) {
-  const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
-  const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
-  if (userBans.length !== 0) sendMessage(client, serverID, userID, userTag, userBans.length);
-}
-
 module.exports.run = async (client, member) => {
+  // record user tag
   client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
-  checkBannedUser(client, member);
+  // check if user is banned on some server
+  const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
+  // get all bans and warnings the joined user has
+  const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
+  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHander);
+  // calculate sum and check if sum is still 0
+  const overallAmmount = userBans.length + userWarns.length;
+  if (overallAmmount !== 0) sendMessage(client, serverID, userID, userTag, overallAmmount);
 };
 
 module.exports.help = {
