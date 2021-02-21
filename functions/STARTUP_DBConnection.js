@@ -17,9 +17,9 @@ module.exports.run = () => {
     password = DBCredentials.password;
     host = DBCredentials.host;
   } else {
-    database = process.env.DBNameAgentBlack;
-    user = process.env.DBNameAgentBlack;
-    password = process.env.DBPasswAgentBlack;
+    database = process.env.DBName;
+    user = process.env.DBUsername;
+    password = process.env.DBPassword;
     host = process.env.DBHost;
   }
   const sequelize = new Sequelize(
