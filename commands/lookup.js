@@ -116,7 +116,6 @@ function getID(message, args) {
   if (message.mentions.members.first()) return message.mentions.members.first().id;
   // get userID
   const [userID] = args;
-  console.log(userID);
   // check if id argument is present
   if (!userID) return message.author.id;
   // ckeck if content is not NaN
