@@ -19,7 +19,7 @@ async function checkTag(userTag) {
   return found;
 }
 
-async function postUserinfo(client, message, userID) {
+async function postUserinfo(client, message, userID, bans, warns) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
   const discordUser = await client.users.fetch(userID, false)
@@ -38,6 +38,8 @@ async function postUserinfo(client, message, userID) {
       .addField('ID', `\`${userID}\``)
       .addField('Account Creation Date', discordUser.createdAt, true)
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
+    if (bans) embed.addField('Ban ammount', bans, true);
+    if (warns) embed.addField('Warn ammount', warns, true);
     return message.channel.send({ embed });
   }
 }
@@ -106,9 +108,9 @@ function postWarns(message, warns) {
 }
 
 // prepares for bans and warnings from other servers
-async function postInfractions(message, userID) {
-  postBans(message, await getBanns(userID));
-  postWarns(message, await getWarns(userID));
+async function postInfractions(message, bans, warns) {
+  postBans(message, bans);
+  postWarns(message, warns);
 }
 
 function getID(message, args) {
@@ -158,8 +160,11 @@ module.exports.run = async (client, message, args, config) => {
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
-    await postUserinfo(client, message, ID);
-    await postInfractions(message, ID);
+    const bans = await getBanns(userID);
+    const warns = await getWarns(userID);
+    const ammount = bans.length + warns.length;
+    await postUserinfo(client, message, ID, bans.length, warns.length);
+    await postInfractions(message, bans, warns);
   });
 };
 
