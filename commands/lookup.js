@@ -42,7 +42,7 @@ async function postUserinfo(client, message, userID, bans, warns) {
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
     if (bans) embed.addField('Ban ammount', bans, true);
     if (warns) embed.addField('Warn ammount', warns, true);
-    if (sharedServers.size) embed.addField('Shared servers', `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
+    if (sharedServers.size) embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
     return message.channel.send({ embed });
   }
 }
