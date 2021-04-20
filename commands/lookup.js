@@ -30,6 +30,8 @@ async function postUserinfo(client, message, userID, bans, warns) {
       failed = true;
       return message.channel.send({ embed });
     });
+  const sharedServers = await client.guilds.cache.filter((guild) => !!guild.member(discordUser));
+  // post userinfo if no errors accour
   if (!failed) {
     let botBadge = '';
     if (discordUser.bot) botBadge = config.lookupBotBadge;
@@ -40,6 +42,7 @@ async function postUserinfo(client, message, userID, bans, warns) {
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
     if (bans) embed.addField('Ban ammount', bans, true);
     if (warns) embed.addField('Warn ammount', warns, true);
+    if (sharedServers.size) embed.addField('Shared servers', `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
     return message.channel.send({ embed });
   }
 }
@@ -162,7 +165,6 @@ module.exports.run = async (client, message, args, config) => {
   IDArr.forEach(async (ID) => {
     const bans = await getBanns(userID);
     const warns = await getWarns(userID);
-    const ammount = bans.length + warns.length;
     await postUserinfo(client, message, ID, bans.length, warns.length);
     await postInfractions(message, bans, warns);
   });
