@@ -160,6 +160,11 @@ module.exports.run = async (client, message, args, config) => {
   if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
   // else return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
+  // TODO: alias checking
+  // check if only 1 array entry (because we dont want to wildcard)
+  // check DB for ID => add to array; run function again to check if newly added ID is on list again
+  // ckeck if entry is already there => skip if it is, continue; repeat if not (?)
+
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
