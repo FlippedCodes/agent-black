@@ -1,15 +1,15 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('UserAlias', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('UserAliases', {
     aliasID: {
       type: Sequelize.INTEGER(11),
       primaryKey: true,
       autoIncrement: true,
     },
-    userID: {
+    mainUser: {
       type: Sequelize.STRING(30),
       allowNull: false,
     },
-    aliasUserID: {
+    aliasUser: {
       type: Sequelize.STRING(30),
       allowNull: false,
     },
@@ -21,5 +21,5 @@ module.exports = {
     updatedAt: Sequelize.DATE,
   }),
 
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('UserAlias'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('UserAliases'),
 };
