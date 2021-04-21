@@ -1,10 +1,14 @@
 const Sequelize = require('sequelize');
 
 module.exports = sequelize.define('UserAlias', {
-  userID: {
-    type: Sequelize.STRING(30),
+  aliasID: {
+    type: Sequelize.INTEGER(11),
     primaryKey: true,
     autoIncrement: true,
+  },
+  userID: {
+    type: Sequelize.STRING(30),
+    allowNull: false,
   },
   aliasUserID: {
     type: Sequelize.STRING(30),
