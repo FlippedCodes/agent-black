@@ -1,10 +1,4 @@
-// module.exports.run = async (client, message, args, config) => {
-//   // check permissions
-//   // check server settings (is punishing feature enabled?)
-//   // command handler for subcommands: manualAdd, manualRemove, stats, userStats (calls lookup), add, remove, list, listPunishments
-// };
-
-const ServerSetting = require('../database/models/ServerSetting');
+const UserAlias = require('../database/models/UserAlias');
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
@@ -12,15 +6,57 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-// check if server has feature enabled.
-async function checkFeature(serverID) {
-  const found = await ServerSetting.findOne({ where: { serverID, pointsSystemEnabled: true } })
-    .catch(errHander);
+async function addAlias(mainUser, aliasUser, addedBy) {
+  const [output] = await UserAlias.findOrCreate({
+    where: { mainUser, aliasUser },
+    defaults: { addedBy },
+  }).catch(errHander);
+  return output;
+}
+
+async function checkAlias(mainUser, aliasUser) {
+  const found = await UserAlias.findOne({ where: { mainUser, aliasUser } })
+    .catch((err) => console.error(err));
   return found;
 }
 
-// is used to configure settings
-// if setting is not set, use default from config
+// check for correct values
+async function checkValues(message, config, mainUser, aliasUser) {
+  if (!mainUser) {
+    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
+    return false;
+  }
+  if (isNaN(mainUser)) {
+    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
+    return false;
+  }
+  if (!await message.client.functions.get('FUNC_checkID').run(mainUser, message.client, 'user')) {
+    messageFail(message, `A user with the ID \`${mainUser}\` doesn't exist!`);
+    return false;
+  }
+  if (!aliasUser) {
+    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
+    return false;
+  }
+  if (isNaN(aliasUser)) {
+    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
+    return false;
+  }
+  if (!await message.client.functions.get('FUNC_checkID').run(aliasUser, message.client, 'user')) {
+    messageFail(message, `A user with the ID \`${aliasUser}\` doesn't exist!`);
+    return false;
+  }
+  // check for existing id
+  // let exist = true;
+  // await [mainUser, aliasUser].forEach(async (uID) => {
+  //   if (!await message.client.functions.get('FUNC_checkID').run(uID, message.client, 'user')) {
+  //     exist = false;
+  //     await messageFail(message, `A user with the ID \`${uID}\` doesn't exist!`);
+  //   }
+  // });
+  return true;
+}
+
 module.exports.run = async (client, message, args, config) => {
   // command usame checking
   // ckeck if both ids are valid
@@ -39,6 +75,16 @@ module.exports.run = async (client, message, args, config) => {
   //       .run(client, message, args, config);
   //   } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first!\n${CommandUsage(config.prefix, currentCMD.name, 'enable true')}`);
   // } else messageFail(message, CommandUsage(config.prefix, currentCMD.name, commandValues.join('|')));
+  if (!await checkValues(message, config, mainUser, aliasUser)) return;
+  if (await checkAlias(mainUser, aliasUser)) {
+    messageFail(message, 'Entry already exists!');
+    return;
+  }
+  if (!await addAlias(mainUser, aliasUser, message.author.id)) {
+    messageFail(message, 'Something went wrong...');
+    return;
+  }
+  messageSuccess(message, 'Added entry!');
 };
 
 module.exports.help = {
