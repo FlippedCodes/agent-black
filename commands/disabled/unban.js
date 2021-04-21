@@ -1,6 +1,5 @@
 // WIP
 
-
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
