@@ -6,11 +6,11 @@ module.exports = sequelize.define('UserAlias', {
     primaryKey: true,
     autoIncrement: true,
   },
-  userID: {
+  mainUser: {
     type: Sequelize.STRING(30),
     allowNull: false,
   },
-  aliasUserID: {
+  aliasUser: {
     type: Sequelize.STRING(30),
     allowNull: false,
   },
