@@ -40,8 +40,8 @@ async function postUserinfo(client, message, userID, bans, warns) {
       .addField('ID', `\`${userID}\``)
       .addField('Account Creation Date', discordUser.createdAt, true)
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
-    if (bans) embed.addField('Ban ammount', bans, true);
-    if (warns) embed.addField('Warn ammount', warns, true);
+    if (bans) embed.addField('Bans', bans, true);
+    if (warns) embed.addField('Warns', warns, true);
     if (sharedServers.size) embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
     return message.channel.send({ embed });
   }
