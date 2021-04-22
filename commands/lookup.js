@@ -147,7 +147,7 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
 
-  const IDArr = [];
+  let IDArr = [];
   const userID = getID(message, args);
   if (userID) IDArr.push(userID);
   else {
@@ -164,7 +164,10 @@ module.exports.run = async (client, message, args, config) => {
   // check if only 1 array entry (because we dont want to wildcard)
   // check DB for ID => add to array; run function again to check if newly added ID is on list again
   // ckeck if entry is already there => skip if it is, continue; repeat if not (?)
-
+  if (IDArr.length === 1) {
+    IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
+    // if (extraIDs) IDArr.push(...extraIDs);
+  }
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
