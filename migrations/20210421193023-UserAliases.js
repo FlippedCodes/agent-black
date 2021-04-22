@@ -5,11 +5,11 @@ module.exports = {
       primaryKey: true,
       autoIncrement: true,
     },
-    mainUser: {
+    groupingID: {
       type: Sequelize.STRING(30),
       allowNull: false,
     },
-    aliasUser: {
+    userID: {
       type: Sequelize.STRING(30),
       allowNull: false,
     },
