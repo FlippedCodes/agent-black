@@ -168,8 +168,8 @@ module.exports.run = async (client, message, args, config) => {
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
-    const bans = await getBanns(userID);
-    const warns = await getWarns(userID);
+    const bans = await getBanns(ID);
+    const warns = await getWarns(ID);
     await postUserinfo(client, message, ID, bans.length, warns.length);
     await postInfractions(message, bans, warns);
   });
