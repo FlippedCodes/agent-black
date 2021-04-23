@@ -165,6 +165,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   // check DB for ID => add to array; run function again to check if newly added ID is on list again
   // ckeck if entry is already there => skip if it is, continue; repeat if not (?)
   if (IDArr.length === 1) {
+    // TODO: show a warning, that there are aliases, before showing them
     IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
     // if (extraIDs) IDArr.push(...extraIDs);
   }
