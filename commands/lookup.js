@@ -140,10 +140,10 @@ async function checkUserTag(uTag, IDArr) {
   return IDArr;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if MANAGE_MESSAGES and if send in DMs
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'MANAGE_MESSAGES')) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
 
@@ -152,7 +152,7 @@ module.exports.run = async (client, message, args, config) => {
   if (userID) IDArr.push(userID);
   else {
     // parse username
-    const userTag = message.content.slice(config.prefix.length + module.exports.help.name.length + 1);
+    const userTag = message.content.slice(prefix.length + module.exports.help.name.length + 1);
     // make DB search
     await checkUserTag(userTag, IDArr);
   }

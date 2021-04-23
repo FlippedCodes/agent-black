@@ -15,10 +15,10 @@ async function sendMessages(client, author, body) {
   });
 }
 
-module.exports.run = async (client, message, args, config) => {
-  const body = message.content.slice(config.prefix.length + module.exports.help.name.length + 1);
+module.exports.run = async (client, message, args, config, prefix) => {
+  const body = message.content.slice(prefix.length + module.exports.help.name.length + 1);
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${body}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${body}\``);
     return;
   }
   sendMessages(client, message.author.tag, body);

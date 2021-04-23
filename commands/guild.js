@@ -37,13 +37,13 @@ async function getBanCount(serverID) {
   return result.count;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // get subcmd from args
   const [subcmd, serverID, logChannelID, teamRoleID, serverName] = args;
 
   // check userpermissions
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${subcmd}\``);
     return;
   }
 
@@ -55,7 +55,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!serverID || !logChannelID || !teamRoleID || !serverName) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} ${teamRoleID || 'TEAMROLEID'} SERVERNAME\`\`\``);
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} ${teamRoleID || 'TEAMROLEID'} SERVERNAME\`\`\``);
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'channel')) {
@@ -85,7 +85,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!serverID) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverRemoved = await removeServer(ParticipatingServer, serverID);
@@ -103,7 +103,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!serverID) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverFound = await findServer(ParticipatingServer, serverID);
@@ -126,7 +126,7 @@ module.exports.run = async (client, message, args, config) => {
     default:
       messageFail(message,
         `Command usage: 
-        \`\`\`${config.prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
+        \`\`\`${prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };

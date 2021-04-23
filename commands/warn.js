@@ -20,7 +20,7 @@ function getServerEntry(client, serverID) {
 }
 
 // creates a embed messagetemplate for failed actions
-async function messageBannedUserInGuild(client, channelID, userTag, userID, warnReason, serverName) {
+async function messageBannedUserInGuild(client, prefix, channelID, userTag, userID, warnReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
@@ -29,7 +29,7 @@ async function messageBannedUserInGuild(client, channelID, userTag, userID, warn
       Reason: \`${warnReason || 'none'}\``,
       `A user on your server has been warned on '${serverName}'!`,
       16755456,
-      `For more information and other bans and warns use '${config.prefix}lookup ${userID}'`);
+      `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
 }
 
 function checkforInfectedGuilds(client, guild, userID, warnReason) {
@@ -40,7 +40,7 @@ function checkforInfectedGuilds(client, guild, userID, warnReason) {
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(client, serverID);
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
-        messageBannedUserInGuild(client, infectedGuild.logChannelID, serverMember.user.tag, userID, warnReason, guild.name);
+        messageBannedUserInGuild(client, prefix, infectedGuild.logChannelID, serverMember.user.tag, userID, warnReason, guild.name);
       }
     }
   });
@@ -52,13 +52,13 @@ async function getWarning(warnID) {
   return found;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // get subcmd from args
   const [subcmd, userIDOrWarnID, reasonTesting] = args;
 
   // check permissions if MANAGE_MESSAGES and if send in DMs
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'MANAGE_MESSAGES')) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
 
@@ -72,7 +72,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!userIDOrWarnID || !reasonTesting) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
         return;
       }
       // check if user exists
@@ -94,7 +94,7 @@ module.exports.run = async (client, message, args, config) => {
       if (!userIDOrWarnID || !reasonTesting) {
         messageFail(message,
           `Command usage:
-          \`\`\`${config.prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
         return;
       }
       // check if user exists
@@ -125,7 +125,7 @@ module.exports.run = async (client, message, args, config) => {
     default:
       messageFail(message,
         `Command usage: 
-        \`\`\`${config.prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
+        \`\`\`${prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };

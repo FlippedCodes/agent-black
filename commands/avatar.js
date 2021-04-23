@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   let [userID] = args;
   if (!userID) userID = message.author.id;
 

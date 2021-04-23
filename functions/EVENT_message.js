@@ -13,8 +13,11 @@ module.exports.run = async (client, message, config) => {
   const command = messageArray[0];
   const args = messageArray.slice(1);
 
+  // get prefix
+  const prefix = await client.functions.get('FUNC_getPrefix').run(message);
+
   // return if not prefix
-  if (!command.startsWith(config.prefix)) return;
+  if (!command.startsWith(prefix)) return;
 
   // check if server is on ParticipatingServers Table
   let serverID = null;
@@ -22,11 +25,11 @@ module.exports.run = async (client, message, config) => {
   if (!await client.functions.get('FUNC_checkServer').run(serverID, false)) return;
 
   // remove prefix and lowercase
-  const cmd = client.commands.get(command.slice(config.prefix.length).toLowerCase());
+  const cmd = client.commands.get(command.slice(prefix.length).toLowerCase());
 
   // run cmd if existent
   if (cmd) {
-    cmd.run(client, message, args, config)
+    cmd.run(client, message, args, config, prefix)
       .catch(console.log);
   }
 };

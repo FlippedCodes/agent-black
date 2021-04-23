@@ -30,12 +30,12 @@ async function findUser(Maintainer, userID) {
   return found;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // get subcmd from args
   const [subcmd, userID] = args;
 
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name} ${subcmd}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${subcmd}\``);
     return;
   }
 
@@ -44,7 +44,7 @@ module.exports.run = async (client, message, args, config) => {
     case 'add':
       // check provided information
       if (!userID) {
-        messageFail(CommandUsage(config.prefix, module.exports.help.name, subcmd));
+        messageFail(CommandUsage(prefix, module.exports.help.name, subcmd));
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(userID, client, 'sharedUser')) {
@@ -66,7 +66,7 @@ module.exports.run = async (client, message, args, config) => {
     // removes a userentry
     case 'remove':
       if (!userID) {
-        messageFail(CommandUsage(config.prefix, module.exports.help.name, subcmd));
+        messageFail(CommandUsage(prefix, module.exports.help.name, subcmd));
         return;
       }
       const userRemoved = await removeUser(Maintainer, userID);
@@ -82,7 +82,7 @@ module.exports.run = async (client, message, args, config) => {
     // shows info about a userentry
     case 'info':
       if (!userID) {
-        messageFail(CommandUsage(config.prefix, module.exports.help.name, subcmd));
+        messageFail(CommandUsage(prefix, module.exports.help.name, subcmd));
         return;
       }
       const userFound = await findUser(Maintainer, userID);
@@ -101,7 +101,7 @@ module.exports.run = async (client, message, args, config) => {
     default:
       messageFail(message,
         `Command usage: 
-        \`\`\`${config.prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
+        \`\`\`${prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };

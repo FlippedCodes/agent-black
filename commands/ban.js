@@ -4,25 +4,25 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
   // get args
   const [userID, reasonTester] = args;
   // check if gived arge are correct
   if (!userID) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'USERID REASON'));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
     return;
   }
   if (isNaN(userID)) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'USERID REASON'));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
     return;
   }
   if (!reasonTester) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, `${userID} REASON`));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${userID} REASON`));
     return;
   }
   // check userID if valid

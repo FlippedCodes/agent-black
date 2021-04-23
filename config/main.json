@@ -1,6 +1,9 @@
 {
     "name": "Agent Black",
-    "prefix": "ä",
+    "prefix": {
+        "default": "ä",
+        "nicknameSpacer": " | "
+    },
     "setup": {
         "moduleFolders": {
             "functionsFolder": "functions",

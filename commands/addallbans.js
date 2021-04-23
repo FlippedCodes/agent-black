@@ -12,16 +12,16 @@ function CommandUsage(prefix, cmdName, subcmd) {
     \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   const [serverID] = args;
 
   if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
   if (!serverID) {
     const info = module.exports.help;
-    messageFail(message, CommandUsage(config.prefix, info.name, info.usage));
+    messageFail(message, CommandUsage(prefix, info.name, info.usage));
     return;
   }
   if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {

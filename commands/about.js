@@ -13,7 +13,7 @@ function error(client, channel, err) {
     .run(client.user, channel, 'Oh no! Something went wrong. This error has been carefully recorded and our nerd is working on it to fix it. Please try again later.', '', 16449540, false);
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   fs.readFile(config.aboutText, 'utf8', (err, data) => {
     if (err) return error(client, message.channel, err);
     postMessage(client, message, data, error);

@@ -22,7 +22,7 @@ function findLogChannel(client, logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(client, serverID, userID, userTag, userBans, userWarns) {
+async function sendMessage(client, prefix, serverID, userID, userTag, userBans, userWarns) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(client, logChannelID);
@@ -33,7 +33,7 @@ async function sendMessage(client, serverID, userID, userTag, userBans, userWarn
       ID: \`${userID}\`
       bans: \`${userBans}\`
       warns: \`${userWarns}\`
-      For more information use \`${config.prefix}lookup ${userID}\``,
+      For more information use \`${prefix}lookup ${userID}\``,
       `Known user joined '${serverName}'`,
       16739072, false);
 }
@@ -48,7 +48,7 @@ module.exports.run = async (client, member) => {
   const userWarns = await Warn.findAll({ where: { userID } }).catch(errHandler);
   // calculate sum and check if sum is still 0
   const overallAmmount = userBans.length + userWarns.length;
-  if (overallAmmount !== 0) sendMessage(client, serverID, userID, userTag, userBans.length, userWarns.length);
+  if (overallAmmount !== 0) sendMessage(client, prefix, serverID, userID, userTag, userBans.length, userWarns.length);
 };
 
 module.exports.help = {

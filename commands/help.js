@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // prepare title and desc for embed
   const embed = new MessageEmbed()
     .setTitle('Halp')
@@ -9,7 +9,7 @@ module.exports.run = async (client, message, args, config) => {
   // creating embed fields for every command
   client.commands.forEach((CMD) => {
     embed.addField(
-      `\`${config.prefix}${CMD.help.name} ${CMD.help.usage || ''}\``,
+      `\`${prefix}${CMD.help.name} ${CMD.help.usage || ''}\``,
       CMD.help.desc, false,
     );
   });

@@ -22,13 +22,13 @@ async function checkAlias(userID) {
 }
 
 // check for correct values
-async function checkValues(message, config, mainUser, aliasUser) {
+async function checkValues(message, prefix, mainUser, aliasUser) {
   if (!mainUser) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
     return false;
   }
   if (isNaN(mainUser)) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
     return false;
   }
   // check if ID exists as a user
@@ -37,11 +37,11 @@ async function checkValues(message, config, mainUser, aliasUser) {
     return false;
   }
   if (!aliasUser) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
     return false;
   }
   if (isNaN(aliasUser)) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
+    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
     return false;
   }
   // check if ID exists as a user
@@ -52,15 +52,16 @@ async function checkValues(message, config, mainUser, aliasUser) {
   return true;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // command usame checking
   // ckeck if both ids are valid
   // command handler
   // add, remove
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
+
   // check if user is teammember
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
   const [mainUser, aliasUser] = args;
@@ -70,10 +71,10 @@ module.exports.run = async (client, message, args, config) => {
   // if (commandValues.toLowerCase().includes(subcmd)) {
   //   if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
   //     client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
-  //       .run(client, message, args, config);
-  //   } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first!\n${CommandUsage(config.prefix, currentCMD.name, 'enable true')}`);
-  // } else messageFail(message, CommandUsage(config.prefix, currentCMD.name, commandValues.join('|')));
-  if (!await checkValues(message, config, mainUser, aliasUser)) return;
+  //       .run(client, message, args, config, prefix);
+  //   } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first!\n${CommandUsage(prefix, currentCMD.name, 'enable true')}`);
+  // } else messageFail(message, CommandUsage(prefix, currentCMD.name, commandValues.join('|')));
+  if (!await checkValues(message, prefix, mainUser, aliasUser)) return;
   // get entries for both IDs
   const resultMainID = await checkAlias(mainUser);
   const resultAliasID = await checkAlias(aliasUser);

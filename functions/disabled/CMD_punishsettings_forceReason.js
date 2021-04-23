@@ -22,7 +22,7 @@ async function disableForceReason(serverID) {
   return disabled;
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   const [subcmd, enable] = args;
   const lowercaseEnable = enable.toLowerCase();
   const serverID = message.guild.id;

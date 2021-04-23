@@ -10,7 +10,7 @@ async function getBanns(userID) {
 }
 
 // send message when user is banned
-async function sendBanMessage(config, message, serverName, serverID, userID, userTag) {
+async function sendBanMessage(prefix, message, serverName, serverID, userID, userTag) {
   const client = message.client;
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, message.channel,
@@ -19,7 +19,7 @@ async function sendBanMessage(config, message, serverName, serverID, userID, use
       userID: \`${userID}\`
       username: \`${userTag}\``,
       '',
-      16739072, `For more information use \`${config.prefix}lookup ${userID}\``);
+      16739072, `For more information use \`${prefix}lookup ${userID}\``);
 }
 
 async function getServerName(serverID) {
@@ -30,17 +30,17 @@ async function getServerName(serverID) {
   return found.serverName;
 }
 
-function postBans(allBans, config, message) {
+function postBans(allBans, prefix, message) {
   allBans.forEach(async (foundBan) => {
     const serverID = foundBan.serverID;
-    sendBanMessage(config, message, await getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
+    sendBanMessage(prefix, message, await getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
   });
 }
 
-module.exports.run = async (client, message, args, config) => {
+module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`${config.prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
   // get all userIDs
@@ -50,7 +50,7 @@ module.exports.run = async (client, message, args, config) => {
   const allBans = await getBanns(IDs);
   if (allBans.length === 0) return messageSuccess(message, 'Your server is clear! No users banned on other servers have been found.');
   // check if up to 5 entries
-  if (allBans.length < 5) return postBans(allBans, config, message);
+  if (allBans.length < 5) return postBans(allBans, prefix, message);
   // sends pre waring message
   const confirmMessage = await messageFail(message, `You are about to display ${allBans.length} listed bans! This action can not be stopped midway through. \nAre you sure?`, true);
   await confirmMessage.react('❌');
@@ -67,7 +67,7 @@ module.exports.run = async (client, message, args, config) => {
       case '✅':
         messageSuccess(message, 'Starting... Please note, because of Discords API limit, the messages take some time to process.');
         // post bans
-        return postBans(allBans, config, message);
+        return postBans(allBans, prefix, message);
       default:
         // wrong reaction
         return messageFail(message, 'Please only choose one of the two options! Try again.');
