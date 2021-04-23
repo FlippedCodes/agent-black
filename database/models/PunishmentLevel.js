@@ -13,5 +13,5 @@ module.exports = sequelize.define('PunishmentLevel', {
     type: Sequelize.TEXT('tiny'),
     allowNull: false,
   },
-  ammount: Sequelize.INTEGER,
+  amount: Sequelize.INTEGER,
 });

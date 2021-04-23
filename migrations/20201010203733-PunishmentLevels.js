@@ -12,7 +12,7 @@ module.exports = {
       type: Sequelize.TEXT('tiny'),
       allowNull: false,
     },
-    ammount: Sequelize.INTEGER,
+    amount: Sequelize.INTEGER,
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   }),
