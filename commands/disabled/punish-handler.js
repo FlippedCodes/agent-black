@@ -15,7 +15,7 @@ function CommandUsage(prefix, cmdName, subcmd) {
 // check if server has feature enabled.
 async function checkFeature(serverID) {
   const found = await ServerSetting.findOne({ where: { serverID, pointsSystemEnabled: true } })
-    .catch(errHander);
+    .catch(errHandler);
   return found;
 }
 

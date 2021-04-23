@@ -15,7 +15,7 @@ const UserIDAssociation = require('../database/models/UserIDAssociation');
 // looksup usertag in list if recorded
 async function checkTag(userTag) {
   const found = await UserIDAssociation.findOne({ where: { userTag } })
-    .catch(errHander);
+    .catch(errHandler);
   return found;
 }
 
@@ -181,5 +181,5 @@ module.exports.run = async (client, message, args, config) => {
 module.exports.help = {
   name: 'lookup',
   usage: 'USERID|USERTAG|USERMENTION|USERSEARCH',
-  desc: 'Uses the Discord API to lookup userinformaiton',
+  desc: 'Uses the Discord API to lookup user information',
 };

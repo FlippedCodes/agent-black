@@ -4,7 +4,7 @@ const Ban = require('../database/models/Ban');
 
 const config = require('../config/main.json');
 
-const errHander = (err) => {
+const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -53,13 +53,13 @@ module.exports.run = async (guild, user) => {
       const [banEntry] = await Ban.findOrCreate({
         where: { userID, serverID },
         defaults: { userTag, reason: fixedReason, userBanned },
-      }).catch(errHander);
+      }).catch(errHandler);
       // check if entry is already on DB
       if (await !banEntry.isNewRecord) {
         // update DB entry
         Ban.update({ reason: fixedReason, userTag, userBanned },
           { where: { userTag, userID, serverID } })
-          .catch(errHander);
+          .catch(errHandler);
       }
       banReason = fixedReason;
       const bannedGuild = await getServerEntry(user.client, serverID);

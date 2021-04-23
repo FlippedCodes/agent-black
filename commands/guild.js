@@ -21,7 +21,7 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 async function removeServer(ParticipatingServer, serverID) {
   const success = await ParticipatingServer.update({ active: false },
     { where: { serverID, active: true } })
-    .catch(errHander);
+    .catch(errHandler);
   return success[0];
 }
 
@@ -59,7 +59,7 @@ module.exports.run = async (client, message, args, config) => {
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'channel')) {
-        messageFail(message, `The channel with the ID \`${logChannelID}\` doesnt exist!`);
+        messageFail(message, `The channel with the ID \`${logChannelID}\` doesn't exist!`);
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
@@ -114,7 +114,7 @@ module.exports.run = async (client, message, args, config) => {
         Log Channel: <#${serverFound.logChannelID}> (\`${serverFound.logChannelID}\`)
         Team Role ID: \`${serverFound.teamRoleID}\`
         Submitted Bans: \`${await getBanCount(serverID)}\`
-        Is server part of Assisioation: \`${serverFound.active}\``;
+        Is server apart of Association: \`${serverFound.active}\``;
         if (serverFound.active) content += `\nParticipating Server since \`${serverFound.updatedAt}\``;
         messageSuccess(message, content);
       } else {

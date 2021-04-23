@@ -7,7 +7,7 @@ const Warn = require('../database/models/Warn');
 const config = require('../config/main.json');
 
 // error Handler
-const errHander = (err) => {
+const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -44,8 +44,8 @@ module.exports.run = async (client, member) => {
   // check if user is banned on some server
   const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
   // get all bans and warnings the joined user has
-  const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
-  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHander);
+  const userBans = await Ban.findAll({ where: { userID } }).catch(errHandler);
+  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHandler);
   // calculate sum and check if sum is still 0
   const overallAmmount = userBans.length + userWarns.length;
   if (overallAmmount !== 0) sendMessage(client, serverID, userID, userTag, userBans.length, userWarns.length);

@@ -9,7 +9,7 @@ module.exports.run = async (userID, userTag) => {
     where: { userID },
     defaults: { userTag },
   })
-    .catch(errHander);
+    .catch(errHandler);
   cachedUsers.push(userID);
 };
 

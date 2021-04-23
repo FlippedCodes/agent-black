@@ -5,13 +5,13 @@ const Warn = require('../database/models/Warn');
 // adds a Warn to the warning table
 async function addWarn(serverID, userID, reason) {
   await Warn.create({ userID, serverID, reason })
-    .catch(errHander);
+    .catch(errHandler);
 }
 
 // edits a Warn to the warning table
 async function editWarn(warnID, reason) {
   Warn.update({ reason }, { where: { warnID } })
-    .catch(errHander);
+    .catch(errHandler);
 }
 
 // checks if server is partisipating server
@@ -48,7 +48,7 @@ function checkforInfectedGuilds(client, guild, userID, warnReason) {
 
 async function getWarning(warnID) {
   const found = await Warn.findOne({ where: { warnID } })
-    .catch(errHander);
+    .catch(errHandler);
   return found;
 }
 

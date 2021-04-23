@@ -18,7 +18,7 @@ module.exports = sequelize.define('UserPunishmentTicker', {
     type: Sequelize.STRING(30),
     allowNull: false,
   },
-  ammountLeft: {
+  amountLeft: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
