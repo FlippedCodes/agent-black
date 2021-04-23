@@ -11,7 +11,7 @@ function addAlias(userID, groupingID, addedBy) {
   UserAlias.findOrCreate({
     where: { userID, groupingID },
     defaults: { addedBy },
-  }).catch(errHander);
+  }).catch(errHandler);
   // return output;
 }
 
