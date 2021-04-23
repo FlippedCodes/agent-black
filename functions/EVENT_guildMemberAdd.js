@@ -7,7 +7,7 @@ const Warn = require('../database/models/Warn');
 const config = require('../config/main.json');
 
 // error Handler
-const errHander = (err) => {
+const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -22,7 +22,7 @@ function findLogChannel(client, logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(client, serverID, userID, userTag, ammount) {
+async function sendMessage(client, serverID, userID, userTag, amount) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(client, logChannelID);
@@ -31,7 +31,7 @@ async function sendMessage(client, serverID, userID, userTag, ammount) {
     .run(client.user, logChannel,
       `tag: \`${userTag}\`
       ID: \`${userID}\`
-      bans and warns: \`${ammount}\`
+      bans and warns: \`${amount}\`
       For more information use \`${config.prefix}lookup ${userID}\``,
       `Banned user joined '${serverName}'`,
       16739072, false);
@@ -43,11 +43,11 @@ module.exports.run = async (client, member) => {
   // check if user is banned on some server
   const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
   // get all bans and warnings the joined user has
-  const userBans = await Ban.findAll({ where: { userID } }).catch(errHander);
-  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHander);
+  const userBans = await Ban.findAll({ where: { userID } }).catch(errHandler);
+  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHandler);
   // calculate sum and check if sum is still 0
-  const overallAmmount = userBans.length + userWarns.length;
-  if (overallAmmount !== 0) sendMessage(client, serverID, userID, userTag, overallAmmount);
+  const overallamount = userBans.length + userWarns.length;
+  if (overallamount !== 0) sendMessage(client, serverID, userID, userTag, overallamount);
 };
 
 module.exports.help = {

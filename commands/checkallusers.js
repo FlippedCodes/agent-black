@@ -70,7 +70,7 @@ module.exports.run = async (client, message, args, config) => {
         return postBans(allBans, config, message);
       default:
         // wrong reaction
-        return messageFail(message, 'Please only choose one othe the two options! Try again.');
+        return messageFail(message, 'Please only choose one of the two options! Try again.');
     }
   });
   reactionCollector.on('end', () => confirmMessage.delete());

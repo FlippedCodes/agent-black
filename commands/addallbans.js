@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
-const errHander = (err) => {
+const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -44,21 +44,21 @@ module.exports.run = async (client, message, args, config) => {
             const [banEntry] = await Ban.findOrCreate({
               where: { userID, serverID },
               defaults: { reason: fixedReason, userTag, userBanned },
-            }).catch(errHander);
+            }).catch(errHandler);
             if (!banEntry.isNewRecord) {
               Ban.update({ reason: fixedReason, userBanned },
                 { where: { userID, serverID } })
-                .catch(errHander);
+                .catch(errHandler);
             }
           });
         })
         .then(() => msg.edit({ embed: new MessageEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }))
-        .catch(errHander);
-    }).catch(errHander);
+        .catch(errHandler);
+    }).catch(errHandler);
 };
 
 module.exports.help = {
   name: 'addallbans',
   usage: 'SERVERID',
-  desc: 'Adds all bans drom the current server its beeing used in.',
+  desc: 'Adds all bans from the current server its being used in.',
 };

@@ -2,7 +2,7 @@ const startupTime = +new Date();
 
 const OfflineStat = require('../database/models/OfflineStat');
 
-const errHander = (err) => {
+const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -14,9 +14,9 @@ module.exports.run = async (client, config) => {
     // loop db update in 5 sec intervall
     const [offlineStat] = await OfflineStat.findOrCreate({
       where: { ID: 1 }, defaults: { time: startupTime },
-    }).catch(errHander);
+    }).catch(errHandler);
     if (!offlineStat.isNewRecord) {
-      OfflineStat.update({ time: +new Date() }, { where: { ID: 1 } }).catch(errHander);
+      OfflineStat.update({ time: +new Date() }, { where: { ID: 1 } }).catch(errHandler);
     }
   }, 1 * 5000);
 };
