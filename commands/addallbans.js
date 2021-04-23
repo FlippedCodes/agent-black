@@ -60,5 +60,5 @@ module.exports.run = async (client, message, args, config) => {
 module.exports.help = {
   name: 'addallbans',
   usage: 'SERVERID',
-  desc: 'Adds all bans from the current server its being used in.',
+  desc: 'Adds all bans from the current server its beeing used in.',
 };

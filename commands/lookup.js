@@ -19,7 +19,7 @@ async function checkTag(userTag) {
   return found;
 }
 
-async function postUserinfo(client, message, userID) {
+async function postUserinfo(client, message, userID, bans, warns) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
   const discordUser = await client.users.fetch(userID, false)
@@ -30,6 +30,8 @@ async function postUserinfo(client, message, userID) {
       failed = true;
       return message.channel.send({ embed });
     });
+  const sharedServers = await client.guilds.cache.filter((guild) => !!guild.member(discordUser));
+  // post userinfo if no errors accour
   if (!failed) {
     let botBadge = '';
     if (discordUser.bot) botBadge = config.lookupBotBadge;
@@ -38,6 +40,9 @@ async function postUserinfo(client, message, userID) {
       .addField('ID', `\`${userID}\``)
       .addField('Account Creation Date', discordUser.createdAt, true)
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
+    if (bans) embed.addField('Bans', bans, true);
+    if (warns) embed.addField('Warns', warns, true);
+    if (sharedServers.size) embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
     return message.channel.send({ embed });
   }
 }
@@ -106,9 +111,9 @@ function postWarns(message, warns) {
 }
 
 // prepares for bans and warnings from other servers
-async function postInfractions(message, userID) {
-  postBans(message, await getBanns(userID));
-  postWarns(message, await getWarns(userID));
+async function postInfractions(message, bans, warns) {
+  postBans(message, bans);
+  postWarns(message, warns);
 }
 
 function getID(message, args) {
@@ -142,7 +147,7 @@ module.exports.run = async (client, message, args, config) => {
     return;
   }
 
-  const IDArr = [];
+  let IDArr = [];
   const userID = getID(message, args);
   if (userID) IDArr.push(userID);
   else {
@@ -155,11 +160,21 @@ module.exports.run = async (client, message, args, config) => {
   if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
   // else return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
+  // TODO: alias checking
+  // check if only 1 array entry (because we dont want to wildcard)
+  // check DB for ID => add to array; run function again to check if newly added ID is on list again
+  // ckeck if entry is already there => skip if it is, continue; repeat if not (?)
+  if (IDArr.length === 1) {
+    IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
+    // if (extraIDs) IDArr.push(...extraIDs);
+  }
   // not needed, not enough banns
   // const sentMessage = await sendUserinfo(client, message, args);
   IDArr.forEach(async (ID) => {
-    await postUserinfo(client, message, ID);
-    await postInfractions(message, ID);
+    const bans = await getBanns(ID);
+    const warns = await getWarns(ID);
+    await postUserinfo(client, message, ID, bans.length, warns.length);
+    await postInfractions(message, bans, warns);
   });
 };
 
