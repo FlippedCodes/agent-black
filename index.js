@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 // init Discord client
 const client = new Discord.Client({ disableEveryone: true });
 // init sequelize
-const sequelize = require('sequelize');
+// const sequelize = require('sequelize');
 // init filesystem
 const fs = require('fs');
 // init config
@@ -27,11 +27,11 @@ client.on('ready', async () => {
   // confirm user logged in
   console.log(`[${config.name}] Logged in as "${client.user.tag}"!`);
 
-  // // setup tables
-  // console.log('[DB] Syncing tables...');
-  // // eslint-disable-next-line no-undef
-  // await sequelize.sync();
-  // await console.log('[DB] Done syncing!');
+  // setup tables
+  console.log('[DB] Syncing tables...');
+  // eslint-disable-next-line no-undef
+  await sequelize.sync();
+  await console.log('[DB] Done syncing!');
 
   // run startup functions
   config.setup.setupFunctions.forEach((FCN) => {
