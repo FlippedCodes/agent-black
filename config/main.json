@@ -1,7 +1,7 @@
 {
     "name": "Agent Black",
     "prefix": {
-        "default": "ä",
+        "default": "a!",
         "nicknameSpacer": " | "
     },
     "setup": {
