@@ -140,6 +140,13 @@ async function checkUserTag(uTag, IDArr) {
   return IDArr;
 }
 
+async function postLookup(client, message, ID) {
+  const bans = await getBanns(ID);
+  const warns = await getWarns(ID);
+  await postUserinfo(client, message, ID, bans.length, warns.length);
+  await postInfractions(message, bans, warns);
+}
+
 module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if MANAGE_MESSAGES and if send in DMs
   if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'MANAGE_MESSAGES')) {
@@ -162,23 +169,43 @@ module.exports.run = async (client, message, args, config, prefix) => {
   if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
   if (IDArr.length === 0 && args.length !== 0) return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
-  // TODO: alias checking
-  // check if only 1 array entry (because we dont want to wildcard)
-  // check DB for ID => add to array; run function again to check if newly added ID is on list again
-  // ckeck if entry is already there => skip if it is, continue; repeat if not (?)
-  if (IDArr.length === 1) {
-    // TODO: show a warning, that there are aliases, before showing them
-    IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
-    // if (extraIDs) IDArr.push(...extraIDs);
-  }
-  // not needed, not enough banns
-  // const sentMessage = await sendUserinfo(client, message, args);
+  const orgID = IDArr[0];
+  // check for aliases and overwrite array
+  if (IDArr.length === 1) IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
+  // only post the one that has the orginal user id
   IDArr.forEach(async (ID) => {
-    const bans = await getBanns(ID);
-    const warns = await getWarns(ID);
-    await postUserinfo(client, message, ID, bans.length, warns.length);
-    await postInfractions(message, bans, warns);
+    if (ID === orgID) postLookup(client, message, ID);
   });
+  // if more then 1 entry in array...
+  if (IDArr.length !== 1) {
+    // ask if rest should be posted
+    const confirmMessage = await messageFail(message, `Show all ${IDArr.length} results?`, true);
+    await confirmMessage.react('❌');
+    await confirmMessage.react('✅');
+    // start reaction collector
+    const filter = (reaction, user) => user.id === message.author.id;
+    const reactionCollector = confirmMessage.createReactionCollector(filter, { time: 10000 });
+    reactionCollector.on('collect', async (reaction) => {
+      reactionCollector.stop();
+      switch (reaction.emoji.name) {
+        case '❌':
+          // cancel
+          return confirmMessage.delete();
+        case '✅':
+          // post bans
+          confirmMessage.delete();
+          // post all besides orginal userID
+          IDArr.forEach(async (ID) => {
+            if (ID !== orgID) postLookup(client, message, ID);
+          });
+          return;
+        default:
+          // wrong reaction
+          messageFail(message, 'Please only choose one of the two options! Try again.');
+          return confirmMessage.delete();
+      }
+    });
+  }
 };
 
 module.exports.help = {
