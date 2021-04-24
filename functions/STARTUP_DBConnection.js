@@ -28,12 +28,6 @@ module.exports.run = () => {
   sequelize.query('SET NAMES utf8mb4;');
   console.log('[DB] Connected!');
 
-  // // setup tables
-  // console.log('[DB] Syncing tables...');
-  // // eslint-disable-next-line no-undef
-  // sequelize.sync();
-  // console.log('[DB] Done syncing!');
-
   global.sequelize = sequelize;
 };
 
