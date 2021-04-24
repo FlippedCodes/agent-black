@@ -171,7 +171,10 @@ module.exports.run = async (client, message, args, config, prefix) => {
 
   const orgID = IDArr[0];
   // check for aliases and overwrite array
-  if (IDArr.length === 1) IDArr = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
+  if (IDArr.length === 1) {
+    const output = await client.functions.get('FUNC_checkAlias').run(IDArr[0]);
+    if (output) IDArr = output;
+  }
   // only post the one that has the orginal user id
   IDArr.forEach(async (ID) => {
     if (ID === orgID) postLookup(client, message, ID);
