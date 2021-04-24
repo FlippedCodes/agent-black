@@ -27,7 +27,7 @@ async function messageBannedUserInGuild(client, prefix, channelID, userTag, user
     .run(client.user, channel,
       `Tag: \`${userTag}\`
       ID: \`${userID}\`
-      Reason: \`${banReason || 'none'}\``,
+      Reason: \`\`\`${banReason || 'none'}\`\`\``,
       `A user on your server has been banned on '${serverName}'!`,
       16739072,
       `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
