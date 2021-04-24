@@ -9,12 +9,6 @@
             "request": "launch",
             "name": "Agent Black",
             "program": "${workspaceFolder}/index.js"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Agent Black TEST",
-            "program": "${workspaceFolder}/indexTEST.js"
         }
     ]
 }
