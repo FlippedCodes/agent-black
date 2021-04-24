@@ -160,7 +160,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   }
   // if no info is given, return author ID
   if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
-  // else return messageFail(message, 'Couldn\'t find any results with your search querry.');
+  if (IDArr.length === 0 && args.length !== 0) return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
   // TODO: alias checking
   // check if only 1 array entry (because we dont want to wildcard)
