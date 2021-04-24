@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: mainserverJulian
 
     # strategy:
     #   matrix:
@@ -20,7 +20,6 @@ jobs:
       DB_PORT: ${{ secrets.DB_PORT }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_PASSWORD_ROOT: ${{ secrets.DB_PASSWORD_ROOT }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
     steps:
@@ -37,12 +36,13 @@ jobs:
       - name: Build app
         run: docker-compose build
 
-      #   - name: Spin up DB
-      #   run: docker-compose up db -d
+      # - name: Spin up DB
+      # run: docker-compose up -d db
 
       # - name: Update DB structure
       #   run: npm i sequelize-cli
       #   run: sequelize db:migrate
 
-      - name: Spin up other containers
+      # - name: Spin up other containers
+      - name: Spin up containers
         run: docker-compose up -d

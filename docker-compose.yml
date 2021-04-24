@@ -10,7 +10,7 @@ services:
       BotTokenAgentBlack: ${DISCORD_BOT_TOKEN}
       DBHost: db
       DBName: agentBlack
-      DBUsername: ${DB_USERNAME}
+      DBUsername: agentBlack
       DBPassword: ${DB_PASSWORD}
 
   db:
