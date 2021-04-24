@@ -74,10 +74,10 @@ async function getServerName(serverID) {
 function postBans(message, banns) {
   banns.forEach(async (ban) => {
     const embed = new MessageEmbed()
+      .setDescription(`**Reason**:\n\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('ServerID', `\`${ban.serverID}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
       .addField('BanID', `\`${ban.banID}\``, true)
-      .addField('Reason', `\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('Ban creation date', ban.createdAt, true)
       .addField('Ban updated date', ban.updatedAt, true);
     const serverName = await getServerName(ban.serverID);
@@ -101,10 +101,10 @@ function postWarns(message, warns) {
     const serverName = await getServerName(warn.serverID);
     const embed = new MessageEmbed()
       .setColor(16755456) // yellow
+      .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
       .setAuthor(`Warned on ${serverName}`)
       .addField('ServerID', `\`${warn.serverID}\``, true)
       .addField('WarnID', `\`${warn.warnID}\``, true)
-      .addField('Reason', `\`\`\`${warn.reason || 'None'}\`\`\``)
       .addField('Warning creation date', warn.createdAt, true)
       .addField('Warning updated date', warn.updatedAt, true);
     message.channel.send({ embed });
