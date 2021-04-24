@@ -153,6 +153,8 @@ module.exports.run = async (client, message, args, config, prefix) => {
   else {
     // parse username
     const userTag = message.content.slice(prefix.length + module.exports.help.name.length + 1);
+    // check length
+    if (userTag.length < config.commands.lookup.lowerQuerryLimit) return messageFail(message, 'Your search querry must be at least 5 characters long.');
     // make DB search
     await checkUserTag(userTag, IDArr);
   }
