@@ -33,6 +33,21 @@ async function messageBannedUserInGuild(client, prefix, channelID, userTag, user
       `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
 }
 
+// warns other servers for aliases
+async function messageBannedAliasUserInGuild(client, prefix, channelID, userTag, userID, warnReason, serverName, orgUserTag) {
+  const channel = await client.channels.cache.get(channelID);
+  client.functions.get('FUNC_richEmbedMessage')
+    .run(client.user, channel,
+      `**The user \`${userTag}\` is an alias of a user that has been banned!**
+
+      Tag: \`${orgUserTag}\`
+      ID: \`${userID}\`
+      Reason: \`\`\`${warnReason || 'none'}\`\`\``,
+      `A alias of a user on your server has been banned on '${serverName}'!`,
+      16755456,
+      `For more information and other bans and warns use '${prefix}lookup ${orgUserTag}'`);
+}
+
 module.exports.run = async (guild, user) => {
   // outside of ban due to followup code
   const userID = user.id;
@@ -67,16 +82,22 @@ module.exports.run = async (guild, user) => {
         messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
       }
     });
-  user.client.guilds.cache.forEach(async (toTestGuild) => {
-    if (guild.id === toTestGuild.id) return;
-    const serverMember = toTestGuild.members.cache.get(user.id);
-    if (serverMember) {
+  // post for other servers
+  let aliases = await user.client.functions.get('FUNC_checkAlias').run(userID);
+  if (!aliases) aliases = [userID];
+  aliases.forEach((toCheckUserID) => {
+    user.client.guilds.cache.forEach(async (toTestGuild) => {
+      if (guild.id === toTestGuild.id) return;
+      const serverMember = toTestGuild.members.cache.get(toCheckUserID);
+      // TODO: warn own server that there are aliases
+      if (!serverMember) return;
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(user.client, serverID);
-      if (infectedGuild.logChannelID && infectedGuild.active) {
-        messageBannedUserInGuild(user.client, prefix, infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
+      if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
+        if (userID === toCheckUserID) messageBannedUserInGuild(user.client, 'a!', infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
+        else messageBannedAliasUserInGuild(user.client, 'a!', infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
       }
-    }
+    });
   });
 };
 
