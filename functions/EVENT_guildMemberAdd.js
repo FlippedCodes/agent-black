@@ -30,7 +30,7 @@ async function sendMessage(client, prefix, serverID, userID, userTag, userBans, 
 
   // update title, when alias
   let title = `Known user joined '${serverName}'`;
-  if (alias) title = `Alias of '${orgUserTag}'`;
+  if (alias) title = `Alias of '${orgUserTag}' joined the server`;
 
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, logChannel, `tag: \`${userTag}\`
