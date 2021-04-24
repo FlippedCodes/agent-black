@@ -19,8 +19,8 @@ function getServerEntry(client, serverID) {
   return client.functions.get('FUNC_checkServer').run(serverID, true);
 }
 
-// creates a embed messagetemplate for failed actions
-async function messageBannedUserInGuild(client, prefix, channelID, userTag, userID, warnReason, serverName) {
+// warns other servers
+async function messageWarnedUserInGuild(client, prefix, channelID, userTag, userID, warnReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
@@ -32,17 +32,38 @@ async function messageBannedUserInGuild(client, prefix, channelID, userTag, user
       `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
 }
 
-function checkforInfectedGuilds(client, guild, userID, warnReason) {
-  client.guilds.cache.forEach(async (toTestGuild) => {
-    if (guild.id === toTestGuild.id) return;
-    const serverMember = toTestGuild.members.cache.get(userID);
-    if (serverMember) {
+// warns other servers for aliases
+async function messageWarnedAliasUserInGuild(client, prefix, channelID, userTag, userID, warnReason, serverName, orgUserTag) {
+  const channel = await client.channels.cache.get(channelID);
+  client.functions.get('FUNC_richEmbedMessage')
+    .run(client.user, channel,
+      `**The user \`${userTag}\` is an alias of a user that has been warned!**
+
+      Tag: \`${orgUserTag}\`
+      ID: \`${userID}\`
+      Reason: \`\`\`${warnReason || 'none'}\`\`\``,
+      `A alias of a user on your server has been warned on '${serverName}'!`,
+      16755456,
+      `For more information and other bans and warns use '${prefix}lookup ${orgUserTag}'`);
+}
+
+async function checkforInfectedGuilds(client, prefix, guild, orgUserID, warnReason) {
+  let aliases = await client.functions.get('FUNC_checkAlias').run(orgUserID);
+  if (!aliases) aliases = [orgUserID];
+  const orgUser = await client.users.fetch(orgUserID, false);
+  aliases.forEach((userID) => {
+    client.guilds.cache.forEach(async (toTestGuild) => {
+      if (guild.id === toTestGuild.id) return;
+      const serverMember = toTestGuild.members.cache.get(userID);
+      // TODO: warn own server that there are aliases
+      if (!serverMember) return;
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(client, serverID);
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
-        messageBannedUserInGuild(client, prefix, infectedGuild.logChannelID, serverMember.user.tag, userID, warnReason, guild.name);
+        if (orgUserID === userID) messageWarnedUserInGuild(client, prefix, infectedGuild.logChannelID, orgUser.tag, orgUserID, warnReason, guild.name);
+        else messageWarnedAliasUserInGuild(client, prefix, infectedGuild.logChannelID, serverMember.user.tag, orgUserID, warnReason, guild.name, orgUser.tag);
       }
-    }
+    });
   });
 }
 
@@ -85,7 +106,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       // add warn
       await addWarn(message.guild.id, userIDOrWarnID, slicedReason);
       messageSuccess(message, `The user with the ID \`${userIDOrWarnID}\` got a new warning added.\n Warning other servers.`);
-      checkforInfectedGuilds(client, message.guild, userIDOrWarnID, slicedReason);
+      checkforInfectedGuilds(client, prefix, message.guild, userIDOrWarnID, slicedReason);
       return;
 
     // edit a warning
@@ -119,7 +140,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       // add warn
       await editWarn(userIDOrWarnID, slicedReason);
       messageSuccess(message, `The warning with the the ID ${userIDOrWarnID} has been edited. Warning other servers.`);
-      checkforInfectedGuilds(client, message.guild, warning.userID, slicedReason);
+      checkforInfectedGuilds(client, prefix, message.guild, warning.userID, slicedReason);
       return;
 
     default:
