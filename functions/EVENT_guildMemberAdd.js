@@ -22,33 +22,50 @@ function findLogChannel(client, logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(client, prefix, serverID, userID, userTag, userBans, userWarns) {
+async function sendMessage(client, prefix, serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
   const server = await getServerEntry(client, serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(client, logChannelID);
   const serverName = server.serverName;
+
+  // update title, when alias
+  let title = `Known user joined '${serverName}'`;
+  if (alias) title = `Alias of '${orgUserTag}'`;
+
   client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, logChannel,
-      `tag: \`${userTag}\`
-      ID: \`${userID}\`
-      bans: \`${userBans}\`
-      warns: \`${userWarns}\`
-      For more information use \`${prefix}lookup ${userID}\``,
-      `Known user joined '${serverName}'`,
-      16739072, false);
+    .run(client.user, logChannel, `tag: \`${userTag}\`
+    ID: \`${userID}\`
+    bans: \`${userBans}\`
+    warns: \`${userWarns}\`
+    For more information use \`${prefix}lookup ${userID}\``, title, 16739072, false);
 }
 
 module.exports.run = async (client, member) => {
   // record user tag
   client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
   // check if user is banned on some server
-  const [serverID, userID, userTag] = [member.guild.id, member.id, member.user.tag];
+  const [serverID, orgUserID, orgUserTag] = [member.guild.id, member.id, member.user.tag];
   // get all bans and warnings the joined user has
-  const userBans = await Ban.findAll({ where: { userID } }).catch(errHandler);
-  const userWarns = await Warn.findAll({ where: { userID } }).catch(errHandler);
-  // calculate sum and check if sum is still 0
-  const overallAmmount = userBans.length + userWarns.length;
-  if (overallAmmount !== 0) sendMessage(client, prefix, serverID, userID, userTag, userBans.length, userWarns.length);
+  const userBans = await Ban.count({ where: { userID: orgUserID } }).catch(errHandler);
+  const userWarns = await Warn.count({ where: { userID: orgUserID } }).catch(errHandler);
+  // calculate sum and check if sum is 0
+  const overallAmmount = userBans + userWarns;
+  if (overallAmmount === 0) return;
+  // post message
+  sendMessage(client, 'a!', serverID, orgUserID, orgUserTag, userBans, userWarns);
+
+  // lookup aliases
+  // check if user has aliases
+  const output = await client.functions.get('FUNC_checkAlias').run(member.id);
+  if (output) {
+    output.forEach(async (aliasUserID) => {
+      if (orgUserID === aliasUserID) return;
+      const aliasUser = await client.users.fetch(aliasUserID, false).catch(errHandler);
+      const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(errHandler);
+      const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(errHandler);
+      sendMessage(client, 'a!', serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
+    });
+  }
 };
 
 module.exports.help = {
