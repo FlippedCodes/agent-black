@@ -30,6 +30,7 @@ async function postUserinfo(client, message, userID, bans, warns) {
       failed = true;
       return message.channel.send({ embed });
     });
+  // get all server that the bot shares with the user
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.member(discordUser));
   // post userinfo if no errors accour
   if (!failed) {
