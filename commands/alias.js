@@ -53,10 +53,7 @@ async function checkValues(message, prefix, mainUser, aliasUser) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // command usame checking
-  // ckeck if both ids are valid
-  // command handler
-  // add, remove
+  // check if run in dms
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
 
   // check if user is teammember
@@ -65,15 +62,6 @@ module.exports.run = async (client, message, args, config, prefix) => {
     return;
   }
   const [mainUser, aliasUser] = args;
-  // DISABLED: might get added later
-  // const commandValues = ['add', 'remove'];
-  // const currentCMD = module.exports.help;
-  // if (commandValues.toLowerCase().includes(subcmd)) {
-  //   if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
-  //     client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
-  //       .run(client, message, args, config, prefix);
-  //   } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first!\n${CommandUsage(prefix, currentCMD.name, 'enable true')}`);
-  // } else messageFail(message, CommandUsage(prefix, currentCMD.name, commandValues.join('|')));
   if (!await checkValues(message, prefix, mainUser, aliasUser)) return;
   // get entries for both IDs
   const resultMainID = await checkAlias(mainUser);
