@@ -58,7 +58,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   // exec ban
   const processedBanUser = await message.guild.members.ban(userID, { reason: slicedReason });
   // write confirmation
-  messageSuccess(message, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`${slicedReason}\``);
+  messageSuccess(message, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`\`\`${slicedReason}\`\`\``);
 };
 
 module.exports.help = {
