@@ -67,6 +67,11 @@ client.on('guildMemberAdd', async (member) => {
   }
 });
 
+// bot joins the server
+client.on('guildCreate', async (guild) => {
+  client.functions.get('EVENT_guildCreate').run(client, guild);
+});
+
 client.on('message', async (message) => {
   client.functions.get('EVENT_message').run(client, message, config);
 });
