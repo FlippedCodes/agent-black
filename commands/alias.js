@@ -57,7 +57,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
 
   // check if user is teammember
-  if (!await client.functions.get('FUNC_checkPermissions').run(message.member, message, 'BAN_MEMBERS')) {
+  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'BAN_MEMBERS')) {
     messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }

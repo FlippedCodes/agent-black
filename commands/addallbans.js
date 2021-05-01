@@ -15,7 +15,7 @@ function CommandUsage(prefix, cmdName, subcmd) {
 module.exports.run = async (client, message, args, config, prefix) => {
   const [serverID] = args;
 
-  if (!await client.functions.get('FUNC_checkUser').run(message.author.id)) {
+  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
     messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }

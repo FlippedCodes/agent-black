@@ -6,5 +6,5 @@ module.exports.run = async () => {
 };
 
 module.exports.help = {
-  name: 'FUNC_checkUserPunishment',
+  name: 'FUNC_checkPermissionsDBPunishment',
 };

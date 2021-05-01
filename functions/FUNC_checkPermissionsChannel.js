@@ -6,5 +6,5 @@ module.exports.run = async (guildMember, message, type) => {
 };
 
 module.exports.help = {
-  name: 'FUNC_checkPermissions',
+  name: 'FUNC_checkPermissionsChannel',
 };
