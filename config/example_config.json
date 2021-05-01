@@ -1,4 +1,5 @@
 {
+    "README": "THIS FILE OF FOR DEBUGGING PURPOSES ONLY! USE ENVIRONMENT VARIABLES IN PRODUCTION.",
     "token": "**************************",
     "development": {
         "username": "***",
