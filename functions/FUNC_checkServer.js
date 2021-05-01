@@ -5,7 +5,7 @@ module.exports.run = async (serverID, onlyCheckEntry) => {
     return ParticipatingServer.findOne({ where: { serverID } })
       .catch((err) => console.error(err));
   }
-  return ParticipatingServer.findOne({ where: { serverID, active: true } })
+  return ParticipatingServer.findOne({ where: { serverID, active: true, blocked: false } })
     .catch((err) => console.error(err));
 };
 
