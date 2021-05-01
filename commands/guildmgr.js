@@ -157,6 +157,6 @@ module.exports.run = async (client, message, args, config, prefix) => {
 
 module.exports.help = {
   name: 'guildmgr',
-  usage: 'add|remove|info|blacklist SERVERID',
+  usage: 'add|remove|info|block SERVERID',
   desc: 'Manages guilds.',
 };
