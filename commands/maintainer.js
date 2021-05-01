@@ -109,5 +109,5 @@ module.exports.run = async (client, message, args, config, prefix) => {
 module.exports.help = {
   name: 'maintainer',
   usage: 'add|remove|info USERID',
-  desc: 'Manages the maintainers.',
+  desc: 'Manages the maintainers. [MAINTAINER ONLY]',
 };
