@@ -29,17 +29,40 @@ module.exports.run = async (client, message, args, config, prefix) => {
     messageFail(message, `The channel with the ID \`${logChannelID}\` doesn't exist!`);
     return;
   }
-  const serverName = message.guild.name;
-  const serverID = message.guild.id;
-  const serverAdded = await addServer(serverID, logChannelID, teamRoleID, serverName);
-  // post outcome
-  if (serverAdded) {
-    messageSuccess(message,
-      `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands with this server.`);
-  } else {
-    messageFail(message,
-      `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
-  }
+  const confirmMessage = await messageFail(message, 'Please confirm that you have read the ToS and agree to the listed Terms.\nThe ToS can be read here: https://github.com/FlippedCode/agent-black/wiki/ToS-and-Privacy-Policy', true);
+  await confirmMessage.react('❌');
+  await confirmMessage.react('✅');
+  // start reaction collector
+  const filter = (reaction, user) => user.id === message.author.id;
+  const reactionCollector = confirmMessage.createReactionCollector(filter, { time: 10000 });
+  reactionCollector.on('collect', async (reaction) => {
+    reactionCollector.stop();
+    switch (reaction.emoji.name) {
+      case '❌':
+        // cancel
+        return confirmMessage.delete();
+      case '✅':
+        // confirm
+        confirmMessage.delete();
+        const serverName = message.guild.name;
+        const serverID = message.guild.id;
+        const serverAdded = await addServer(serverID, logChannelID, teamRoleID, serverName);
+        // post outcome
+        if (serverAdded) {
+          messageSuccess(message,
+            `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.`);
+        } else {
+          messageFail(message,
+            `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
+        }
+        return;
+      default:
+        // wrong reaction
+        messageFail(message, 'Please only choose one of the two options! Try again.');
+        return confirmMessage.delete();
+    }
+  });
+  reactionCollector.on('end', () => confirmMessage.delete());
 };
 
 module.exports.help = {
