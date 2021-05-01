@@ -10,7 +10,7 @@ module.exports.run = async (client, message, config) => {
   client.functions.get('FUNC_userTagRecord').run(message.author.id, message.author.tag);
   // return if unwanted
   if (message.author.bot) return;
-  if (message.channel.type === 'dm') return;
+  if (message.channel.type === 'dm') return messageFail(message, 'This bot is meant to be used in servers, sorry.');
 
   // checking if staffmember
   // DEPRECATED: use function with permissions instead
