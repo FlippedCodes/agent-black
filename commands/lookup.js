@@ -149,9 +149,9 @@ async function postLookup(client, message, ID) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // check permissions if user has teamrole and if send in DMs
+  // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${subcmd}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
 
