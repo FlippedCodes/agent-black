@@ -1,3 +1,4 @@
 A bot used to manage bans of multiple servers.
 
-For more Information, please contact **Phil | Flipper#3621**.
+For more Information, please contact **Phil | Flipper#3621**
+or join our Discord server here: https://discord.gg/QhfnAWgEMS
