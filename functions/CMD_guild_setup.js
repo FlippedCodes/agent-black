@@ -47,7 +47,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
         // post outcome
         if (serverAdded) {
           messageSuccess(message,
-            `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.`);
+            `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.\nConsider running \`${prefix}checkallusers\` once in your log channel.`);
         } else {
           messageFail(message,
             `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first with \`${prefix}${module.exports.help.parent} disable\``);
