@@ -183,7 +183,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   // if more then 1 entry in array...
   if (IDArr.length !== 1) {
     // ask if rest should be posted
-    const confirmMessage = await messageFail(message, `Show all ${IDArr.length} results?`, true);
+    const confirmMessage = await messageFail(message, `Show all (+${IDArr.length - 1}) results?`, true);
     await confirmMessage.react('❌');
     await confirmMessage.react('✅');
     // start reaction collector
