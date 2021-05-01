@@ -1,4 +1,4 @@
-// const Ban = require('../database/models/Ban');
+const Ban = require('../database/models/Ban');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -18,7 +18,8 @@ async function addServerEntry(serverID, serverName) {
 }
 
 module.exports.run = async (client, guild) => {
-  if (await !getServerEntry(client, guild.id)) await addServerEntry(guild.id, guild.name);
+  const serverID = guild.id;
+  if (!await getServerEntry(client, serverID)) await addServerEntry(serverID, guild.name);
   // add all bans to DB
   const allBans = await guild.fetchBans(true);
   allBans.forEach(async ({ user, reason }) => {
@@ -38,7 +39,7 @@ module.exports.run = async (client, guild) => {
         { where: { userID, serverID } })
         .catch(errHandler);
     }
-  }).catch(errHandler);
+  });
 };
 
 module.exports.help = {
