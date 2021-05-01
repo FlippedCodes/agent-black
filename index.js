@@ -74,7 +74,7 @@ client.on('guildCreate', async (guild) => {
 
 // bot leaves the server
 client.on('guildDelete', async (guild) => {
-  if (await client.functions.get('FUNC_checkServer').run(member.guild.id, true)) {
+  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
     client.functions.get('EVENT_guildDelete').run(client, guild);
   }
 });
