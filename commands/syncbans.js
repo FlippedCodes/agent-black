@@ -58,7 +58,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
 };
 
 module.exports.help = {
-  name: 'addallbans',
+  name: 'syncbans',
   usage: 'SERVERID',
   desc: 'Adds all bans from the current server its beeing used in. [MAINTAINER ONLY]',
 };
