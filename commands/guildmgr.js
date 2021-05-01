@@ -25,6 +25,12 @@ async function removeServer(ParticipatingServer, serverID) {
   return success[0];
 }
 
+// removes a server from the ParticipatingServers table
+async function blacklistServer(serverID) {
+  const success = await ParticipatingServer.update({ blocked: true }, { where: { serverID } }).catch(errHandler);
+  return success[0];
+}
+
 // finds a server in the ParticipatingServers table
 async function findServer(ParticipatingServer, serverID) {
   const found = await ParticipatingServer.findOne({ where: { serverID } })
@@ -92,6 +98,24 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (serverRemoved >= 1) {
         messageSuccess(message,
           `The server with the ID \`${serverID}\` got disabled from the participating Servers list.`);
+      } else {
+        messageFail(message,
+          `The server with the ID \`${serverID}\` couldn't be found of the list.`);
+      }
+      return;
+
+    // removes a serverentry
+    case 'block':
+      if (!serverID) {
+        messageFail(message,
+          `Command usage: 
+          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+        return;
+      }
+      const serverBlocked = await blacklistServer(serverID);
+      if (serverBlocked >= 1) {
+        messageSuccess(message,
+          `The server with the ID \`${serverID}\` got blocked from using the bot.`);
       } else {
         messageFail(message,
           `The server with the ID \`${serverID}\` couldn't be found of the list.`);
