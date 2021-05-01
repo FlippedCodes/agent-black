@@ -38,12 +38,9 @@ module.exports.run = async (client, message, args, config, prefix) => {
   reactionCollector.on('collect', async (reaction) => {
     reactionCollector.stop();
     switch (reaction.emoji.name) {
-      case '❌':
-        // cancel
-        return confirmMessage.delete();
+      case '❌': return;
       case '✅':
         // confirm
-        confirmMessage.delete();
         const serverName = message.guild.name;
         const serverID = message.guild.id;
         const serverAdded = await addServer(serverID, logChannelID, teamRoleID, serverName);
@@ -59,7 +56,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       default:
         // wrong reaction
         messageFail(message, 'Please only choose one of the two options! Try again.');
-        return confirmMessage.delete();
+        return;
     }
   });
   reactionCollector.on('end', () => confirmMessage.delete());

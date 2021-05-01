@@ -192,12 +192,9 @@ module.exports.run = async (client, message, args, config, prefix) => {
     reactionCollector.on('collect', async (reaction) => {
       reactionCollector.stop();
       switch (reaction.emoji.name) {
-        case '❌':
-          // cancel
-          return confirmMessage.delete();
+        case '❌': return;
         case '✅':
           // post bans
-          confirmMessage.delete();
           // post all besides orginal userID
           IDArr.forEach(async (ID) => {
             if (ID !== orgID) postLookup(client, message, ID);
@@ -206,7 +203,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
         default:
           // wrong reaction
           messageFail(message, 'Please only choose one of the two options! Try again.');
-          return confirmMessage.delete();
+          return;
       }
     });
     reactionCollector.on('end', () => confirmMessage.delete());
