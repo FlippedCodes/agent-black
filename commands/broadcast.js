@@ -16,11 +16,12 @@ async function sendMessages(client, author, body) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  const body = message.content.slice(prefix.length + module.exports.help.name.length + 1);
+  // check maintainer permissions
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${body}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+  const body = message.content.slice(prefix.length + module.exports.help.name.length + 1);
   sendMessages(client, message.author.tag, body);
 };
 

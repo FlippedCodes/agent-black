@@ -53,14 +53,12 @@ async function checkValues(message, prefix, mainUser, aliasUser) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // check if run in dms
-  if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
-
-  // check if user is teammember
-  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'BAN_MEMBERS')) {
+  // check permissions if user has teamrole
+  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
     messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
   const [mainUser, aliasUser] = args;
   if (!await checkValues(message, prefix, mainUser, aliasUser)) return;
   // get entries for both IDs

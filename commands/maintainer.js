@@ -31,13 +31,14 @@ async function findUser(Maintainer, userID) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // get subcmd from args
-  const [subcmd, userID] = args;
-
+  // check maintainer permissions
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${subcmd}\``);
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
+  // get subcmd from args
+  const [subcmd, userID] = args;
 
   switch (subcmd) {
     // adds a userentry

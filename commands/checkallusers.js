@@ -38,11 +38,12 @@ function postBans(allBans, prefix, message) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // check permissions
-  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'BAN_MEMBERS')) {
+  // check MANAGE_GUILD permissions
+  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'MANAGE_GUILD')) {
     messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
   // get all userIDs
   const IDs = [];
   message.guild.members.cache.map((user) => IDs.push(user.id));

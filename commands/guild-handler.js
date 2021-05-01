@@ -16,15 +16,13 @@ async function checkFeature(serverID) {
 // is used to configure settings
 // if setting is not set, use default from config
 module.exports.run = async (client, message, args, config, prefix) => {
-  // TODO: check permissions (Servermanager)
-  // check DM
-  if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
-  const [subcmd] = args;
-  // check userpermissions
-  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name} ${subcmd}\``);
+  // check MANAGE_GUILD permissions
+  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'MANAGE_GUILD')) {
+    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
+  const [subcmd] = args;
   const commandValues = ['setup', 'disable', 'stats'];
   const currentCMD = module.exports.help;
   if (commandValues.includes(subcmd)) {
