@@ -16,6 +16,11 @@ module.exports = {
       allowNull: false,
       defaultValue: false,
     },
+    blocked: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
   }),
