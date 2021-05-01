@@ -22,10 +22,16 @@ module.exports.run = async (client, message, config) => {
   // check if server is on ParticipatingServers Table
   let serverID = null;
   if (message.channel.guild) serverID = message.channel.guild.id;
-  if (!await client.functions.get('FUNC_checkServer').run(serverID, false)) return;
+  const mainCMD = command.slice(prefix.length).toLowerCase();
+  // commands to block, when guild has not been setup yet
+  const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn', 'guildmgr'];
+  if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('FUNC_checkServer').run(serverID, false)) {
+    messageFail(message, `This server is not setup correctly.\nPlease run \`${prefix}guild setup\` first.`);
+    return;
+  }
 
   // remove prefix and lowercase
-  const cmd = client.commands.get(command.slice(prefix.length).toLowerCase());
+  const cmd = client.commands.get(mainCMD);
 
   // run cmd if existent
   if (cmd) {
