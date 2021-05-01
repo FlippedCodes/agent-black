@@ -132,7 +132,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       }
       // check if warn is from the same server
       if (warning.serverID !== serverID) {
-        messageFail(message, 'You can only edit warnings form the server where they have been issues from.');
+        messageFail(message, 'You can only edit warnings form the server where they have been issued from.');
         return;
       }
       // slice reason
