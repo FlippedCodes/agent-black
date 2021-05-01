@@ -52,13 +52,16 @@ module.exports.run = async (guild, user) => {
   // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;
+  const serverID = guild.id;
+  // check if server is blacklsited before sending api request
+  const bannedGuild = await getServerEntry(user.client, serverID);
+  if (bannedGuild.blocked) return;
   // declaring so ban reason can be used in foreach loop
   let banReason;
   // getting newly added ban
   await guild.fetchBan(user)
     .then(async (ban) => {
       // assign simpler values
-      const serverID = guild.id;
       const userBanned = '1';
       const reason = ban.reason;
       // fix ban reason by filtering new line breaks
@@ -77,7 +80,6 @@ module.exports.run = async (guild, user) => {
           .catch(errHandler);
       }
       banReason = fixedReason;
-      const bannedGuild = await getServerEntry(user.client, serverID);
       if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
         messageBanSuccess(user.client, bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
       }
@@ -93,6 +95,7 @@ module.exports.run = async (guild, user) => {
       if (!serverMember) return;
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(user.client, serverID);
+      if (infectedGuild.blocked) return;
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
         if (userID === toCheckUserID) messageBannedUserInGuild(user.client, 'a!', infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
         else messageBannedAliasUserInGuild(user.client, 'a!', infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
