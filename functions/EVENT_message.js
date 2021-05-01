@@ -26,7 +26,7 @@ module.exports.run = async (client, message, config) => {
   // commands to block, when guild has not been setup yet
   const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn', 'guildmgr'];
   if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('FUNC_checkServer').run(serverID, false)) {
-    messageFail(message, `This server is not setup correctly.\nPlease run \`${prefix}guild setup\` first.`);
+    messageFail(message, `You need to setup the server first before yu can use this command.\nPlease run \`${prefix}guild setup\`.`);
     return;
   }
 
