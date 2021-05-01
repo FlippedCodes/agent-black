@@ -209,6 +209,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
           return confirmMessage.delete();
       }
     });
+    reactionCollector.on('end', () => confirmMessage.delete());
   }
 };
 
