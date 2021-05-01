@@ -74,14 +74,14 @@ async function getWarning(warnID) {
 }
 
 module.exports.run = async (client, message, args, config, prefix) => {
-  // get subcmd from args
-  const [subcmd, userIDOrWarnID, reasonTesting] = args;
-
-  // check permissions if MANAGE_MESSAGES and if send in DMs
-  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'MANAGE_MESSAGES')) {
+  // check permissions if user has teamrole
+  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
     messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
+  // get subcmd from args
+  const [subcmd, userIDOrWarnID, reasonTesting] = args;
 
   // eslint doesnt like have a double const declaration in 2 cases for some reason
   let slicedReason;
