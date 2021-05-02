@@ -23,10 +23,10 @@ module.exports.run = async (client, message, args, config, prefix) => {
   }
 
   const [subcmd] = args;
-  const commandValues = ['setup', 'disable', 'stats'];
+  const commandValues = ['setup', 'disable', 'enable', 'stats'];
   const currentCMD = module.exports.help;
   if (commandValues.includes(subcmd)) {
-    if (subcmd === 'setup' || await checkFeature(message.guild.id)) {
+    if (subcmd === 'setup' || subcmd === 'enable' || await checkFeature(message.guild.id)) {
       client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
         .run(client, message, args, config, prefix);
     } else messageFail(message, 'You can\'t use this command without setting up your server first!');
@@ -35,6 +35,6 @@ module.exports.run = async (client, message, args, config, prefix) => {
 
 module.exports.help = {
   name: 'guild',
-  usage: 'setup|disable|stats',
+  usage: 'setup|disable|enable|stats',
   desc: 'Config for setting up your server with the bot.',
 };
