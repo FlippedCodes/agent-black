@@ -4,10 +4,6 @@
 
 # Agent Black
 
-Updated as of 5/1/21. For a more updated description, please visit this Google Document [here](https://docs.google.com/document/d/1MEMJnkhO5lUFcZvE28PQ-e8SljSnKvh3I1MML_ZTZMk/edit)
-
-## Description
-
 Agent Black is a blacklist bot. It stores every ban of every participating server. This bot is designed to warn participating servers of members who have been banned (or who are troublesome) in other participating servers. Currently, the bot has more than several thousand users blacklisted.
 
 ## Getting Started
