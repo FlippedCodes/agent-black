@@ -29,7 +29,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
     if (subcmd === 'setup' || await checkFeature(message.guild.id)) {
       client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
         .run(client, message, args, config, prefix);
-    } else messageFail(message, 'You cant use this command without setting up your server first!');
+    } else messageFail(message, 'You can\'t use this command without setting up your server first!');
   } else messageFail(message, CommandUsage(prefix, currentCMD.name, commandValues.join('|')));
 };
 
