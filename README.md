@@ -42,6 +42,15 @@ No, because the bot pulls bans directly from the ban list, you can use any bot t
 
 No, the bot only warns other participating servers of troublesome users, It does not ban them. The only way the bot can ban users is if a staff member of a participating server uses its own ban command.
 
+### Does unbanning users remove them from the blacklist?
+
+No, the bot still stores the information regardless of whether they were unbanned or not. However, their "is banned" status will be set as "false" if they are no longer banned and the sidebar of the rich embed will be green.
+
 ### Can I host the bot myself?
 
 The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind tho, that your DB is not going to have any content/listed bans.
+
+## Future Features
+
+Currently, we are in the process of adding an unban command which will enable you to provide reasons for unbans.
+We will also be adding a punishment system, where participating servers can coordinate punishments against troublesome users. Involvement in this system is optional, you may punish troublesome users independently of this system if you so wish.
