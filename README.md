@@ -26,7 +26,7 @@ The guide on how to add the bot to your server, can be found [here](https://gith
 ## Required Permissions
 
 - The bot requires access to the channel you want it to log in. Preferably, this should be the staff channel, log channels are generally muted by staff because of bot spam in them. This bot doesn’t usually spam messages so it would be good if it logs in a channel everyone can see.
-- The only administrative permission the bot requires is the ‘Ban Members’ permission. The bot can only view the server ban list with this command as the bot pulls the bans directly from the ban list. Without this permission, the bot cannot function. The bot also has its own ban command.
+- The only administrative permission the bot requires is the 'Ban Members' permission. The bot can only view the server ban list with this command as the bot pulls the bans directly from the ban list. Without this permission, the bot cannot function. The bot also has its own ban command.
 
 ## FAQ
 
