@@ -35,5 +35,6 @@ module.exports.run = async (client, message, args, config, prefix) => {
 
 module.exports.help = {
   name: 'guild',
+  usage: 'setup|disable|stats',
   desc: 'Config for setting up your server with the bot.',
 };
