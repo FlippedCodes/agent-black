@@ -10,6 +10,10 @@ Updated as of 5/1/21. For a more updated description, please visit this Google D
 
 Agent Black is a blacklist bot. It stores every ban of every participating server. This bot is designed to warn participating servers of members who have been banned (or who are troublesome) in other participating servers. Currently, the bot has more than several thousand users blacklisted.
 
+## Getting Started
+
+The guide on how to add the bot to your server, can be found [here](https://github.com/FlippedCode/agent-black/wiki/Bot---Getting-Started). If you have trouble with something, feel free to [have a look into the wiki](https://github.com/FlippedCode/agent-black/wiki) or [join our Discord server](https://discord.gg/QhfnAWgEMS)
+
 ## Features
 
 - Agent Black’s primary function is to record the bans of participating servers and warn other participating servers of said bans.
@@ -37,3 +41,7 @@ No, because the bot pulls bans directly from the ban list, you can use any bot t
 ### Does the bot ban users by itself?
 
 No, the bot only warns other participating servers of troublesome users, It does not ban them. The only way the bot can ban users is if a staff member of a participating server uses its own ban command.
+
+### Can I host the bot myself?
+
+The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind tho, that your DB is not going to have any content/listed bans.
