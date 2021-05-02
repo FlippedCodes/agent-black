@@ -13,7 +13,8 @@ module.exports.run = async (client, message, args, config, prefix) => {
     );
   });
   embed.addField('Need more help?', `
-  Join the help server here: https://discord.gg/QhfnAWgEMS`);
+  Read the wiki here: https://github.com/FlippedCode/agent-black/wiki
+  or join our server here: https://discord.gg/QhfnAWgEMS`);
   message.channel.send(embed);
   return;
 };
