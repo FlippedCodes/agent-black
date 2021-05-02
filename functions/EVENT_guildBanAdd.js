@@ -95,7 +95,7 @@ module.exports.run = async (guild, user) => {
       if (!serverMember) return;
       const serverID = toTestGuild.id;
       const infectedGuild = await getServerEntry(user.client, serverID);
-      if (infectedGuild.blocked) return;
+      if (infectedGuild && infectedGuild.blocked) return;
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
         if (userID === toCheckUserID) messageBannedUserInGuild(user.client, 'a!', infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
         else messageBannedAliasUserInGuild(user.client, 'a!', infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
