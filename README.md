@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="30%" src="https://cdn.discordapp.com/avatars/611989106494406694/b3f2a8354aca5ef9e152d55908cdef92.png">
+  <img width="30%" src="/assets/agentBlack.jpg">
 </div>
 
 # Agent Black
