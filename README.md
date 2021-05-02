@@ -17,11 +17,11 @@ The guide on how to add the bot to your server, can be found [here](https://gith
 ## Features
 
 - Agent Black’s primary function is to record the bans of participating servers and warn other participating servers of said bans.
-- The bot has it’s very own ban command, this command enables you to ban users more easily than using the manual ban function.
+- The bot has it's own ban command; this command enables you to ban users more easily than using the manual ban function.
 - Similarly to recording bans, the bot also has a warn command. This command warns other participating servers of troublesome members without banning them.
-- There is a command which enables you to view all of the members in your server who are banned, or warned, in any other participating servers.
-- Agent Black has a command which enables you to view basic account information of users; for example: account creation date and servers shared with Agent black. The command also shows the user’s previous offences in other participating servers.
-- The bot has an alias command which allows you to tie alt accounts with main accounts; for example, if you know the alt account of a troublesome user, you can connect their main account with their alt account so other participating servers are aware of this.
+- There is a command which enables you to view all of the members in your server who are banned or warned in any other participating servers.
+- Agent Black has a command which enables you to view basic account information of users, for example, account creation date and servers shared with Agent black. The command also shows the user’s previous offences in other participating servers.
+- The bot has an alias command that allows you to tie alt accounts with main accounts. For example, if you know the alt account of a troublesome user, you can connect their main account with their alt account, so other participating servers know this.
 
 ## Required Permissions
 
