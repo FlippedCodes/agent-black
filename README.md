@@ -25,14 +25,14 @@ The guide on how to add the bot to your server, can be found [here](https://gith
 
 ## Required Permissions
 
-- The bot requires access to the channel you want it to log in. Preferably, this should be the staff channel, log channels are generally muted by staff because of bot spam in them. This bot doesn’t usually spam messages so it would be good if it logs in a channel everyone can see.
+- The bot requires access to the channel you want it to log it's messages in to. Preferably, this should be the staff channel; log channels are generally muted by staff because of bot spam in them. This bot doesn’t usually spam messages, so it would be good if it logs in a channel that everyone can see.
 - The only administrative permission the bot requires is the 'Ban Members' permission. The bot can only view the server ban list with this command as the bot pulls the bans directly from the ban list. Without this permission, the bot cannot function. The bot also has its own ban command.
 
 ## FAQ
 
 ### Can I view the code for the bot?
 
-Absolutely, the link to the bot’s github is <https://github.com/FlipperLP/agent-black>
+Absolutely, the link to the bot's github is <https://github.com/FlipperLP/agent-black>
 
 ### Do I need to use the Agent Black ban command?
 
@@ -40,7 +40,7 @@ No, because the bot pulls bans directly from the ban list, you can use any bot t
 
 ### Does the bot ban users by itself?
 
-No, the bot only warns other participating servers of troublesome users, It does not ban them. The only way the bot can ban users is if a staff member of a participating server uses its own ban command.
+No, the bot only warns other participating servers of troublesome users; it does not ban them. The bot can only ban users if a staff member of a participating server uses its own ban command.
 
 ### Does unbanning users remove them from the blacklist?
 
@@ -48,9 +48,9 @@ No, the bot still stores the information regardless of whether they were unbanne
 
 ### Can I host the bot myself?
 
-The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind tho, that your DB is not going to have any content/listed bans.
+The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind, that your DB is not going to have any content/listed bans.
 
 ## Future Features
 
-Currently, we are in the process of adding an unban command which will enable you to provide reasons for unbans.
-We will also be adding a punishment system, where participating servers can coordinate punishments against troublesome users. Involvement in this system is optional, you may punish troublesome users independently of this system if you so wish.
+- Currently, we are in the process of adding an unban command which will enable you to provide reasons for unbans.
+- We will also be adding a punishment system, where participating servers can coordinate punishments against troublesome users. Involvement in this system is optional, you may punish troublesome users independently of this system if you so wish.
