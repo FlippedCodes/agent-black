@@ -1,4 +1,3 @@
-A bot used to manage bans of multiple servers.
+Agent Black is a blacklist bot. It stores every ban of every participating server. This bot is designed to warn participating servers of members who have been banned (or who are troublesome) in other participating servers.
 
-For more Information, please contact **Phil | Flipper#3621**
-or join our Discord server here: https://discord.gg/QhfnAWgEMS
+For more Information, please join our Discord server here: https://discord.gg/QhfnAWgEMS
