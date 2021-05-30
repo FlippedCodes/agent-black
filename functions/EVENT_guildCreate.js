@@ -8,7 +8,7 @@ const errHandler = (err) => {
   console.error('ERROR:', err);
 };
 
-// checks if server is partisipating server
+// checks if server is participating server
 function getServerEntry(client, serverID) {
   return client.functions.get('FUNC_checkServer').run(serverID, true);
 }
