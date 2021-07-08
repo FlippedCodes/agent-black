@@ -83,6 +83,6 @@ client.on('message', async (message) => {
   client.functions.get('EVENT_message').run(client, message, config);
 });
 
-// logging errors
+// logging errors and warns
 client.on('error', (e) => console.error(e));
 client.on('warn', (e) => console.warn(e));
