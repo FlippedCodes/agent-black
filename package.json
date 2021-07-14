@@ -4,6 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.5.3",
+    "html-to-image": "^1.6.2",
     "mysql2": "^2.2.5",
     "pretty-ms": "^5.1.0",
     "sequelize": "^5.22.4"
