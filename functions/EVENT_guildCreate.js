@@ -25,7 +25,7 @@ module.exports.run = async (client, guild) => {
   const owner = await guild.fetchOwner();
   const embed = new MessageEmbed()
     .setTitle('Hello World!')
-    .setFooter('Only you recieved the message.')
+    .setFooter('Only you received the message.')
     .setDescription(`Thanks for adding me to your delightful server.
 Before you expect anything from me, I need you to complete some more steps before I get completely functional.
 
@@ -34,7 +34,7 @@ Please tell me, where to log new members and what server role belongs to the tea
 Example: \`a!guild setup 123456789123456 987654321987654\`
 
 After you run the command you need to confirm the Terms of Service and you are good to go!
-If you need any assistance, feel free to join our Discord server and we gladly help you out.`);
+If you need any assistance, feel free to join our Discord server, and we gladly help you out. https://discord.gg/QhfnAWgEMS`);
   owner.send(embed);
   // add all bans to DB
   const allBans = await guild.fetchBans(true);
