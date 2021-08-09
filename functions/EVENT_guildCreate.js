@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 const Ban = require('../database/models/Ban');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
