@@ -35,7 +35,6 @@ module.exports.run = async (client, message, args, config, prefix) => {
       client.guilds.cache.find((server) => server.id === serverID).fetchBans(true)
         .then((bans) => {
           bans.forEach(async ({ user, reason }) => {
-            // FIXME: Some emojis in names cant be stored in DB
             const regex = config.emojiLayout;
             const userTag = user.tag.replace(regex, 'X');
             const userBanned = true;

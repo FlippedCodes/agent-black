@@ -23,7 +23,6 @@ module.exports.run = async (client, guild) => {
   // add all bans to DB
   const allBans = await guild.fetchBans(true);
   allBans.forEach(async ({ user, reason }) => {
-    // FIXME: Some emojis in names cant be stored in DB
     const regex = config.emojiLayout;
     const userTag = user.tag.replace(regex, 'X');
     const userBanned = true;
