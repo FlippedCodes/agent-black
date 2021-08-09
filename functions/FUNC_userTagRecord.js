@@ -14,7 +14,7 @@ module.exports.run = async (userID, userTag) => {
   if (userTag.indexOf('#0000') !== -1) return;
   // check if user has said anything in the last 3hrs
   if (cachedUsers.has(userID)) return;
-  // if not add it
+  // if not, add it
   timeout(userID);
   // and add entry to DB if not yet existent
   UserIDAssociation.findOrCreate({
