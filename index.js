@@ -29,7 +29,6 @@ client.on('ready', async () => {
 
   // setup tables
   console.log('[DB] Syncing tables...');
-  // eslint-disable-next-line no-undef
   await sequelize.sync();
   await console.log('[DB] Done syncing!');
 
