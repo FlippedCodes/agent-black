@@ -27,7 +27,7 @@ module.exports.run = async (client, guild) => {
   const owner = await guild.fetchOwner();
   const embed = new MessageEmbed()
     .setTitle('Hello World!')
-    .setFooter('Only you received the message.')
+    .setFooter('Only you received this message.')
     .setDescription(`Thanks for adding me to your delightful server.
 Before you expect anything from me, I need you to complete some more steps before I get completely functional.
 
