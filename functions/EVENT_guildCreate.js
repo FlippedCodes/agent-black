@@ -24,7 +24,7 @@ module.exports.run = async (client, guild) => {
   // check if was alreads added: add a server entry in the DB
   if (!await getServerEntry(client, serverID)) await addServerEntry(serverID, guild.name);
   // message owner about adding the bot and how to procceed
-  const owner = await guild.fetchOwner();
+  const owner = await guild.members.cache.get(guild.ownerID);
   const embed = new MessageEmbed()
     .setTitle('Hello World!')
     .setFooter('Only you received this message.')
