@@ -12,12 +12,9 @@ services:
       DBName: agentBlack
       DBUsername: agentBlack
       DBPassword: ${DB_PASSWORD}
-
   db:
     image: mariadb:latest
     restart: always
-    ports:
-      - "${DB_PORT}:3306"
     volumes:
       - db_data:/var/lib/mysql
     environment:
@@ -25,5 +22,11 @@ services:
       MYSQL_DATABASE: agentBlack
       MYSQL_USER: agentBlack
       MYSQL_PASSWORD: ${DB_PASSWORD}
+
+networks:
+  default:
+    external:
+      name: nginx_backend
+
 volumes:
   db_data:
