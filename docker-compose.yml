@@ -4,7 +4,7 @@ services:
     build:
       context: ./
     depends_on:
-      - db
+      - db-aB
     restart: always
     environment:
       BotTokenAgentBlack: ${DISCORD_BOT_TOKEN}
