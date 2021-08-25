@@ -28,7 +28,7 @@ services:
 networks:
   default:
     external:
-      name: nginx_backend
+      name: test
 
 volumes:
   db_data:
