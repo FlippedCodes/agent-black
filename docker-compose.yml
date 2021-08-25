@@ -12,7 +12,7 @@ services:
       DBName: agentBlack
       DBUsername: agentBlack
       DBPassword: ${DB_PASSWORD}
-  db:
+  db-aB:
     image: mariadb:latest
     restart: always
     ports:
