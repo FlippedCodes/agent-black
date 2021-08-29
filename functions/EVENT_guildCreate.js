@@ -38,7 +38,8 @@ After you run the command you need to confirm the Terms of Service and you are g
 
 If you added our bot before already: Keep in mind, that you need to run \`a!guild enable\`.
 
-Feel free to join our Discord server, and we gladly help you out, if you need any assistance. https://discord.gg/QhfnAWgEMS`);
+As the last step its recommended joining our Discord server for frequent updates or if there are questions about a ban.
+We also gladly help you out, if you need any assistance with the bot. https://discord.gg/QhfnAWgEMS`);
   owner.send(embed);
   // add all bans to DB
   const allBans = await guild.fetchBans(true);
