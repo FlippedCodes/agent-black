@@ -2,8 +2,6 @@
 const Discord = require('discord.js');
 // init Discord client
 const client = new Discord.Client({ disableEveryone: true });
-// init sequelize
-// const sequelize = require('sequelize');
 // init filesystem
 const fs = require('fs');
 // init config
