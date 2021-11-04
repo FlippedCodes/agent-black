@@ -3,11 +3,15 @@
   "version": "2.1.1",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "@discordjs/builders": "^0.8.2",
+    "bufferutil": "^4.0.5",
+    "discord.js": "^13.3.1",
     "html-to-image": "^1.6.2",
-    "mysql2": "^2.2.5",
+    "moment": "^2.29.1",
+    "mysql2": "^2.3.2",
     "pretty-ms": "^5.1.0",
-    "sequelize": "^5.22.4"
+    "sequelize": "^6.9.0",
+    "utf-8-validate": "^5.0.7"
   },
   "devDependencies": {
     "eslint": "^7.25.0",
