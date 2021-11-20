@@ -45,7 +45,7 @@ module.exports.run = async (fs) => {
   const registerLength = commandsSubmit.length;
 
   await console.log(`[${module.exports.data.name}] Loaded ${cmdLength} command${cmdLength !== 1 ? 's' : ''}!`);
-  await console.log(`[${module.exports.data.name}] Registering ${registerLength} command${registerLength !== 1 ? 's' : ''}!`);
+  await console.log(`[${module.exports.data.name}] Registering ${registerLength} command${registerLength !== 1 ? 's' : ''}...`);
   // submit commands to discord api| Dev: one guild only, prod: globaly
   // await client.application.commands.set(commandsSubmit, config.guildId).catch(ERR);
   await client.application.commands.set(commandsSubmit, DEBUG ? process.env.devGuild : undefined).catch(ERR);
