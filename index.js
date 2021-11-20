@@ -50,55 +50,45 @@ client.on('ready', async () => {
   });
 });
 
-client.on('ready', async () => {
-  // confirm user logged in
-  console.log(`[${config.name}] Logged in as "${client.user.tag}"!`);
+// // EVENT user gets banned
+// client.on('guildBanAdd', async (guild, user) => {
+//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
+//     client.functions.get('EVENT_guildBanAdd').run(guild, user);
+//   }
+// });
 
-  // setup tables
-  console.log('[DB] Syncing tables...');
-  await sequelize.sync();
-  await console.log('[DB] Done syncing!');
+// // EVENT user gets unbanned
+// client.on('guildBanRemove', async (guild, user) => {
+//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
+//     client.functions.get('EVENT_guildBanRemove').run(guild, user);
+//   }
+// });
 
-  // set bot user status
-  const setupFunctions = client.functions.filter((fcn) => fcn.data.callOn === 'setup');
-  setupFunctions.forEach((FCN) => FCN.run());
-});
+// // user joins the server
+// client.on('guildMemberAdd', async (member) => {
+//   if (await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) {
+//     client.functions.get('EVENT_guildMemberAdd').run(client, member);
+//   }
+// });
 
-// EVENT user gets banned
-client.on('guildBanAdd', async (guild, user) => {
-  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-    client.functions.get('EVENT_guildBanAdd').run(guild, user);
+// // bot joins the server
+// client.on('guildCreate', async (guild) => {
+//   client.functions.get('EVENT_guildCreate').run(client, guild);
+// });
+
+// // bot leaves the server
+// client.on('guildDelete', async (guild) => {
+//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
+//     client.functions.get('EVENT_guildDelete').run(client, guild);
+//   }
+// });
+
+client.on('interactionCreate', async (interaction) => {
+  // command handler
+  if (interaction.isCommand()) {
+    const command = client.commands.get(interaction.commandName);
+    if (command) return command.run(interaction).catch(console.log);
   }
-});
-
-// EVENT user gets unbanned
-client.on('guildBanRemove', async (guild, user) => {
-  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-    client.functions.get('EVENT_guildBanRemove').run(guild, user);
-  }
-});
-
-// user joins the server
-client.on('guildMemberAdd', async (member) => {
-  if (await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) {
-    client.functions.get('EVENT_guildMemberAdd').run(client, member);
-  }
-});
-
-// bot joins the server
-client.on('guildCreate', async (guild) => {
-  client.functions.get('EVENT_guildCreate').run(client, guild);
-});
-
-// bot leaves the server
-client.on('guildDelete', async (guild) => {
-  if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-    client.functions.get('EVENT_guildDelete').run(client, guild);
-  }
-});
-
-client.on('message', async (message) => {
-  client.functions.get('EVENT_message').run(client, message, config);
 });
 
 // logging errors and warns
