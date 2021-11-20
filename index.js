@@ -36,11 +36,18 @@ client.on('ready', async () => {
   });
 });
 
-client.once('ready', async () => {
-  // set bot player status
-  config.setup.setupFunctionsOnce.forEach((FCN) => {
-    client.functions.get(FCN).run(client, config);
-  });
+client.on('ready', async () => {
+  // confirm user logged in
+  console.log(`[${config.name}] Logged in as "${client.user.tag}"!`);
+
+  // setup tables
+  console.log('[DB] Syncing tables...');
+  await sequelize.sync();
+  await console.log('[DB] Done syncing!');
+
+  // set bot user status
+  const setupFunctions = client.functions.filter((fcn) => fcn.data.callOn === 'setup');
+  setupFunctions.forEach((FCN) => FCN.run());
 });
 
 // EVENT user gets banned
