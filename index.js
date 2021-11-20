@@ -1,25 +1,39 @@
 // init Discord
-const Discord = require('discord.js');
-// init Discord client
-const client = new Discord.Client({ disableEveryone: true });
-// init filesystem
+const { Client, Intents, Collection } = require('discord.js');
+// init file system
 const fs = require('fs');
+// init command builder
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// setting essential global values
+// init Discord client
+global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS] });
 // init config
-const config = require('./config/main.json');
+global.config = require('./config.json');
 
-// create new collections in client and config
-client.functions = new Discord.Collection();
-client.commands = new Discord.Collection();
-config.env = new Discord.Collection();
+global.DEBUG = process.env.NODE_ENV === 'development';
 
-// import Functions and Commands
-config.setup.startupFunctions.forEach((FCN) => {
-  const INIT = require(`./functions/${FCN}.js`);
-  INIT.run(client, fs, config);
-});
+// global.main = {};
+global.CmdBuilder = SlashCommandBuilder;
+
+global.ERR = (err) => console.error('ERROR:', err);
+
+// creating collections
+client.commands = new Collection();
+client.functions = new Collection();
+
+// anouncing debug mode
+if (DEBUG) console.log(`[${config.name}] Bot is on Debug-Mode. Some functions are not going to be loaded.`);
 
 // Login the bot
-client.login(config.env.get('token'));
+client.login(process.env.DCtoken)
+  .then(() => {
+    // import Functions and Commands; startup database connection
+    fs.readdirSync('./functions/STARTUP').forEach((FCN) => {
+      if (FCN.search('.js') === -1) return;
+      const INIT = require(`./functions/STARTUP/${FCN}`);
+      INIT.run(fs);
+    });
+  });
 
 client.on('ready', async () => {
   // confirm user logged in
