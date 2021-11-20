@@ -1,0 +1,5 @@
+**Changelog:**
+* completely remade agent-black with the new slash-commands
+
+**Plannings:**
+- everything else
