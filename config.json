@@ -1,6 +1,7 @@
 {
     "name": "Agent Black",
     "teamRole": "638670637052854282",
+    "logChannel": "638793508202741790",
     "setup": {
         "setupFunctions": [
             "SETUP_offlineStat",
@@ -19,9 +20,6 @@
     "functions": {
         "userTagRecord": {
             "maxCacheTimeout": 10800000
-        },
-        "offlineStat": {
-            "logChannel": "638793508202741790"
         }
     }
 }

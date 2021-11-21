@@ -22,7 +22,7 @@ module.exports.run = async () => {
   } else {
     embed.setDescription('The time that the bot was offline, is missing. A new entry got created!');
   }
-  client.channels.cache.get(config.setup.logStatusChannel).send({ embeds: [embed] });
+  client.channels.cache.get(config.logChannel).send({ embeds: [embed] });
 
   setInterval(async () => {
     // loop db update in 5 sec intervall
