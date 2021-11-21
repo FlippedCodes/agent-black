@@ -87,7 +87,12 @@ client.on('interactionCreate', async (interaction) => {
   // command handler
   if (interaction.isCommand()) {
     const command = client.commands.get(interaction.commandName);
-    if (command) return command.run(interaction).catch(console.log);
+    if (command) {
+      // trigger application thinking
+      await interaction.deferReply({ ephemeral: true });
+      command.run(interaction).catch(console.log);
+      return;
+    }
   }
 });
 
