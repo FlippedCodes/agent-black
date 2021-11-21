@@ -15,7 +15,16 @@ global.DEBUG = process.env.NODE_ENV === 'development';
 // global.main = {};
 global.CmdBuilder = SlashCommandBuilder;
 
-global.ERR = (err) => console.error('ERROR:', err);
+global.ERR = (err) => {
+  console.error('ERROR:', err);
+  const { MessageEmbed } = require('discord.js');
+  const embed = new MessageEmbed()
+    .setAuthor(`Error: '${err.message}'`)
+    .setDescription(`STACKTRACE:\n\`\`\`${err.stack.slice(0, 4000)}\`\`\``)
+    .setColor(16449540);
+  client.channels.cache.get(config.logChannel).send({ embeds: [embed] });
+  return;
+};
 
 // creating collections
 client.commands = new Collection();
@@ -99,3 +108,4 @@ client.on('interactionCreate', async (interaction) => {
 // logging errors and warns
 client.on('error', (e) => console.error(e));
 client.on('warn', (e) => console.warn(e));
+process.on('uncaughtException', (ERR));
