@@ -12,6 +12,7 @@ async function addUser(Maintainer, userID) {
 // adds user entry
 module.exports.run = async (interaction, Maintainer) => {
   const userID = await interaction.options.getUser('user').id;
+  if (userID === interaction.user.id) return messageFail(interaction, 'You cant edit yourself.');
   // add server
   const userAdded = await addUser(Maintainer, userID);
   // post outcome

@@ -7,6 +7,7 @@ async function removeUser(Maintainer, userID) {
 // adds user entry
 module.exports.run = async (interaction, Maintainer) => {
   const userID = await interaction.options.getUser('user').id;
+  if (userID === interaction.user.id) return messageFail(interaction, 'You cant edit yourself.');
   const userRemoved = await removeUser(Maintainer, userID);
   if (userRemoved >= 1) {
     messageSuccess(interaction,

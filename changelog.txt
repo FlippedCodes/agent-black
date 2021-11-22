@@ -9,6 +9,7 @@ Important Changes:
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
+- added failsafe to not demote own maintainer account
 
 **Planned:**
 - everything else
