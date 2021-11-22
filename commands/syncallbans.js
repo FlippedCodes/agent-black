@@ -1,10 +1,4 @@
-const { MessageEmbed } = require('discord.js');
-
 const Ban = require('../database/models/Ban');
-
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
 
 module.exports.run = async (interaction) => {
   // check owner permissions
