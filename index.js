@@ -17,6 +17,7 @@ global.CmdBuilder = SlashCommandBuilder;
 
 global.ERR = (err) => {
   console.error('ERROR:', err);
+  if (DEBUG) return;
   const { MessageEmbed } = require('discord.js');
   const embed = new MessageEmbed()
     .setAuthor(`Error: '${err.message}'`)
