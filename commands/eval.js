@@ -12,9 +12,8 @@ const clean = (text) => {
 
 module.exports.run = async (interaction) => {
   // check owner permissions
-  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`${module.exports.data.name}\``);
+  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`${module.exports.data.name}\``, null, false);
   const code = interaction.options.getString('codeline', true);
-  // if (code.indexOf('DCtoken' || 'process.env.DCtoken' || 'token' || 'client') !== -1) return message.channel.send('Do you think its that easy?\nSry, but cant give you my key...');
   try {
     let evaled = eval(code);
 
