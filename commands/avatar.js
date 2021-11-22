@@ -6,7 +6,7 @@ module.exports.run = async (interaction) => {
   const command = interaction.options;
   // get user and ID
   const user = command.getUser('user', true);
-  const pfp = user.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 });
+  const pfp = user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
   embed.setAuthor(user.tag, null, pfp);
   embed.setImage(pfp);
 
