@@ -4,7 +4,7 @@ module.exports.run = async (interaction) => {
   // check owner permissions
   if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`${module.exports.data.name}\``);
 
-  await messageSuccess(interaction, 'Processing banlist for all servers...');
+  if (!DEBUG) await interaction.deferReply();
   await client.guilds.cache.forEach(async (guild) => {
     const bans = await guild.bans.fetch({ cache: false });
     await bans.forEach(async ({ user, reason }) => {
