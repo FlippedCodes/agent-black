@@ -94,6 +94,8 @@ client.on('ready', async () => {
 // });
 
 client.on('interactionCreate', async (interaction) => {
+  // only guild command
+  if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
   // command handler
   if (interaction.isCommand()) {
     const command = client.commands.get(interaction.commandName);
