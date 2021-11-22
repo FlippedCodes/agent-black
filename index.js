@@ -97,8 +97,8 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.isCommand()) {
     const command = client.commands.get(interaction.commandName);
     if (command) {
-      // trigger application thinking
-      await interaction.deferReply({ ephemeral: true });
+      // if debuging trigger application thinking
+      if (DEBUG) await interaction.deferReply({ ephemeral: true });
       command.run(interaction).catch(console.log);
       return;
     }
