@@ -1,5 +1,14 @@
 **Changelog:**
-* completely remade agent-black with the new slash-commands
+__Bot update - 2.2.0 - Discord-App-y-fyed the bot__
+New Stuff:
+- A new command to retrieve user banners
 
-**Plannings:**
+Important Changes:
+- completely remade agent-black with the new slash-commands
+(You now need use the slash commands to interact with the bot)
+
+Boring Bug Fixes:
+- Updated dependencies to new versions
+
+**Planned:**
 - everything else
