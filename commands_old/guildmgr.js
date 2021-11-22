@@ -21,13 +21,13 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 async function removeServer(ParticipatingServer, serverID) {
   const success = await ParticipatingServer.update({ active: false },
     { where: { serverID, active: true } })
-    .catch(errHandler);
+    .catch(ERR);
   return success[0];
 }
 
 // removes a server from the ParticipatingServers table
 async function blacklistServer(serverID) {
-  const success = await ParticipatingServer.update({ blocked: true }, { where: { serverID } }).catch(errHandler);
+  const success = await ParticipatingServer.update({ blocked: true }, { where: { serverID } }).catch(ERR);
   return success[0];
 }
 

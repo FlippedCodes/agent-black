@@ -7,7 +7,7 @@ const Warn = require('../database/models/Warn');
 const config = require('../config/main.json');
 
 // error Handler
-const errHandler = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -46,8 +46,8 @@ module.exports.run = async (client, member) => {
   // check if user is banned on some server
   const [serverID, orgUserID, orgUserTag] = [member.guild.id, member.id, member.user.tag];
   // get all bans and warnings the joined user has
-  const userBans = await Ban.count({ where: { userID: orgUserID } }).catch(errHandler);
-  const userWarns = await Warn.count({ where: { userID: orgUserID } }).catch(errHandler);
+  const userBans = await Ban.count({ where: { userID: orgUserID } }).catch(ERR);
+  const userWarns = await Warn.count({ where: { userID: orgUserID } }).catch(ERR);
   // calculate sum and check if sum is 0
   const overallAmmount = userBans + userWarns;
   if (overallAmmount === 0) return;
@@ -60,9 +60,9 @@ module.exports.run = async (client, member) => {
   if (output) {
     output.forEach(async (aliasUserID) => {
       if (orgUserID === aliasUserID) return;
-      const aliasUser = await client.users.fetch(aliasUserID, false).catch(errHandler);
-      const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(errHandler);
-      const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(errHandler);
+      const aliasUser = await client.users.fetch(aliasUserID, false).catch(ERR);
+      const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(ERR);
+      const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(ERR);
       sendMessage(client, 'a!', serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
     });
   }

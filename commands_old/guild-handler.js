@@ -9,7 +9,7 @@ function CommandUsage(prefix, cmdName, subcmd) {
 // check if server has feature enabled.
 async function checkFeature(serverID) {
   const found = await ParticipatingServer.findOne({ where: { serverID, active: true } })
-    .catch(errHandler);
+    .catch(ERR);
   return found;
 }
 

@@ -10,7 +10,7 @@ function CommandUsage(prefix, cmdName, subcmd) {
 async function enableForceReason(serverID) {
   const enabled = await ServerSetting.update({ pointsSystemForceReason: true },
     { where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return enabled;
 }
 
@@ -18,7 +18,7 @@ async function enableForceReason(serverID) {
 async function disableForceReason(serverID) {
   const disabled = await ServerSetting.update({ pointsSystemForceReason: false },
     { where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return disabled;
 }
 

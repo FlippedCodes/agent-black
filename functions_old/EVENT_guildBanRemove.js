@@ -1,7 +1,7 @@
 const Ban = require('../database/models/Ban');
 
 // error-handler for event-function
-const errHandler = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -12,7 +12,7 @@ module.exports.run = async (guild, user) => {
   // update ban-DB entry
   Ban.update({ userBanned: false },
     { where: { userID, serverID } })
-    .catch(errHandler);
+    .catch(ERR);
 };
 
 module.exports.help = {

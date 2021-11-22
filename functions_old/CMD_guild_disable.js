@@ -6,7 +6,7 @@ async function removeServer(serverID) {
     { active: false },
     { where: { serverID, active: true } },
   )
-    .catch(errHandler);
+    .catch(ERR);
   return success[0];
 }
 

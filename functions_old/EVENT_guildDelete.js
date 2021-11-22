@@ -1,6 +1,6 @@
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
-const errHandler = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -10,7 +10,7 @@ async function removeServer(serverID) {
     { active: false },
     { where: { serverID, active: true } },
   )
-    .catch(errHandler);
+    .catch(ERR);
   return success[0];
 }
 

@@ -6,7 +6,7 @@ const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const config = require('../config/main.json');
 
-const errHandler = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -16,7 +16,7 @@ function getServerEntry(client, serverID) {
 }
 
 async function addServerEntry(serverID, serverName) {
-  await ParticipatingServer.findOrCreate({ where: { serverID, serverName } }).catch(errHandler);
+  await ParticipatingServer.findOrCreate({ where: { serverID, serverName } }).catch(ERR);
 }
 
 module.exports.run = async (client, guild) => {
@@ -53,11 +53,11 @@ We also gladly help you out, if you need any assistance with the bot. https://di
     const [banEntry] = await Ban.findOrCreate({
       where: { userID, serverID },
       defaults: { reason: fixedReason, userTag, userBanned },
-    }).catch(errHandler);
+    }).catch(ERR);
     if (!banEntry.isNewRecord) {
       Ban.update({ reason: fixedReason, userBanned },
         { where: { userID, serverID } })
-        .catch(errHandler);
+        .catch(ERR);
     }
   });
 };

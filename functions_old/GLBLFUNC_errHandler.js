@@ -1,5 +1,5 @@
-global.errHandler = (err) => console.error('ERROR:', err);
+global.ERR = (err) => console.error('ERROR:', err);
 
 module.exports.help = {
-  name: 'GLBLFUNC_errHandler',
+  name: 'GLBLFUNC_ERR',
 };

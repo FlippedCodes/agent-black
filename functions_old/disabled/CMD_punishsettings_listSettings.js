@@ -5,7 +5,7 @@ const ServerSetting = require('../database/models/ServerSetting');
 // gets server settings
 async function getSettings(serverID) {
   const found = await ServerSetting.findOne({ where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return found;
 }
 

@@ -8,14 +8,14 @@ function CommandUsage(prefix, cmdName, subcmd) {
 
 // adds server if not existent
 async function createServer(serverID) {
-  const created = await ServerSetting.findOrCreate({ where: { serverID } }).catch(errHandler);
+  const created = await ServerSetting.findOrCreate({ where: { serverID } }).catch(ERR);
   return created;
 }
 
 // checks is server is on list
 async function checkServer(serverID) {
   const found = await ServerSetting.findOne({ where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return found;
 }
 
@@ -23,7 +23,7 @@ async function checkServer(serverID) {
 async function enablePointsSystem(serverID) {
   const enabled = await ServerSetting.update({ pointsSystemEnabled: true },
     { where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return enabled;
 }
 
@@ -31,7 +31,7 @@ async function enablePointsSystem(serverID) {
 async function disablePointsSystem(serverID) {
   const disabled = await ServerSetting.update({ pointsSystemEnabled: false },
     { where: { serverID } })
-    .catch(errHandler);
+    .catch(ERR);
   return disabled;
 }
 

@@ -15,7 +15,7 @@ const UserIDAssociation = require('../database/models/UserIDAssociation');
 // looksup usertag in list if recorded
 async function checkTag(userTag) {
   const found = await UserIDAssociation.findOne({ where: { userTag } })
-    .catch(errHandler);
+    .catch(ERR);
   return found;
 }
 

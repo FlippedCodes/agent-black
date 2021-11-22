@@ -21,7 +21,7 @@ module.exports.run = async (userID, userTag) => {
     where: { userID },
     defaults: { userTag },
   })
-    .catch(errHandler);
+    .catch(ERR);
 };
 
 module.exports.help = {

@@ -6,7 +6,7 @@ async function enableServer(serverID) {
     { active: true },
     { where: { serverID, active: false, blocked: false } },
   )
-    .catch(errHandler);
+    .catch(ERR);
   return success[0];
 }
 
@@ -15,7 +15,7 @@ async function checkData(serverID) {
   const found = await ParticipatingServer.findOne({
     where: { serverID },
     attributes: ['logChannelID', 'teamRoleID'],
-  }).catch(errHandler);
+  }).catch(ERR);
   return found;
 }
 

@@ -6,7 +6,7 @@ const startupTime = +new Date();
 
 const OfflineStat = require('../database/models/OfflineStat');
 
-const errHandler = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
 };
 
@@ -19,7 +19,7 @@ module.exports.run = async (client, config) => {
     .setColor(4296754)
     .setFooter(client.user.tag, client.user.displayAvatarURL)
     .setTimestamp();
-  const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(errHandler);
+  const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(ERR);
   if (offlineTime) {
     embed
       .addField('The time the bot was offline:', `${toTime(startupTime - offlineTime.time * 1)}`, false)
