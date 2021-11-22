@@ -98,7 +98,7 @@ client.on('interactionCreate', async (interaction) => {
   if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
   // command handler
   if (interaction.isCommand()) {
-    const command = client.commands.get(interaction.commandName);
+    const command = client.commands.get(DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName);
     if (command) {
       // if debuging trigger application thinking
       if (DEBUG) await interaction.deferReply({ ephemeral: true });
