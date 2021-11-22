@@ -5,7 +5,7 @@ async function kickoff(interaction) {
   const sendMessage = await new MessageEmbed()
     .setDescription('📤 Pong...')
     .setColor();
-  const sentMessage = await interaction.reply({ embeds: [sendMessage], fetchReply: true });
+  const sentMessage = await reply(interaction, { embeds: [sendMessage], fetchReply: true });
   return sentMessage;
 }
 
@@ -32,7 +32,7 @@ async function checkPing(interaction) {
   //       .setStyle('DANGER'),
   //   );
   // interaction.editReply({ embeds: [editedMessage(sentReply, interaction)], components: [test] });
-  interaction.editReply({ embeds: [editedMessage(sentReply, interaction)] });
+  reply(interaction, { embeds: [editedMessage(sentReply, interaction)] });
 }
 
 module.exports.run = async (interaction) => checkPing(interaction);

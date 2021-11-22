@@ -9,6 +9,11 @@ global.messageSuccess = async (interaction, body, color, ephemeral) => {
   return sentMessage;
 };
 
+global.reply = async (interaction, message) => {
+  if (DEBUG) return interaction.editReply(message);
+  return interaction.reply(message);
+};
+
 global.prettyCheck = (question) => {
   if (question) return '✅';
   return '❌';

@@ -10,7 +10,7 @@ module.exports.run = async (interaction) => {
   embed.setAuthor(user.tag, null, pfp);
   embed.setImage(pfp);
 
-  interaction.reply({ embeds: [embed] });
+  reply(interaction, { embeds: [embed] });
 };
 
 module.exports.data = new CmdBuilder()
