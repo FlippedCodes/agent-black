@@ -9,9 +9,10 @@ global.messageSuccess = async (interaction, body, color, ephemeral) => {
   return sentMessage;
 };
 
-global.reply = async (interaction, message) => {
-  if (DEBUG) return interaction.editReply(message);
-  return interaction.reply(message);
+global.reply = async (interaction, payload) => {
+  // check if message needs to be edited or if its a first reply
+  if (interaction.deferred || interaction.replied) return interaction.editReply(payload);
+  return interaction.reply(payload);
 };
 
 global.prettyCheck = (question) => {
