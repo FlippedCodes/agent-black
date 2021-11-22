@@ -6,6 +6,7 @@ New Stuff:
 Important Changes:
 - completely remade agent-black with the new slash-commands
 (You now need use the slash commands to interact with the bot)
+- the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
