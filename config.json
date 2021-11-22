@@ -15,6 +15,9 @@
         },
         "about": {
             "text": "./about.txt"
+        },
+        "changelog": {
+            "text": "./changelog.txt"
         }
     },
     "functions": {
