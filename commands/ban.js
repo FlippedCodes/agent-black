@@ -6,37 +6,36 @@ module.exports.run = async (interaction) => {
   }
 
   const command = interaction.options;
-  // get member
-  const toBanMember = command.getMember('user', true);
-  // TODO: might need a error handler, if member is not on the server
+  // get user
+  const userOpt = command.get('user', true);
   // check if member is bannable
-  if (toBanMember) {
-    if (!toBanMember.bannable) {
-      messageFail(message, `The user  \`${toBanMember.user.tag}\` can't be banned!\nHe owns the server, has higher permissions or is a system user!`);
+  if (userOpt.member) {
+    if (!userOpt.member.bannable) {
+      messageFail(interaction, `The user  \`${userOpt.user.tag}\` can't be banned!\nHe owns the server, has higher permissions or is a system user!`);
       return;
     }
   }
 
+  // value definitions
+  const user = userOpt.user;
+  const guild = interaction.guild;
+  const userID = user.id;
   // check if user is already banned
-  const banList = await message.guild.fetchBans();
+  const banList = await guild.bans.fetch();
   const existingBan = await banList.find((ban) => ban.user.id === userID);
-  if (existingBan) {
-    // unbanning so reason gets updated
-    await message.guild.members.unban(userID);
-    // messageFail(message, `The user \`${toBanUser.tag}\` has been already banned!`);
-    // return;
-  }
+  // unbanning so reason gets updated
+  if (existingBan) await guild.members.unban(userID);
   // get complete reason
-  const reason = command.getUser('reason', true);
+  const reason = command.getString('reason', true);
   // check ban reason length for discord max ban reason
   if (reason.length > 512) {
-    messageFail(message, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
+    messageFail(interaction, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
     return;
   }
   // exec ban
-  const processedBanUser = await message.guild.members.ban(userID, { reason });
+  const processedBanUser = await guild.members.ban(userID, { reason });
   // write confirmation
-  messageSuccess(message, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`\`\`${reason}\`\`\``);
+  messageSuccess(interaction, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`\`\`${reason}\`\`\``);
 };
 
 module.exports.data = new CmdBuilder()
