@@ -210,8 +210,8 @@ module.exports.run = async (client, message, args, config, prefix) => {
   }
 };
 
-module.exports.help = {
-  name: 'lookup',
-  usage: 'USERID|USERTAG|USERMENTION|USERSEARCH',
-  desc: 'Uses the Discord API to lookup user information',
-};
+module.exports.data = new CmdBuilder()
+  .setName('lookup')
+  .setDescription('Uses the Discord API to lookup user information.')
+  .addUserOption((option) => option.setName('user').setDescription('Provide a user id or search from the drop down.'))
+  .addStringOption((option) => option.setName('search').setDescription('Search database for a user.'));
