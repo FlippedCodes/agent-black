@@ -13,7 +13,7 @@ module.exports.run = async (interaction) => {
     .setImage(defaultPFP);
   await reply(interaction, { embeds: [embedDefault] });
 
-  if (member) {
+  if (member && member.avatar) {
     const embedServer = new MessageEmbed();
     const serverPFP = member.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
     embedServer.setAuthor(member.nickname, null, serverPFP)
