@@ -3,6 +3,7 @@ module.exports.run = async () => {
   console.log(`[${module.exports.data.name}] Setting status...`);
   await client.user.setStatus('online');
   const membercount = await client.guilds.cache.reduce((previousCount, currentGuild) => previousCount + currentGuild.memberCount, 0);
+  // TODO: update activity message
   await client.user.setActivity(`${membercount} members in Devoravore`, { type: 'WATCHING' });
   console.log(`[${module.exports.data.name}] Status set!`);
 };
