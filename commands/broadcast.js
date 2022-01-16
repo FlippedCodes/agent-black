@@ -13,7 +13,7 @@ async function sendMessage(author, body) {
     const channelID = DBchannel.logChannelID;
     const channel = client.channels.cache.find((channel) => channel.id === channelID);
     const embed = new MessageEmbed()
-      .setAuthor(`${author} broadcasted`)
+      .setAuthor({ name: `${author} broadcasted` })
       .setDescription(body)
       .setColor(4182379);
     channel.send({ embeds: [embed] });

@@ -30,7 +30,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
     return;
   }
 
-  message.channel.send({ embed: new MessageEmbed().setAuthor('Processing banlist...') })
+  message.channel.send({ embed: new MessageEmbed().setAuthor({ name: 'Processing banlist...' }) })
     .then(async (msg) => {
       client.guilds.cache.find((server) => server.id === serverID).fetchBans(true)
         .then((bans) => {
@@ -52,7 +52,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
             }
           });
         })
-        .then(() => msg.edit({ embed: new MessageEmbed().setAuthor('Done!', 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png') }))
+        .then(() => msg.edit({ embed: new MessageEmbed().setAuthor({ name: 'Done!', iconURL: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-512.png' }) }))
         .catch(ERR);
     }).catch(ERR);
 };

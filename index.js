@@ -20,7 +20,7 @@ global.ERR = (err) => {
   if (DEBUG) return;
   const { MessageEmbed } = require('discord.js');
   const embed = new MessageEmbed()
-    .setAuthor(`Error: '${err.message}'`)
+    .setAuthor({ name: `Error: '${err.message}'` })
     .setDescription(`STACKTRACE:\n\`\`\`${err.stack.slice(0, 4000)}\`\`\``)
     .setColor(16449540);
   client.channels.cache.get(config.logChannel).send({ embeds: [embed] });

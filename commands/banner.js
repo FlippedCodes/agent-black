@@ -10,7 +10,7 @@ module.exports.run = async (interaction) => {
   await user.fetch(true);
   const pic = await user.bannerURL({ format: 'png', dynamic: true, size: 4096 });
   if (!pic) return messageFail(interaction, 'This user doesn\'t have a banner.');
-  embed.setAuthor(user.tag, null, pic);
+  embed.setAuthor({ name: user.tag });
   embed.setImage(pic);
 
   reply(interaction, { embeds: [embed] });

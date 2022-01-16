@@ -9,14 +9,14 @@ module.exports.run = async (interaction) => {
   const user = rawUser.user;
   const member = rawUser.member;
   const defaultPFP = user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
-  embedDefault.setAuthor(user.tag, null, defaultPFP)
+  embedDefault.setAuthor({ name: user.tag })
     .setImage(defaultPFP);
   await reply(interaction, { embeds: [embedDefault] });
 
   if (member && member.avatar) {
     const embedServer = new MessageEmbed();
     const serverPFP = member.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
-    embedServer.setAuthor(member.nickname, null, serverPFP)
+    embedServer.setAuthor({ name: member.nickname })
       .setImage(serverPFP)
       .setFooter('Server profile picture');
     interaction.followUp({ embeds: [embedServer] });

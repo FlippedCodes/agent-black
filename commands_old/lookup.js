@@ -24,8 +24,8 @@ async function postUserinfo(client, message, userID, bans, warns) {
   let failed = false;
   const discordUser = await client.users.fetch(userID, false)
     .catch((err) => {
-      if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
-      else embed.setAuthor('An error occurred!');
+      if (err.code === 10013) embed.setAuthor({ name: 'This user doesn\'t exist.' });
+      else embed.setAuthor({ name: 'An error occurred!' });
       embed.addField('Stopcode', err.message);
       failed = true;
       return message.channel.send({ embed });
@@ -85,11 +85,11 @@ function postBans(message, banns) {
     if (ban.userBanned) {
       embed
         .setColor(16739072) // orange
-        .setAuthor(`Banned on ${serverName}`);
+        .setAuthor({ name: `Banned on ${serverName}` });
     } else {
       embed
         .setColor(4296754) // green
-        .setAuthor(`Was banned on ${serverName}`);
+        .setAuthor({ name: `Was banned on ${serverName}` });
     }
     message.channel.send({ embed });
   });
@@ -102,7 +102,7 @@ function postWarns(message, warns) {
     const embed = new MessageEmbed()
       .setColor(16755456) // yellow
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
-      .setAuthor(`Warned on ${serverName}`)
+      .setAuthor({ name: `Warned on ${serverName}` })
       .addField('ServerID', `\`${warn.serverID}\``, true)
       .addField('WarnID', `\`${warn.warnID}\``, true)
       .addField('Warning creation date', warn.createdAt, true)
