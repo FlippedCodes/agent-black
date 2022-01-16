@@ -4,11 +4,12 @@ module.exports.run = async (interaction) => {
   // needs to be local as settings overlap from dofferent embed-requests
   const embed = new MessageEmbed();
   const command = interaction.options;
-  // get user and ID
+  // get user and Pic
   const user = command.getUser('user', true);
-  const forcedUser = await user.fetch(true);
-  if (!forcedUser.banner) return messageFail(interaction, 'This user doesn\'t have a banner.');
-  const pic = `https://cdn.discordapp.com/banners/${user.id}/${forcedUser.banner}?size=4096`;
+  // need to be fetched so banner url can be generated
+  await user.fetch(true);
+  const pic = await user.bannerURL({ format: 'png', dynamic: true, size: 4096 });
+  if (!pic) return messageFail(interaction, 'This user doesn\'t have a banner.');
   embed.setAuthor(user.tag, null, pic);
   embed.setImage(pic);
 
