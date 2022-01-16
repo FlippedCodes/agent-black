@@ -5,7 +5,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
     "bufferutil": "^4.0.5",
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.6.0",
     "html-to-image": "^1.6.2",
     "moment": "^2.29.1",
     "mysql2": "^2.3.2",
