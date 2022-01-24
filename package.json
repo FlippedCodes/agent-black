@@ -1,6 +1,6 @@
 {
   "name": "agent-black",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "main": "index.js",
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
