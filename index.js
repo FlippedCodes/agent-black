@@ -12,7 +12,6 @@ global.config = require('./config.json');
 
 global.DEBUG = process.env.NODE_ENV === 'development';
 
-// global.main = {};
 global.CmdBuilder = SlashCommandBuilder;
 
 global.ERR = (err) => {
