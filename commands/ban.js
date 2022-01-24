@@ -1,7 +1,7 @@
 module.exports.run = async (interaction) => {
   // check BAN_MEMBERS permissions
   if (!interaction.memberPermissions.has('BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(interaction, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
 
