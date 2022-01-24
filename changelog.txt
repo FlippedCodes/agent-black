@@ -1,12 +1,12 @@
 **Changelog:**
-__Bot update - 2.2.0 - Discord-App-y-fyed the bot__
+__Bot update - 3.0.0 - Discord-App-y-fyed the bot__
 New Stuff:
 - A new command to retrieve user banners
 
 Important Changes:
-- completely remade agent-black with the new slash-commands
-(You now need use the slash commands to interact with the bot)
-- the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord
+- completely remade agent-black with the new slash-commands (complete remake of backend)
+- the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord (Temporary)
+- **you now need use the slash commands to interact with the bot**
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
