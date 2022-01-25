@@ -1,37 +1,20 @@
-// WIP
+// TODO: not yet completed beforehand
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
+    \`\`\`/${cmdName} ${subcmd}\`\`\``;
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (interaction) => {
   // check permissions
   if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
   // get args
   const [userID, reasonTester] = args;
-  // check if gived arge are correct
-  if (!userID) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
-    return;
-  }
-  if (isNaN(userID)) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
-    return;
-  }
-  if (!reasonTester) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${userID} REASON`));
-    return;
-  }
-  // check userID if valid
-  if (!await client.functions.get('FUNC_checkID').run(userID, client, 'user')) {
-    messageFail(message, `A user with the ID \`${userID}\` doesn't exist!`);
-    return;
-  }
+
   // get member
   const toBanMember = await message.guild.members.cache.get(userID);
   // check if member is bannable
@@ -66,5 +49,12 @@ module.exports.run = async (client, message, args, config, prefix) => {
 module.exports.help = {
   name: 'unban',
   usage: 'USERID REASON',
-  desc: 'Pardons a user by ID',
+  desc: '',
 };
+
+module.exports.data = new CmdBuilder()
+  .setName('unban')
+  .setDescription('Pardons a user by ID.')
+  .addUserOption((option) => option.setName('user').setDescription('Provide the user you wish to ban.').setRequired(true))
+  .addStringOption((option) => option.setName('reason').setDescription('Reason for the server ban.').setRequired(true));
+
