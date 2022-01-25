@@ -23,15 +23,6 @@ function editedMessage(sentMessage, interaction) {
 // posts ping message and edits it afterwards
 async function checkPing(interaction) {
   const sentReply = await kickoff(interaction);
-  // const test = new MessageActionRow()
-  //   .addComponents(
-  //     new MessageButton()
-  //       .setCustomId('test')
-  //       .setEmoji('💩')
-  //       .setLabel('Testo')
-  //       .setStyle('DANGER'),
-  //   );
-  // interaction.editReply({ embeds: [editedMessage(sentReply, interaction)], components: [test] });
   reply(interaction, { embeds: [editedMessage(sentReply, interaction)] });
 }
 
