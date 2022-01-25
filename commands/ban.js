@@ -5,9 +5,8 @@ module.exports.run = async (interaction) => {
     return;
   }
 
-  const command = interaction.options;
   // get user
-  const userOpt = command.get('user', true);
+  const userOpt = interaction.options.get('user', true);
   // check if member is bannable
   if (userOpt.member) {
     if (!userOpt.member.bannable) {
@@ -26,7 +25,7 @@ module.exports.run = async (interaction) => {
   // unbanning so reason gets updated
   if (existingBan) await guild.members.unban(userID);
   // get complete reason
-  const reason = command.getString('reason', true);
+  const reason = interaction.options.getString('reason', true);
   // check ban reason length for discord max ban reason
   if (reason.length > 512) {
     messageFail(interaction, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
