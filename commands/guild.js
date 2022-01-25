@@ -16,8 +16,8 @@ module.exports.run = async (interaction) => {
     return;
   }
 
-  const subName = interaction.options.getString('action', true);
-  if (subcmd === 'setup' || subcmd === 'enable' || await checkFeature(interaction.guild.id)) {
+  const subName = interaction.options.getSubcommand(true);
+  if (subName === 'setup' || subName === 'enable' || await checkFeature(interaction.guild.id)) {
     client.commands.get(`${module.exports.data.name}_${subName}`).run(interaction, ParticipatingServer);
   } else messageFail(interaction, 'You can\'t use this command without setting up your server first!');
 };
@@ -25,13 +25,24 @@ module.exports.run = async (interaction) => {
 module.exports.data = new CmdBuilder()
   .setName('guild')
   .setDescription('Config for setting up your server with the bot.')
-  .addStringOption((option) => option
-    .setName('action')
-    .setDescription('What do you want with your server?')
-    .addChoices([
-      ['First time setup.', 'setup'],
-      ['View stats.', 'stats'],
-      ['Enable this guild.', 'enable'],
-      ['Disable this guild.', 'disable'],
-    ])
-    .setRequired(true));
+  .addSubcommand((SC) => SC
+    .setName('setup')
+    .setDescription('First time setup.')
+    .addChannelOption((option) => option
+      .setName('channel')
+      .setDescription('Provide a channel you want Agent Black to report to.')
+      .addChannelType(0)
+      .setRequired(true))
+    .addRoleOption((option) => option
+      .setName('role')
+      .setDescription('Provide your teams role, so the bot know who to listen to.')
+      .setRequired(true)))
+  .addSubcommand((SC) => SC
+    .setName('stats')
+    .setDescription('View stats.'))
+  .addSubcommand((SC) => SC
+    .setName('enable')
+    .setDescription('Enable this guild.'))
+  .addSubcommand((SC) => SC
+    .setName('disable')
+    .setDescription('Disable this guild.'));
