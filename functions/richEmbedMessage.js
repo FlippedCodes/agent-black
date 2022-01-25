@@ -11,6 +11,7 @@ module.exports.run = async (interaction, body, title, color, footer, ephemeral) 
 
   const options = {
     embeds: [embed],
+    components: [],
     ephemeral: String(ephemeral) ? ephemeral : true,
   };
 
