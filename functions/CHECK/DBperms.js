@@ -2,6 +2,7 @@ const Maintainer = require('../../database/models/Maintainer');
 
 const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
+// TODO: pass interaction to use #memberPermissions
 module.exports.run = async (userID, type, serverID, member) => {
   switch (type || 'maintainer') {
     case 'maintainer': return Maintainer.findOne({ where: { userID } }).catch(ERR);
