@@ -57,4 +57,3 @@ module.exports.data = new CmdBuilder()
   .setDescription('Pardons a user by ID.')
   .addUserOption((option) => option.setName('user').setDescription('Provide the user you wish to ban.').setRequired(true))
   .addStringOption((option) => option.setName('reason').setDescription('Reason for the server ban.').setRequired(true));
-
