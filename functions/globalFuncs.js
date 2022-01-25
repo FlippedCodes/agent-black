@@ -1,6 +1,7 @@
 global.messageFail = async (interaction, body, color, ephemeral) => {
   const sentMessage = await client.functions.get('richEmbedMessage')
     .run(interaction, body, '', color || 16449540, false, ephemeral || true);
+  return sentMessage;
 };
 
 global.messageSuccess = async (interaction, body, color, ephemeral) => {
@@ -9,6 +10,7 @@ global.messageSuccess = async (interaction, body, color, ephemeral) => {
   return sentMessage;
 };
 
+// raw reply to commands
 global.reply = async (interaction, payload) => {
   // check if message needs to be edited or if its a first reply
   if (interaction.deferred || interaction.replied) return interaction.editReply(payload);
