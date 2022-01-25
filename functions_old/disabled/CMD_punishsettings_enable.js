@@ -1,4 +1,4 @@
-const ServerSetting = require('../database/models/ServerSetting');
+const ServerSetting = require('../../database/models/ServerSetting');
 
 // adds server if not existent
 async function createServer(serverID) {

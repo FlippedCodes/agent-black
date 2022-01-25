@@ -1,4 +1,4 @@
-const ServerSetting = require('../database/models/ServerSetting');
+const ServerSetting = require('../../database/models/ServerSetting');
 
 // enables points system
 async function enableForceReason(serverID) {
