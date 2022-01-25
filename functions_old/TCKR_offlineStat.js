@@ -8,8 +8,8 @@ const ERR = (err) => {
 
 module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
-    console.log(`[${module.exports.help.name}] Starting heartbeat!`);
-  } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
+    console.log(`[${module.exports.data.name}] Starting heartbeat!`);
+  } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
   setInterval(async () => {
     // loop db update in 5 sec intervall
     const [offlineStat] = await OfflineStat.findOrCreate({

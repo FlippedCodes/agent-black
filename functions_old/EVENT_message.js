@@ -42,7 +42,7 @@ module.exports.run = async (client, message, config) => {
   const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn', 'guildmgr'];
   // check if active and if its a management command
   if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('FUNC_checkServer').run(serverID, false)) {
-    messageFail(message, `You need to setup the server first before yu can use this command.\nPlease run \`${prefix}guild setup\`.\n If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot) or join our support server`);
+    messageFail(message, `You need to setup the server first before yu can use this command.\nPlease run \`/guild setup\`.\n If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot) or join our support server`);
     return;
   }
 

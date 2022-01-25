@@ -12,8 +12,8 @@ const ERR = (err) => {
 
 module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
-    console.log(`[${module.exports.help.name}] Posting bot status message!`);
-  } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
+    console.log(`[${module.exports.data.name}] Posting bot status message!`);
+  } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
   const embed = new MessageEmbed()
     .setTitle('Bot back online!')
     .setColor(4296754)

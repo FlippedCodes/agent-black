@@ -12,7 +12,7 @@ async function checkFeature(serverID) {
 module.exports.run = async (interaction) => {
   // check MANAGE_GUILD permissions
   if (!interaction.memberPermissions.has('MANAGE_GUILD')) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 

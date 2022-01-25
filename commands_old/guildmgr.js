@@ -46,7 +46,7 @@ async function getBanCount(serverID) {
 module.exports.run = async (client, message, args, config, prefix) => {
   // check maintainer permissions
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -61,7 +61,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!serverID || !logChannelID || !teamRoleID || !serverName) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} ${teamRoleID || 'TEAMROLEID'} SERVERNAME\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} ${serverID || 'SERVERID'} ${logChannelID || 'LOG-CHANNELID'} ${teamRoleID || 'TEAMROLEID'} SERVERNAME\`\`\``);
         return;
       }
       if (!await client.functions.get('FUNC_checkID').run(logChannelID, client, 'channel')) {
@@ -91,7 +91,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!serverID) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverRemoved = await removeServer(ParticipatingServer, serverID);
@@ -109,7 +109,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!serverID) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverBlocked = await blacklistServer(serverID);
@@ -127,7 +127,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!serverID) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} SERVERID\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} SERVERID\`\`\``);
         return;
       }
       const serverFound = await findServer(ParticipatingServer, serverID);
@@ -150,7 +150,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
     default:
       messageFail(message,
         `Command usage: 
-        \`\`\`${prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
+        \`\`\`/${module.exports.data.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };

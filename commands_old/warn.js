@@ -29,7 +29,7 @@ async function messageWarnedUserInGuild(client, prefix, channelID, userTag, user
       Reason: \`\`\`${warnReason || 'none'}\`\`\``,
       `A user on your server has been warned on '${serverName}'!`,
       16755456,
-      `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
+      `For more information and other bans and warns use '/lookup ${userID}'`);
 }
 
 // warns other servers for aliases
@@ -44,7 +44,7 @@ async function messageWarnedAliasUserInGuild(client, prefix, channelID, userTag,
       Reason: \`\`\`${warnReason || 'none'}\`\`\``,
       `A alias of a user on your server has been warned on '${serverName}'!`,
       16755456,
-      `For more information and other bans and warns use '${prefix}lookup ${orgUserTag}'`);
+      `For more information and other bans and warns use '/lookup ${orgUserTag}'`);
 }
 
 async function checkforInfectedGuilds(client, prefix, guild, orgUserID, warnReason) {
@@ -76,7 +76,7 @@ async function getWarning(warnID) {
 module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -93,7 +93,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!userIDOrWarnID || !reasonTesting) {
         messageFail(message,
           `Command usage: 
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
         return;
       }
       // check if user exists
@@ -115,7 +115,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       if (!userIDOrWarnID || !reasonTesting) {
         messageFail(message,
           `Command usage:
-          \`\`\`${prefix}${module.exports.help.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
+          \`\`\`/${module.exports.data.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
         return;
       }
       // check if user exists
@@ -146,7 +146,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
     default:
       messageFail(message,
         `Command usage: 
-        \`\`\`${prefix}${module.exports.help.name} ${module.exports.help.usage}\`\`\``);
+        \`\`\`/${module.exports.data.name} ${module.exports.help.usage}\`\`\``);
       return;
   }
 };
