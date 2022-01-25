@@ -2,20 +2,10 @@ const { MessageEmbed } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
-
-// prepares command usage message
-function CommandUsage(prefix, cmdName, subcmd) {
-  return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
-}
-
 module.exports.run = async (client, message, args, config, prefix) => {
   // check maintainer permissions
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 

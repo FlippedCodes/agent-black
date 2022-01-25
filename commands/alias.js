@@ -1,11 +1,5 @@
 const UserAlias = require('../database/models/UserAlias');
 
-// prepares command usage message
-function CommandUsage(prefix, cmdName, subcmd) {
-  return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
-}
-
 function addAlias(userID, groupingID, addedBy) {
   // const [output] = await UserAlias.findOrCreate({
   UserAlias.findOrCreate({

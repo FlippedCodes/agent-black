@@ -1,11 +1,5 @@
 const ServerSetting = require('../database/models/ServerSetting');
 
-// prepares command usage message
-function CommandUsage(prefix, cmdName, subcmd) {
-  return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
-}
-
 // adds server if not existent
 async function createServer(serverID) {
   const created = await ServerSetting.findOrCreate({ where: { serverID } }).catch(ERR);

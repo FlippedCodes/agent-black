@@ -1,11 +1,5 @@
 const ServerSetting = require('../database/models/ServerSetting');
 
-// prepares command usage message
-function CommandUsage(prefix, cmdName, subcmd) {
-  return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
-}
-
 // enables points system
 async function enableForceReason(serverID) {
   const enabled = await ServerSetting.update({ pointsSystemForceReason: true },
