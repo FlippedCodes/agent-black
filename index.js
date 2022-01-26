@@ -102,7 +102,7 @@ client.on('interactionCreate', async (interaction) => {
       // if debuging trigger application thinking
       // TEMP: set to false to test some public commands
       if (DEBUG) await interaction.deferReply({ ephemeral: false });
-      command.run(interaction).catch(console.log);
+      command.run(interaction).catch(ERR);
       return;
     }
   }
