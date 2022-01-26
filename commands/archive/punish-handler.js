@@ -4,7 +4,7 @@
 //   // command handler for subcommands: manualAdd, manualRemove, stats, userStats (calls lookup), add, remove, list, listPunishments
 // };
 
-const ServerSetting = require('../database/models/ServerSetting');
+const ServerSetting = require('../../database/models/ServerSetting');
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
