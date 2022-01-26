@@ -1,5 +1,23 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
+const buttons = new MessageActionRow()
+  .addComponents([
+    new MessageButton()
+      .setCustomId('accept')
+      .setEmoji('✅')
+      .setLabel('Accept')
+      .setStyle('PRIMARY'),
+    new MessageButton()
+      .setCustomId('deny')
+      .setEmoji('❌')
+      .setLabel('Deny')
+      .setStyle('SECONDARY'),
+    new MessageButton()
+      .setLabel('ToS')
+      .setURL('https://github.com/FlippedCode/agent-black/wiki/ToS-and-Privacy-Policy')
+      .setStyle('LINK'),
+  ]);
+
 // adds a server to the ParticipatingServers table
 async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
   await ParticipatingServer.destroy({ limit: 1, where: { serverID, active: false } });
@@ -16,24 +34,6 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 }
 
 module.exports.run = async (interaction, ParticipatingServer) => {
-  const buttons = new MessageActionRow()
-    .addComponents([
-      new MessageButton()
-        .setCustomId('accept')
-        .setEmoji('✅')
-        .setLabel('Accept')
-        .setStyle('PRIMARY'),
-      new MessageButton()
-        .setCustomId('deny')
-        .setEmoji('❌')
-        .setLabel('Deny')
-        .setStyle('SECONDARY'),
-      new MessageButton()
-        .setLabel('ToS')
-        .setURL('https://github.com/FlippedCode/agent-black/wiki/ToS-and-Privacy-Policy')
-        .setStyle('LINK'),
-    ]);
-
   const message = await new MessageEmbed()
     .setDescription('Please confirm that you have read the ToS and Privacy Policy.')
     .setColor(16739072);
