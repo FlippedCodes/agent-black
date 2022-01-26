@@ -6,7 +6,7 @@ const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 // setting essential global values
 // init Discord client
-global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS] });
+global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 // init config
 global.config = require('./config.json');
 
@@ -100,7 +100,8 @@ client.on('interactionCreate', async (interaction) => {
     const command = client.commands.get(DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName);
     if (command) {
       // if debuging trigger application thinking
-      if (DEBUG) await interaction.deferReply({ ephemeral: true });
+      // TEMP: set to false to test some public commands
+      if (DEBUG) await interaction.deferReply({ ephemeral: false });
       command.run(interaction).catch(console.log);
       return;
     }
