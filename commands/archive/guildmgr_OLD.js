@@ -1,6 +1,6 @@
-const ParticipatingServer = require('../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
 // adds a server to the ParticipatingServers table
 async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
@@ -25,7 +25,6 @@ async function removeServer(ParticipatingServer, serverID) {
   return success[0];
 }
 
-// removes a server from the ParticipatingServers table
 async function blacklistServer(serverID) {
   const success = await ParticipatingServer.update({ blocked: true }, { where: { serverID } }).catch(ERR);
   return success[0];
@@ -123,7 +122,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
       return;
 
     // shows info about a serverentry
-    case 'info':
+    case 'stats':
       if (!serverID) {
         messageFail(message,
           `Command usage: 
@@ -155,7 +154,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   }
 };
 
-module.exports.help = {
+module.exports.d = {
   name: 'guildmgr',
   usage: 'add|remove|info|block SERVERID',
   desc: 'Manages guilds. [MAINTAINER ONLY]',
