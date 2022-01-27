@@ -18,7 +18,7 @@ module.exports.run = async (interaction) => {
     const serverPFP = member.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
     embedServer.setAuthor({ name: member.nickname })
       .setImage(serverPFP)
-      .setFooter('Server profile picture');
+      .setFooter({ text: 'Server profile picture' });
     interaction.followUp({ embeds: [embedServer] });
   }
 };

@@ -30,7 +30,7 @@ async function messageBannedUserInGuild(client, prefix, channelID, userTag, user
       Reason: \`\`\`${banReason || 'none'}\`\`\``,
       `A user on your server has been banned on '${serverName}'!`,
       16739072,
-      `For more information and other bans and warns use '${prefix}lookup ${userID}'`);
+      `For more information and other bans and warns use '/lookup ${userID}'`);
 }
 
 // warns other servers for aliases
@@ -45,7 +45,7 @@ async function messageBannedAliasUserInGuild(client, prefix, channelID, userTag,
       Reason: \`\`\`${warnReason || 'none'}\`\`\``,
       `A alias of a user on your server has been banned on '${serverName}'!`,
       16755456,
-      `For more information and other bans and warns use '${prefix}lookup ${orgUserTag}'`);
+      `For more information and other bans and warns use '/lookup ${orgUserTag}'`);
 }
 
 module.exports.run = async (guild, user) => {

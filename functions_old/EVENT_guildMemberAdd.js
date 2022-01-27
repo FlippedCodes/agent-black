@@ -37,7 +37,7 @@ async function sendMessage(client, prefix, serverID, userID, userTag, userBans, 
     ID: \`${userID}\`
     bans: \`${userBans}\`
     warns: \`${userWarns}\`
-    For more information use \`${prefix}lookup ${userID}\``, title, 16739072, false);
+    For more information use \`/lookup ${userID}\``, title, 16739072, false);
 }
 
 module.exports.run = async (client, member) => {

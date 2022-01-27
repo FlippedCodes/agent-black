@@ -1,9 +1,9 @@
-const ServerSetting = require('../database/models/ServerSetting');
+const ServerSetting = require('../../database/models/ServerSetting');
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
+    \`\`\`/${cmdName} ${subcmd}\`\`\``;
 }
 
 // check if server has feature enabled.
@@ -20,7 +20,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   // check DM
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
   // check if user is teammember
-  if (!message.member.roles.cache.find(({ id }) => id === config.teamRole)) return messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+  if (!message.member.roles.cache.find(({ id }) => id === config.teamRole)) return messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
   const [subcmd] = args;
   const commandValues = ['enable', 'listSettings', 'forceReason', 'pointLifetime', 'listReasons', 'addReason', 'removeReason', 'listPunishment', 'addPunishment', 'removePunishment'];
   const currentCMD = module.exports.help;

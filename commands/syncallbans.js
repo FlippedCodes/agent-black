@@ -2,7 +2,7 @@ const Ban = require('../database/models/Ban');
 
 module.exports.run = async (interaction) => {
   // check owner permissions
-  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`${module.exports.data.name}\``);
+  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
 
   if (!DEBUG) await interaction.deferReply();
   await client.guilds.cache.forEach(async (guild) => {

@@ -12,7 +12,7 @@ const clean = (text) => {
 
 module.exports.run = async (interaction) => {
   // check owner permissions
-  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`${module.exports.data.name}\``, null, false);
+  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``, null, false);
   const code = interaction.options.getString('codeline', true);
   try {
     let evaled = eval(code);

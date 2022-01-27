@@ -1,7 +1,5 @@
-const ParticipatingServer = require('../database/models/ParticipatingServer');
-
 // removes a server from the ParticipatingServers table
-async function removeServer(serverID) {
+async function removeServer(ParticipatingServer, serverID) {
   const success = await ParticipatingServer.update(
     { active: false },
     { where: { serverID, active: true } },
@@ -10,19 +8,16 @@ async function removeServer(serverID) {
   return success[0];
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
-  const serverID = message.guild.id;
-  const serverRemoved = await removeServer(serverID);
+module.exports.run = async (interaction, ParticipatingServer) => {
+  const serverID = interaction.guildId;
+  const serverRemoved = await removeServer(ParticipatingServer, serverID);
   if (serverRemoved >= 1) {
-    messageSuccess(message,
+    messageSuccess(interaction,
       `The server with the ID \`${serverID}\` got disabled from the participating Servers list.`);
   } else {
-    messageFail(message,
+    messageFail(interaction,
       `The server with the ID \`${serverID}\` couldn't be found of the list.`);
   }
 };
 
-module.exports.help = {
-  name: 'CMD_guild_disable',
-  parent: 'guild',
-};
+module.exports.data = { subcommand: true };

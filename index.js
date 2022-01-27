@@ -6,13 +6,12 @@ const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 // setting essential global values
 // init Discord client
-global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS] });
+global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 // init config
 global.config = require('./config.json');
 
 global.DEBUG = process.env.NODE_ENV === 'development';
 
-// global.main = {};
 global.CmdBuilder = SlashCommandBuilder;
 
 global.ERR = (err) => {
@@ -96,19 +95,23 @@ client.on('ready', async () => {
 client.on('interactionCreate', async (interaction) => {
   // only guild command
   if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
+
+  // autocomplete hanlder
+  if (interaction.isAutocomplete()) return client.functions.get('EVENT_autocomplete').run(interaction).catch(ERR);
   // command handler
   if (interaction.isCommand()) {
     const command = client.commands.get(DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName);
     if (command) {
       // if debuging trigger application thinking
-      if (DEBUG) await interaction.deferReply({ ephemeral: true });
-      command.run(interaction).catch(console.log);
+      // TEMP: set to false to test some public commands
+      if (DEBUG) await interaction.deferReply({ ephemeral: false });
+      command.run(interaction).catch(ERR);
       return;
     }
   }
 });
 
 // logging errors and warns
-client.on('error', (e) => console.error(e));
-client.on('warn', (e) => console.warn(e));
+client.on('error', (ERR));
+client.on('warn', (ERR));
 process.on('uncaughtException', (ERR));

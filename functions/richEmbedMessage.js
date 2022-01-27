@@ -7,10 +7,11 @@ module.exports.run = async (interaction, body, title, color, footer, ephemeral) 
   if (body) embed.setDescription(body);
   if (title) embed.setTitle(title);
   if (color) embed.setColor(color);
-  if (footer) embed.setFooter(footer);
+  if (footer) embed.setFooter({ text: footer });
 
   const options = {
     embeds: [embed],
+    components: [],
     ephemeral: String(ephemeral) ? ephemeral : true,
   };
 

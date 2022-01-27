@@ -12,12 +12,12 @@ const ERR = (err) => {
 
 module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
-    console.log(`[${module.exports.help.name}] Posting bot status message!`);
-  } else return console.log(`[${module.exports.help.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
+    console.log(`[${module.exports.data.name}] Posting bot status message!`);
+  } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
   const embed = new MessageEmbed()
     .setTitle('Bot back online!')
     .setColor(4296754)
-    .setFooter(client.user.tag, client.user.displayAvatarURL)
+    .setFooter({ text: client.user.tag, iconURL: client.user.displayAvatarURL })
     .setTimestamp();
   const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(ERR);
   if (offlineTime) {

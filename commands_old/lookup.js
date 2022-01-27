@@ -151,7 +151,7 @@ async function postLookup(client, message, ID) {
 module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -160,7 +160,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   if (userID) IDArr.push(userID);
   else {
     // parse username
-    const userTag = message.content.slice(prefix.length + module.exports.help.name.length + 1);
+    const userTag = message.content.slice(prefix.length + module.exports.data.name.length + 1);
     // check length
     if (userTag.length < config.commands.lookup.lowerQuerryLimit) return messageFail(message, 'Your search querry must be at least 5 characters long.');
     // make DB search

@@ -7,7 +7,7 @@ async function findUser(Maintainer, userID) {
 
 // adds user entry
 module.exports.run = async (interaction, Maintainer) => {
-  const user = await interaction.options.getUser('user');
+  const user = interaction.options.getUser('user');
   const userID = user.id;
   const userFound = await findUser(Maintainer, userID);
   if (userFound) {

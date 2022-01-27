@@ -1,9 +1,7 @@
-const ParticipatingServer = require('../database/models/ParticipatingServer');
-
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
 // finds a server in the ParticipatingServers table
-async function findServer(serverID) {
+async function findServer(ParticipatingServer, serverID) {
   const found = await ParticipatingServer.findOne({ where: { serverID } })
     .catch((err) => console.error(err));
   return found;
@@ -14,9 +12,9 @@ async function getBanCount(serverID) {
   return result.count;
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (interaction, ParticipatingServer) => {
   // get entry
-  const serverFound = await findServer(message.guild.id);
+  const serverFound = await findServer(ParticipatingServer, interaction.guildId);
   // if entry is found
   if (serverFound) {
     let content = `
@@ -27,14 +25,11 @@ module.exports.run = async (client, message, args, config, prefix) => {
     Submitted Bans: \`${await getBanCount(serverFound.serverID)}\`
     Is server apart of Association: \`${serverFound.active}\``;
     if (serverFound.active) content += `\nParticipating Server since \`${serverFound.updatedAt}\``;
-    messageSuccess(message, content);
+    messageSuccess(interaction, content);
   } else {
-    messageFail(message,
+    messageFail(interaction,
       `The server with the ID \`${serverID}\` couldn't be found.`);
   }
 };
 
-module.exports.help = {
-  name: 'CMD_guild_stats',
-  parent: 'guild',
-};
+module.exports.data = { subcommand: true };
