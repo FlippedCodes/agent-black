@@ -8,7 +8,7 @@ module.exports.run = async (interaction) => {
   // handle response
   const respond = (response) => interaction.respond(response);
 
-  const searchInput = interaction.options.getNumber('serverid', true);
+  const searchInput = interaction.options.getString('server', true);
 
   if (searchInput.length <= 2) return interaction.respond([]);
 
@@ -24,7 +24,7 @@ module.exports.run = async (interaction) => {
   // text search
   const guildReply = await guilds
     .filter((guild) => guild.name.toLowerCase().search(searchInput.toLowerCase()) !== -1)
-    .map((guild) => ({ name: guild.name, value: Number(guild.id) }));
+    .map((guild) => ({ name: guild.name, value: guild.id }));
   respond(guildReply.slice(0, 24));
 };
 
