@@ -47,7 +47,7 @@ module.exports.run = async (fs) => {
   await console.log(`[${module.exports.data.name}] Loaded ${cmdLength} command${cmdLength !== 1 ? 's' : ''}!`);
   await console.log(`[${module.exports.data.name}] Registering ${registerLength} command${registerLength !== 1 ? 's' : ''}...`);
   // submit commands to discord api| Dev: one guild only, prod: globaly
-8  // WARN: TODO: make sure it doesn't disable the production commands while in debug mode
+  // WARN: TODO: make sure it doesn't disable the production commands while in debug mode
   if (DEBUG) {
     const changedCommands = commandsSubmit.map((command) => {
       const newCommand = command;
