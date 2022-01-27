@@ -112,6 +112,6 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 // logging errors and warns
-client.on('error', (e) => console.error(e));
-client.on('warn', (e) => console.warn(e));
+client.on('error', (ERR));
+client.on('warn', (ERR));
 process.on('uncaughtException', (ERR));
