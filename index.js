@@ -97,7 +97,7 @@ client.on('interactionCreate', async (interaction) => {
   if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
 
   // autocomplete hanlder
-  if (interaction.isAutocomplete()) return client.commands.get('EVENT_autocomplete').run(interaction).catch(ERR);
+  if (interaction.isAutocomplete()) return client.functions.get('EVENT_autocomplete').run(interaction).catch(ERR);
   // command handler
   if (interaction.isCommand()) {
     const command = client.commands.get(DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName);
