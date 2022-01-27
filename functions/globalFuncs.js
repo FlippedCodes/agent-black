@@ -11,7 +11,7 @@ global.messageSuccess = async (interaction, body, color, ephemeral) => {
 };
 
 // raw reply to commands
-global.reply = async (interaction, payload, followUp = false) => {
+global.reply = (interaction, payload, followUp = false) => {
   if (followUp) return interaction.followUp(payload);
   // check if message needs to be edited or if its a first reply
   if (interaction.deferred || interaction.replied) return interaction.editReply(payload);
