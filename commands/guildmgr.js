@@ -7,7 +7,8 @@ module.exports.run = async (interaction) => {
     return;
   }
   const subName = interaction.options.getSubcommand(true);
-  client.commands.get(`${module.exports.data.name}_${subName}`).run(interaction, ParticipatingServer);
+  const serverID = interaction.options.getString('server');
+  client.commands.get(`${module.exports.data.name}_${subName}`).run(interaction, ParticipatingServer, serverID);
 };
 
 module.exports.data = new CmdBuilder()
