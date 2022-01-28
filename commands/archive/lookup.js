@@ -2,15 +2,15 @@ const { Op } = require('sequelize');
 
 const { MessageEmbed } = require('discord.js');
 
-const config = require('../config/main.json');
+const config = require('../../config/main.json');
 
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
-const Warn = require('../database/models/Warn');
+const Warn = require('../../database/models/Warn');
 
-const ParticipatingServer = require('../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
-const UserIDAssociation = require('../database/models/UserIDAssociation');
+const UserIDAssociation = require('../../database/models/UserIDAssociation');
 
 // looksup usertag in list if recorded
 async function checkTag(userTag) {
