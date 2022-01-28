@@ -1,7 +1,7 @@
 module.exports.run = async (interaction) => {
   // check maintainer permissions
   if (!await client.functions.get('CHECK_DBperms').run(interaction.user.id)) {
-    interaction.respond([{ name: `You are not authorized to use \`/${module.exports.data.name}\``, value: 0 }]);
+    interaction.respond([{ name: `You are not authorized to use \`/${module.exports.data.name}\``, value: '0' }]);
     return;
   }
 
