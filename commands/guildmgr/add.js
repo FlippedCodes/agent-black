@@ -13,7 +13,19 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 }
 
 module.exports.run = async (interaction, ParticipatingServer, serverID) => {
-
+  const logChannelID = interaction.options.getChannel('channel', true).id;
+  const teamRoleID = interaction.options.getRole('role', true).id;
+  const serverName = await interaction.client.guilds.cache.find((guild) => guild.id === serverID);
+  // add server
+  const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName);
+  // post outcome
+  if (serverAdded) {
+    messageSuccess(interaction,
+      `\`${serverName}\` with the ID \`${serverID}\` got added to / updated for the participating Servers list.`);
+  } else {
+    messageFail(interaction,
+      `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
+  }
 };
 
 module.exports.data = { subcommand: true };
