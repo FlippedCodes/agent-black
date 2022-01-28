@@ -22,8 +22,8 @@ module.exports.run = async (interaction) => {
     return;
   }
 
-  const mainUser = await interaction.options.getUser('mainuser').id;
-  const aliasUser = await interaction.options.getUser('user2').id;
+  const mainUser = interaction.options.getUser('mainuser').id;
+  const aliasUser = interaction.options.getUser('user2').id;
 
   // get entries for both IDs
   const resultMainID = await checkAlias(mainUser);
