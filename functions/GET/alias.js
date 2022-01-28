@@ -1,4 +1,4 @@
-const UserAlias = require('../database/models/UserAlias');
+const UserAlias = require('../../database/models/UserAlias');
 
 async function getGroupID(userID) {
   const found = await UserAlias.findOne({ where: { userID } })
@@ -19,7 +19,7 @@ module.exports.run = async (userID) => {
   return users.map((user) => user.userID);
 };
 
-module.exports.help = {
+module.exports.data = {
   name: 'FUNC_checkAlias',
 };
 
