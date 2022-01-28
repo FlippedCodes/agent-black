@@ -100,7 +100,23 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.isAutocomplete()) return client.functions.get('EVENT_autocomplete').run(interaction).catch(ERR);
   // command handler
   if (interaction.isCommand()) {
-    const command = client.commands.get(DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName);
+    // TODO: cleanup code to own event function
+    // eslint-disable-next-line no-inner-declarations
+    async function checkServer(serverID) {
+      const ParticipatingServer = require('./database/models/ParticipatingServer');
+      const found = await ParticipatingServer.findOne({ where: { serverID, blocked: true } })
+        .catch((err) => console.error(err));
+      return found;
+    }
+    const mainCMD = interaction.commandName.replace('_dev', '');
+    // commands to let through, when guild is blocked
+    const infoCMDs = ['about', 'ping'];
+    // check if blocked
+    if (!infoCMDs.includes(mainCMD) && await checkServer(interaction.guild.id)) {
+      messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
+      return;
+    }
+    const command = client.commands.get(DEBUG ? mainCMD : interaction.commandName);
     if (command) {
       // if debuging trigger application thinking
       // TEMP: set to false to test some public commands
