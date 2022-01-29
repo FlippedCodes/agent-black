@@ -22,15 +22,25 @@ module.exports.data = new CmdBuilder()
       .setDescription('Provide a guild ID you want to edit.')
       .setAutocomplete(true)
       .setRequired(true))
-    .addChannelOption((option) => option
+    .addStringOption((option) => option
       .setName('channel')
       .setDescription('Provide a channel you want Agent Black to report to.')
-      .addChannelType(0)
+      .setAutocomplete(true)
       .setRequired(true))
-    .addRoleOption((option) => option
+    .addStringOption((option) => option
       .setName('role')
       .setDescription('Provide your teams role, so the bot know who to listen to.')
+      .setAutocomplete(true)
       .setRequired(true)))
+  // .addChannelOption((option) => option
+  //   .setName('channel')
+  //   .setDescription('Provide a channel you want Agent Black to report to.')
+  //   .addChannelType(0)
+  //   .setRequired(true))
+  // .addRoleOption((option) => option
+  //   .setName('role')
+  //   .setDescription('Provide your teams role, so the bot know who to listen to.')
+  //   .setRequired(true)))
   .addSubcommand((SC) => SC
     .setName('info')
     .setDescription('Disply info about a guild.')

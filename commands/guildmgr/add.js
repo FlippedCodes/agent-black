@@ -13,8 +13,9 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 }
 
 module.exports.run = async (interaction, ParticipatingServer, serverID) => {
-  const logChannelID = interaction.options.getChannel('channel', true).id;
-  const teamRoleID = interaction.options.getRole('role', true).id;
+  // FIXME: no valid check of provided IDs
+  const logChannelID = interaction.options.getString('channel', true);
+  const teamRoleID = interaction.options.getString('role', true);
   const serverName = await interaction.client.guilds.cache.find((guild) => guild.id === serverID);
   // add server
   const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName);
