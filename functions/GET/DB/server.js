@@ -1,4 +1,4 @@
-const ParticipatingServer = require('../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../../database/models/ParticipatingServer');
 
 module.exports.run = async (serverID, onlyCheckEntry) => {
   if (onlyCheckEntry) {
@@ -10,5 +10,5 @@ module.exports.run = async (serverID, onlyCheckEntry) => {
 };
 
 module.exports.help = {
-  name: 'FUNC_checkServer',
+  name: 'server',
 };
