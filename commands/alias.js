@@ -17,7 +17,7 @@ async function checkAlias(userID) {
 
 module.exports.run = async (interaction) => {
   // check permissions if user has teamrole
-  if (!await client.functions.get('CHECK_DBperms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
+  if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
     messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }

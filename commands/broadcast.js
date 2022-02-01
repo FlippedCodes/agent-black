@@ -22,7 +22,7 @@ async function sendMessage(author, body) {
 
 module.exports.run = async (interaction) => {
   // check maintainer permissions
-  if (!await client.functions.get('CHECK_DBperms').run(interaction.user.id)) {
+  if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id)) {
     messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }

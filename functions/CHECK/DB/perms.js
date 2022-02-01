@@ -1,6 +1,6 @@
-const Maintainer = require('../../database/models/Maintainer');
+const Maintainer = require('../../../database/models/Maintainer');
 
-const ParticipatingServer = require('../../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../../database/models/ParticipatingServer');
 
 // TODO: pass interaction to use #memberPermissions
 module.exports.run = async (userID, type, serverID, member) => {
@@ -16,5 +16,5 @@ module.exports.run = async (userID, type, serverID, member) => {
 };
 
 module.exports.data = {
-  name: 'DBperms',
+  name: 'perms',
 };

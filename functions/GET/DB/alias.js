@@ -1,4 +1,4 @@
-const UserAlias = require('../../database/models/UserAlias');
+const UserAlias = require('../../../database/models/UserAlias');
 
 async function getGroupID(userID) {
   const found = await UserAlias.findOne({ where: { userID } })
@@ -20,7 +20,7 @@ module.exports.run = async (userID) => {
 };
 
 module.exports.data = {
-  name: 'FUNC_checkAlias',
+  name: 'alias',
 };
 
 // update table to make pairs and check then for the pair, makes easyer sql questioning

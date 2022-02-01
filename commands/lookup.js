@@ -187,7 +187,7 @@ async function showAdditionalUsers(interaction, IDArr) {
 
 module.exports.run = async (interaction) => {
   // check permissions if user has teamrole
-  if (!await client.functions.get('CHECK_DBperms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
+  if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
     messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
@@ -212,7 +212,7 @@ module.exports.run = async (interaction) => {
   // check for aliases and overwrite array
   // if not needed of upper code is DEPRECATED:
   if (IDArr.length === 1) {
-    const output = await client.functions.get('GET_alias').run(IDArr[0]);
+    const output = await client.functions.get('GET_DB_alias').run(IDArr[0]);
     if (output) IDArr = output;
   }
 
