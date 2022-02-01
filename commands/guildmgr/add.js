@@ -22,7 +22,7 @@ module.exports.run = async (interaction, ParticipatingServer, serverID) => {
   // post outcome
   if (serverAdded) {
     messageSuccess(interaction,
-      `\`${serverName}\` with the ID \`${serverID}\` got added to / updated for the participating Servers list.`);
+      `\`${serverName}\` with the ID \`${serverID}\` got added to / updated for the participating Servers list and marked as active.`);
   } else {
     messageFail(interaction,
       `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
