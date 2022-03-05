@@ -6,7 +6,15 @@ const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 // setting essential global values
 // init Discord client
-global.client = new Client({ disableEveryone: true, intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
+global.client = new Client({
+  disableEveryone: true,
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_BANS,
+    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+  ],
+});
 // init config
 global.config = require('./config.json');
 
@@ -35,6 +43,7 @@ if (DEBUG) console.log(`[${config.name}] Bot is on Debug-Mode. Some functions ar
 
 // Login the bot
 client.login(process.env.DCtoken)
+// TODO: cleanup
   .then(() => {
     // import Functions and Commands; startup database connection
     fs.readdirSync('./functions/STARTUP').forEach((FCN) => {
