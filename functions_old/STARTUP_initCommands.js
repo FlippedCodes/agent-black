@@ -1,30 +1,30 @@
 module.exports.run = async (client, fs, config) => {
-  const commandsFolder = config.setup.moduleFolders.commandsFolder;
-  // read directory with commands
-  fs.readdir(`./${commandsFolder}`, (err, files) => {
-    // error if fails
-    if (err) console.error(err);
+	const commandsFolder = config.setup.moduleFolders.commandsFolder;
+	// read directory with commands
+	fs.readdir(`./${commandsFolder}`, (err, files) => {
+		// error if fails
+		if (err) console.error(err);
 
-    // removal of '.js' in the end of the file
-    const jsfiles = files.filter((f) => f.split('.').pop() === 'js');
+		// removal of '.js' in the end of the file
+		const jsfiles = files.filter((f) => f.split(".").pop() === "js");
 
-    // check if commands are there
-    if (jsfiles.length <= 0) return console.log(`[${module.exports.data.name}] No command(s) to load!`);
+		// check if commands are there
+		if (jsfiles.length <= 0) return console.log(`[${module.exports.data.name}] No command(s) to load!`);
 
-    if (config.env.get('inDev')) console.log(`[${module.exports.data.name}] Loading ${jsfiles.length} command(s)...`);
+		if (config.env.get("inDev")) console.log(`[${module.exports.data.name}] Loading ${jsfiles.length} command(s)...`);
 
-    // adding all commands
-    jsfiles.forEach((f, i) => {
-      const probs = require(`../${commandsFolder}/${f}`);
-      if (config.env.get('inDev')) console.log(`[${module.exports.data.name}]     ${i + 1}) Loaded: ${f}!`);
-      // adding command to collection
-      client.commands.set(probs.help.name, probs);
-    });
+		// adding all commands
+		jsfiles.forEach((f, i) => {
+			const probs = require(`../${commandsFolder}/${f}`);
+			if (config.env.get("inDev")) console.log(`[${module.exports.data.name}]     ${i + 1}) Loaded: ${f}!`);
+			// adding command to collection
+			client.commands.set(probs.help.name, probs);
+		});
 
-    console.log(`[${module.exports.data.name}] Loaded ${jsfiles.length} command(s)!`);
-  });
+		console.log(`[${module.exports.data.name}] Loaded ${jsfiles.length} command(s)!`);
+	});
 };
 
 module.exports.help = {
-  name: 'STARTUP_initCommands',
+	name: "STARTUP_initCommands",
 };

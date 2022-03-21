@@ -1,11 +1,17 @@
-global.messageFail = async (message, body, keep) => {
-  const client = message.client;
-  const sentMessage = await client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel, body, '', 16449540, false);
-  if (!keep) sentMessage.delete({ timeout: 30000 });
-  return sentMessage;
+const { MessageEmbed } = require("discord.js");
+
+module.exports.messageFail = async (client, interaction, body, keep) => {
+	console.log(client, interaction, body, keep);
+	const sentMessage = await interaction.followUp({ embeds: [new MessageEmbed({
+		title: "",
+		description: body,
+		color: 16449540
+	})], ephemeral: keep ?? false });
+	if (!keep) sentMessage.delete({ timeout: 30000 });
+	return sentMessage;
 };
+global.messageFail = module.exports.messageFail();
 
 module.exports.help = {
-  name: 'GLBLFUNC_messageFail',
+	name: "GLBLFUNC_messageFail",
 };

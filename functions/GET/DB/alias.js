@@ -1,26 +1,26 @@
-const UserAlias = require('../../../database/models/UserAlias');
+const UserAlias = require("../../../database/models/UserAlias");
 
 async function getGroupID(userID) {
-  const found = await UserAlias.findOne({ where: { userID } })
-    .catch((err) => console.error(err));
-  return found;
+	const found = await UserAlias.findOne({ where: { userID } })
+		.catch((err) => console.error(err));
+	return found;
 }
 
 async function getUserIDs(groupingID) {
-  const found = await UserAlias.findAll({ where: { groupingID } })
-    .catch((err) => console.error(err));
-  return found;
+	const found = await UserAlias.findAll({ where: { groupingID } })
+		.catch((err) => console.error(err));
+	return found;
 }
 
 module.exports.run = async (userID) => {
-  const groupID = await getGroupID(userID);
-  if (!groupID) return;
-  const users = await getUserIDs(groupID.groupingID);
-  return users.map((user) => user.userID);
+	const groupID = await getGroupID(userID);
+	if (!groupID) return;
+	const users = await getUserIDs(groupID.groupingID);
+	return users.map((user) => user.userID);
 };
 
 module.exports.data = {
-  name: 'alias',
+	name: "alias",
 };
 
 // update table to make pairs and check then for the pair, makes easyer sql questioning
