@@ -10,7 +10,7 @@
     "moment": "^2.29.1",
     "mysql2": "^2.3.3",
     "pretty-ms": "^7.0.1",
-    "sequelize": "^6.17.0",
+    "sequelize": "6.9",
     "utf-8-validate": "^5.0.9"
   },
   "devDependencies": {
