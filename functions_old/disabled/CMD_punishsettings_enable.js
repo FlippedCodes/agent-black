@@ -35,7 +35,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   const lowercaseEnable = enable.toLowerCase();
   // check if value is a bool
   if (!(lowercaseEnable === 'true' || lowercaseEnable === 'false')) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.parent, 'enable TRUEORFALSE'));
+    messageFail(client, message, CommandUsage(config.prefix, module.exports.help.parent, 'enable TRUEORFALSE'));
     return;
   }
   // check if server exists in list and create it

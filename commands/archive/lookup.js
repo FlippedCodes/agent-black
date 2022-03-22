@@ -1,7 +1,5 @@
 const { Op } = require('sequelize');
 
-const { MessageEmbed } = require('discord.js');
-
 const config = require('../../config/main.json');
 
 const Ban = require('../../database/models/Ban');
@@ -11,14 +9,18 @@ const Warn = require('../../database/models/Warn');
 const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
 const UserIDAssociation = require('../../database/models/UserIDAssociation');
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed, User, Message } = require('discord.js');
 
-// looksup usertag in list if recorded
-async function checkTag(userTag) {
-  const found = await UserIDAssociation.findOne({ where: { userTag } })
-    .catch(ERR);
-  return found;
-}
-
+/**
+ * @param {Client} client 
+ * @param {Message} message 
+ * @param {Integer} userID 
+ * @param {Array<Ban>} bans 
+ * @param {Array<Warn>} warns 
+ */
 async function postUserinfo(client, message, userID, bans, warns) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
@@ -31,7 +33,7 @@ async function postUserinfo(client, message, userID, bans, warns) {
       return message.channel.send({ embed });
     });
   // get all server that the bot shares with the user
-  const sharedServers = await client.guilds.cache.filter((guild) => !!guild.member(discordUser));
+  const sharedServers = await client.guilds.cache.filter((guild) => !guild.member(discordUser));
   // post userinfo if no errors accour
   if (!failed) {
     let botBadge = '';
@@ -151,7 +153,7 @@ async function postLookup(client, message, ID) {
 module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -162,13 +164,13 @@ module.exports.run = async (client, message, args, config, prefix) => {
     // parse username
     const userTag = message.content.slice(prefix.length + module.exports.data.name.length + 1);
     // check length
-    if (userTag.length < config.commands.lookup.lowerQuerryLimit) return messageFail(message, 'Your search querry must be at least 5 characters long.');
+    if (userTag.length < config.commands.lookup.lowerQuerryLimit) return messageFail(client, message, 'Your search querry must be at least 5 characters long.');
     // make DB search
     await checkUserTag(userTag, IDArr);
   }
   // if no info is given, return author ID
   if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
-  if (IDArr.length === 0 && args.length !== 0) return messageFail(message, 'Couldn\'t find any results with your search querry.');
+  if (IDArr.length === 0 && args.length !== 0) return messageFail(client, message, 'Couldn\'t find any results with your search querry.');
 
   const orgID = IDArr[0];
   // check for aliases and overwrite array
@@ -183,7 +185,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   // if more then 1 entry in array...
   if (IDArr.length !== 1) {
     // ask if rest should be posted
-    const confirmMessage = await messageFail(message, `Show all (+${IDArr.length - 1}) results?`, true);
+    const confirmMessage = await messageFail(client, message, `Show all (+${IDArr.length - 1}) results?`, true);
     await confirmMessage.react('❌');
     await confirmMessage.react('✅');
     // start reaction collector
@@ -192,25 +194,25 @@ module.exports.run = async (client, message, args, config, prefix) => {
     reactionCollector.on('collect', async (reaction) => {
       reactionCollector.stop();
       switch (reaction.emoji.name) {
-        case '❌': return;
-        case '✅':
-          // post bans
-          // post all besides orginal userID
-          IDArr.forEach(async (ID) => {
-            if (ID !== orgID) postLookup(client, message, ID);
-          });
-          return;
-        default:
-          // wrong reaction
-          messageFail(message, 'Please only choose one of the two options! Try again.');
-          return;
+      case '❌': return;
+      case '✅':
+        // post bans
+        // post all besides orginal userID
+        IDArr.forEach(async (ID) => {
+          if (ID !== orgID) postLookup(client, message, ID);
+        });
+        return;
+      default:
+        // wrong reaction
+        messageFail(client, message, 'Please only choose one of the two options! Try again.');
+        return;
       }
     });
     reactionCollector.on('end', () => confirmMessage.delete());
   }
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('lookup')
   .setDescription('Uses the Discord API to lookup user information.')
   .addUserOption((option) => option.setName('user').setDescription('Provide a user id or search from the drop down.'))

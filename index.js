@@ -2,12 +2,9 @@
 const { Client, Intents, Collection } = require('discord.js');
 // init file system
 const fs = require('fs');
-// init command builder
-const { SlashCommandBuilder } = require('@discordjs/builders');
 // setting essential global values
 // init Discord client
-global.client = new Client({
-  disableEveryone: true,
+const client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_MEMBERS,
@@ -15,16 +12,17 @@ global.client = new Client({
     Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
   ],
 });
+global.client = client;
 // init config
-global.config = require('./config.json');
+const config = require('./config.json');
+global.config = config;
 
-global.DEBUG = process.env.NODE_ENV === 'development';
+const DEBUG = process.env.NODE_ENV === 'development';
+global.DEBUG = DEBUG;
 
-global.CmdBuilder = SlashCommandBuilder;
-
-global.ERR = (err) => {
+const ERR = (err) => {
   console.error('ERROR:', err);
-  if (DEBUG) return;
+  if (process.env.NODE_ENV === 'development') return;
   const { MessageEmbed } = require('discord.js');
   const embed = new MessageEmbed()
     .setAuthor({ name: `Error: '${err.message}'` })
@@ -33,6 +31,9 @@ global.ERR = (err) => {
   client.channels.cache.get(config.logChannel).send({ embeds: [embed] });
   return;
 };
+global.ERR = ERR;
+
+const { messageFail } = require('./functions_old/GLBLFUNC_messageFail.js');
 
 // creating collections
 client.commands = new Collection();
@@ -103,7 +104,7 @@ client.on('ready', async () => {
 
 client.on('interactionCreate', async (interaction) => {
   // only guild command
-  if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
+  if (!await interaction.inGuild()) return messageFail(client, interaction, 'The bot is for server-use only.');
 
   // autocomplete hanlder
   if (interaction.isAutocomplete()) return client.functions.get('EVENT_autocomplete').run(interaction).catch(ERR);
@@ -122,7 +123,7 @@ client.on('interactionCreate', async (interaction) => {
     const infoCMDs = ['about', 'ping'];
     // check if blocked
     if (!infoCMDs.includes(mainCMD) && await checkServer(interaction.guild.id)) {
-      messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
+      messageFail(client, interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
       return;
     }
     const command = client.commands.get(DEBUG ? mainCMD : interaction.commandName);

@@ -1,15 +1,21 @@
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed } = require('discord.js');
 const Warn = require('../database/models/Warn');
 
 // TODO: recreate richmessage embed sender to it can be sent to other servers
 
 // checks if server is partisipating server
-function getServerEntry(serverID) {
+function getServerEntry(client, serverID) {
   return client.functions.get('GET_DB_server').run(serverID, true);
 }
 
 // warns other servers
-async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage, serverName) {
+async function messageWarnedUserInGuild(client, channelID, userTag, userID, warnMessage, serverName) {
   const channel = await client.channels.cache.get(channelID);
+  // TODO: Create a richembed on the spot instead of passing it to a function
+  // - GitHub/Coder-Tavi
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
       `Tag: \`${userTag}\`
@@ -21,7 +27,7 @@ async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage,
 }
 
 // warns other servers for aliases
-async function messageWarnedAliasUserInGuild(channelID, userTag, userID, warnMessage, serverName, orgUserTag) {
+async function messageWarnedAliasUserInGuild(client, channelID, userTag, userID, warnMessage, serverName, orgUserTag) {
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('richEmbedMessage')
     .run(client.user, channel,
@@ -35,7 +41,7 @@ async function messageWarnedAliasUserInGuild(channelID, userTag, userID, warnMes
       `For more information about this user, use '/lookup ${orgUserTag}'`);
 }
 
-async function checkforInfectedGuilds(guild, orgUserID, warnMessage) {
+async function checkforInfectedGuilds(client, guild, orgUserID, warnMessage) {
   let aliases = await client.functions.get('GET_DB_alias').run(orgUserID);
   if (!aliases) aliases = [orgUserID];
   const orgUser = await client.users.fetch(orgUserID, false);
@@ -57,18 +63,23 @@ async function checkforInfectedGuilds(guild, orgUserID, warnMessage) {
   });
 }
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @returns 
+ */
+module.exports.run = async (client, interaction) => {
   // check maintainer permissions
   if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
   const subName = interaction.options.getSubcommand(true);
   const warnMessage = interaction.options.getString('message', true);
-  client.commands.get(`${module.exports.data.name}_${subName}`).run(interaction, warnMessage, Warn, checkforInfectedGuilds);
+  client.commands.get(`${module.exports.data.name}_${subName}`).run(client, interaction, warnMessage, Warn, checkforInfectedGuilds);
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('warn')
   .setDescription('Warns other servers about a specific user.')
   .addSubcommand((SC) => SC

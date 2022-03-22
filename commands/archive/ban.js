@@ -1,7 +1,17 @@
-module.exports.run = async (interaction) => {
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
+
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ */
+module.exports.run = async (client, interaction) => {
   // check BAN_MEMBERS permissions
   if (!interaction.memberPermissions.has('BAN_MEMBERS')) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -10,7 +20,7 @@ module.exports.run = async (interaction) => {
   // check if member is bannable
   if (userOpt.member) {
     if (!userOpt.member.bannable) {
-      messageFail(interaction, `The user  \`${userOpt.user.tag}\` can't be banned!\nHe owns the server, has higher permissions or is a system user!`);
+      messageFail(client, interaction, `The user  \`${userOpt.user.tag}\` can't be banned!\nHe owns the server, has higher permissions or is a system user!`);
       return;
     }
   }
@@ -28,7 +38,7 @@ module.exports.run = async (interaction) => {
   const reason = interaction.options.getString('reason', true);
   // check ban reason length for discord max ban reason
   if (reason.length > 512) {
-    messageFail(interaction, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
+    messageFail(client, interaction, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
     return;
   }
   // exec ban
@@ -37,7 +47,7 @@ module.exports.run = async (interaction) => {
   messageSuccess(interaction, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`\`\`${reason}\`\`\``);
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('ban')
   .setDescription('Bans a user.')
   .addUserOption((option) => option.setName('user').setDescription('Provide the user you wish to ban.').setRequired(true))

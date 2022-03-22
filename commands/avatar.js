@@ -1,6 +1,13 @@
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed } = require('discord.js');
+const { reply } = require('../functions/globalFuncs.js');
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ */
+module.exports.run = async (client, interaction) => {
   // needs to be local as settings overlap from dofferent embed-requests
   const embedDefault = new MessageEmbed();
   const command = interaction.options;
@@ -23,7 +30,7 @@ module.exports.run = async (interaction) => {
   }
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('avatar')
   .setDescription('Retrieves the profile picture of the provided user ID.')
   .addUserOption((option) => option.setName('user').setDescription('Provide a user to get the avatar from.').setRequired(true));

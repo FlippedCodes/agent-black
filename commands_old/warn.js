@@ -76,7 +76,7 @@ async function getWarning(warnID) {
 module.exports.run = async (client, message, args, config, prefix) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -87,67 +87,67 @@ module.exports.run = async (client, message, args, config, prefix) => {
   let slicedReason;
 
   switch (subcmd) {
-    // adds a waring to a user
-    case 'add':
-      // check provided information
-      if (!userIDOrWarnID || !reasonTesting) {
-        messageFail(message,
-          `Command usage: 
+  // adds a waring to a user
+  case 'add':
+    // check provided information
+    if (!userIDOrWarnID || !reasonTesting) {
+      messageFail(client, message,
+        `Command usage: 
           \`\`\`/${module.exports.data.name} ${subcmd} ${userIDOrWarnID || 'USERID'} MESSAGE\`\`\``);
-        return;
-      }
-      // check if user exists
-      if (!await client.functions.get('FUNC_checkID').run(userIDOrWarnID, client, 'user')) {
-        messageFail(message, `The user with the ID \`${userIDOrWarnID}\` doesn't exist.`);
-        return;
-      }
-      // slice reason
-      slicedReason = await args.join(' ').slice(subcmd.length + 1 + userIDOrWarnID.length + 1);
-      // add warn
-      await addWarn(message.guild.id, userIDOrWarnID, slicedReason);
-      messageSuccess(message, `The user with the ID \`${userIDOrWarnID}\` got a new warning added.\n Warning other servers.`);
-      checkforInfectedGuilds(client, prefix, message.guild, userIDOrWarnID, slicedReason);
       return;
+    }
+    // check if user exists
+    if (!await client.functions.get('FUNC_checkID').run(userIDOrWarnID, client, 'user')) {
+      messageFail(client, message, `The user with the ID \`${userIDOrWarnID}\` doesn't exist.`);
+      return;
+    }
+    // slice reason
+    slicedReason = await args.join(' ').slice(subcmd.length + 1 + userIDOrWarnID.length + 1);
+    // add warn
+    await addWarn(message.guild.id, userIDOrWarnID, slicedReason);
+    messageSuccess(message, `The user with the ID \`${userIDOrWarnID}\` got a new warning added.\n Warning other servers.`);
+    checkforInfectedGuilds(client, prefix, message.guild, userIDOrWarnID, slicedReason);
+    return;
 
     // edit a warning
-    case 'edit':
-      // check provided information
-      if (!userIDOrWarnID || !reasonTesting) {
-        messageFail(message,
-          `Command usage:
+  case 'edit':
+    // check provided information
+    if (!userIDOrWarnID || !reasonTesting) {
+      messageFail(client, message,
+        `Command usage:
           \`\`\`/${module.exports.data.name} ${subcmd} ${userIDOrWarnID || 'WARNID'} MESSAGE\`\`\``);
-        return;
-      }
-      // check if user exists
-      if (isNaN(userIDOrWarnID)) {
-        messageFail(message, 'This is not a warn-ID!');
-        return;
-      }
-      const serverID = message.guild.id;
-      const warning = await getWarning(userIDOrWarnID);
-      // check if warn is existent
-      if (!warning) {
-        messageFail(message, 'A Warning with this ID doesn\'t exist!');
-        return;
-      }
-      // check if warn is from the same server
-      if (warning.serverID !== serverID) {
-        messageFail(message, 'You can only edit warnings form the server where they have been issued from.');
-        return;
-      }
-      // slice reason
-      slicedReason = await args.join(' ').slice(subcmd.length + 1 + userIDOrWarnID.length + 1);
-      // add warn
-      await editWarn(userIDOrWarnID, slicedReason);
-      messageSuccess(message, `The warning with the the ID ${userIDOrWarnID} has been edited. Warning other servers.`);
-      checkforInfectedGuilds(client, prefix, message.guild, warning.userID, slicedReason);
       return;
+    }
+    // check if user exists
+    if (isNaN(userIDOrWarnID)) {
+      messageFail(client, message, 'This is not a warn-ID!');
+      return;
+    }
+    const serverID = message.guild.id;
+    const warning = await getWarning(userIDOrWarnID);
+    // check if warn is existent
+    if (!warning) {
+      messageFail(client, message, 'A Warning with this ID doesn\'t exist!');
+      return;
+    }
+    // check if warn is from the same server
+    if (warning.serverID !== serverID) {
+      messageFail(client, message, 'You can only edit warnings form the server where they have been issued from.');
+      return;
+    }
+    // slice reason
+    slicedReason = await args.join(' ').slice(subcmd.length + 1 + userIDOrWarnID.length + 1);
+    // add warn
+    await editWarn(userIDOrWarnID, slicedReason);
+    messageSuccess(message, `The warning with the the ID ${userIDOrWarnID} has been edited. Warning other servers.`);
+    checkforInfectedGuilds(client, prefix, message.guild, warning.userID, slicedReason);
+    return;
 
-    default:
-      messageFail(message,
-        `Command usage: 
+  default:
+    messageFail(client, message,
+      `Command usage: 
         \`\`\`/${module.exports.data.name} ${module.exports.help.usage}\`\`\``);
-      return;
+    return;
   }
 };
 

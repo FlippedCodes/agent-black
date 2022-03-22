@@ -1,4 +1,8 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { reply } = require('../../functions/globalFuncs.js');
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const buttons = new MessageActionRow()
   .addComponents([
@@ -33,7 +37,12 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
   return created;
 }
 
-module.exports.run = async (interaction, ParticipatingServer) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @param {*} ParticipatingServer 
+ */
+module.exports.run = async (client, interaction, ParticipatingServer) => {
   const message = await new MessageEmbed()
     .setDescription('Please confirm that you have read the ToS and Privacy Policy.')
     .setColor(16739072);
@@ -57,15 +66,15 @@ module.exports.run = async (interaction, ParticipatingServer) => {
         messageSuccess(interaction,
           `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.\nConsider running \`/checkallusers\` in your log channel once.`);
       } else {
-        messageFail(interaction,
+        messageFail(client, interaction,
           `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first with \`/${interaction.commandName} disable\``);
       }
       return;
     }
-    return messageFail(interaction, 'The bot setup cannot be continued without accepting the ToS. Please run the command again.');
+    return messageFail(client, interaction, 'The bot setup cannot be continued without accepting the ToS. Please run the command again.');
   });
   buttonCollector.on('end', async (collected) => {
-    if (collected.size === 0) messageFail(interaction, 'Your response took too long. Please run the command again.');
+    if (collected.size === 0) messageFail(client, interaction, 'Your response took too long. Please run the command again.');
   });
 };
 

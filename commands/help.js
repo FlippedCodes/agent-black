@@ -1,6 +1,13 @@
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed } = require('discord.js');
+const { reply } = require('../functions/globalFuncs.js');
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction
+ */
+module.exports.run = async (client, interaction) => {
   const embed = new MessageEmbed()
     .setTitle('Halp')
     .setColor(interaction.member.displayColor)
@@ -11,6 +18,6 @@ module.exports.run = async (interaction) => {
   return reply(interaction, { embeds: [embed] });
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('help')
   .setDescription('Shows a list of commands. [Deprecated]');

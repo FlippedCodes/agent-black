@@ -1,9 +1,18 @@
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @returns 
+ */
+module.exports.run = async (client, interaction) => {
   // check maintainer permissions
   if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id)) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
   const subName = interaction.options.getSubcommand(true);
@@ -11,7 +20,7 @@ module.exports.run = async (interaction) => {
   client.commands.get(`${module.exports.data.name}_${subName}`).run(interaction, ParticipatingServer, serverID);
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('guildmgr')
   .setDescription('Manages guilds. [MAINTAINER ONLY]')
   .addSubcommand((SC) => SC

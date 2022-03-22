@@ -22,7 +22,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   const serverID = message.guild.id;
   // check if value is a bool
   if (!(lowercaseEnable === 'true' || lowercaseEnable === 'false')) {
-    messageFail(message, CommandUsage(config.prefix, module.exports.help.parent, 'forceReason TRUEORFALSE'));
+    messageFail(client, message, CommandUsage(config.prefix, module.exports.help.parent, 'forceReason TRUEORFALSE'));
     return;
   }
   // set value

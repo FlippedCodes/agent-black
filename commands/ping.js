@@ -1,4 +1,7 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed } = require('discord.js');
+const { reply } = require('../functions/globalFuncs.js');
 
 // Ping kickoff for bot latency
 async function kickoff(interaction) {
@@ -26,8 +29,12 @@ async function checkPing(interaction) {
   reply(interaction, { embeds: [editedMessage(sentReply, interaction)] });
 }
 
-module.exports.run = async (interaction) => checkPing(interaction);
+/**
+ * @param {Client} client
+ * @param {CommandInteraction} interaction  
+ */
+module.exports.run = async (client, interaction) => checkPing(interaction);
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('ping')
   .setDescription('Shows API and bot latencies.');

@@ -1,59 +1,66 @@
-// TODO: not yet completed beforehand
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed } = require('discord.js');
 
 // prepares command usage message
 function CommandUsage(prefix, cmdName, subcmd) {
   return `Command usage: 
-    \`\`\`/${cmdName} ${subcmd}\`\`\``;
+  \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
 }
 
-module.exports.run = async (interaction) => {
-  // check permissions
+module.exports.run = async (client, message, args, config, prefix) => {
+  // check BAN_MEMBERS permissions
   if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'BAN_MEMBERS')) {
-    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
     return;
   }
+
   // get args
   const [userID, reasonTester] = args;
-
+  // check if gived arge are correct
+  if (!userID) {
+    messageFail(client, message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
+    return;
+  }
+  if (isNaN(userID)) {
+    messageFail(client, message, CommandUsage(prefix, module.exports.help.name, 'USERID REASON'));
+    return;
+  }
+  if (!reasonTester) {
+    messageFail(client, message, CommandUsage(prefix, module.exports.help.name, `${userID} REASON`));
+    return;
+  }
+  // check userID if valid
+  if (!await client.functions.get('FUNC_checkID').run(userID, client, 'user')) {
+    messageFail(client, message, `A user with the ID \`${userID}\` doesn't exist!`);
+    return;
+  }
   // get member
   const toBanMember = await message.guild.members.cache.get(userID);
-  // check if member is bannable
+  // check if member is banned
   if (toBanMember) {
-    if (!toBanMember.bannable) {
-      messageFail(message, `The user  \`${toBanMember.user.tag}\` can't be banned!\nHe owns the server, has higher permissions or is a system user!`);
+    if (!message.guild.fetchBan(toBanMember.id)) {
+      messageFail(client, message, `The user  \`${toBanMember.user.tag}\` can't be unbanned!\nThey are not banned!`);
       return;
     }
-  }
-  // check if user is already banned
-  const banList = await message.guild.fetchBans();
-  const existingBan = await banList.find((ban) => ban.user.id === userID);
-  if (existingBan) {
-    // unbanning so reason gets updated
-    await message.guild.members.unban(userID);
-    // messageFail(message, `The user \`${toBanUser.tag}\` has been already banned!`);
-    // return;
   }
   // get complete reason
   const slicedReason = await args.join(' ').slice(userID.length + 1);
   // check ban reason length for discord max ban reason
   if (slicedReason.length > 512) {
-    messageFail(message, 'Your ban reason is too long. Discord only allows a maximum length of 512 characters.');
+    messageFail(client, message, 'Your unban reason is too long. Discord only allows a maximum length of 512 characters.');
     return;
   }
   // exec ban
-  const processedBanUser = await message.guild.members.ban(userID, { reason: slicedReason });
+  const processedBanUser = await message.guild.members.unban(userID, slicedReason);
   // write confirmation
-  messageSuccess(message, `The user \`${processedBanUser.tag}\` has been banned!\nReason: \`${slicedReason}\``);
+  messageSuccess(message, `The user \`${processedBanUser.tag}\` has been unbanned!\nReason: \`\`\`${slicedReason}\`\`\``);
 };
 
-module.exports.help = {
-  name: 'unban',
-  usage: 'USERID REASON',
-  desc: '',
-};
-
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('unban')
-  .setDescription('Pardons a user by ID.')
-  .addUserOption((option) => option.setName('user').setDescription('Provide the user you wish to ban.').setRequired(true))
-  .addStringOption((option) => option.setName('reason').setDescription('Reason for the server ban.').setRequired(true));
+  .setDescription('Unbans a user.')
+  .addUserOption((option) => option.setName('user').setDescription('Provide the user you wish to unban.').setRequired(true))
+  .addStringOption((option) => option.setName('reason').setDescription('Reason for the server unban.').setRequired(true));

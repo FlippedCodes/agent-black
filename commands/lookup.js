@@ -1,14 +1,15 @@
-const { Op } = require('sequelize');
-
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { reply } = require('../functions/globalFuncs.js');
+const config = require('../config.json');
 
 const Ban = require('../database/models/Ban');
 
 const Warn = require('../database/models/Warn');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
-
-const UserIDAssociation = require('../database/models/UserIDAssociation');
 
 const buttons = new MessageActionRow()
   .addComponents([
@@ -20,37 +21,21 @@ const buttons = new MessageActionRow()
     new MessageButton()
       .setCustomId('dontshow')
       .setEmoji('❌')
-      .setLabel('Nah, im good')
+      .setLabel('Nah, I\'m good')
       .setStyle('SECONDARY'),
   ]);
 
-// looksup usertag in list if recorded
-async function checkTag(userTag) {
-  const found = await UserIDAssociation.findOne({ where: { userTag } })
-    .catch(ERR);
-  return found;
-}
-
-async function postUserinfo(interaction, userID, bans, warns, followUp = false) {
+async function postUserinfo(client, interaction, userID, bans, warns, followUp = false) {
   const embed = new MessageEmbed().setColor(interaction.member.displayColor);
-  // DEPRECATED: let failed = false;
   const discordUser = await client.users.fetch(userID, false);
-  // DEPRECATED: id checking will happen on discords end
-  // .catch((err) => {
-  //   if (err.code === 10013) embed.setAuthor({ name: 'This user doesn\'t exist.' });
-  //   else embed.setAuthor({ name: 'An error occurred!' });
-  //   embed.addField('Stopcode', err.message);
-  //   failed = true;
-  //   return interaction.channel.send({ embed });
-  // });
   // get all server that the bot shares with the user
-  const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
+  const sharedServers = await client.guilds.cache.filter((guild) => !guild.members.cache.get(discordUser.id));
   // DEPRECATED: post userinfo if no errors accour
   // if (!failed) {
   embed
     .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.lookupBotBadge : ''}`)
     .addField('ID', `\`${userID}\``)
-    // FIXME: .addField('Account Creation Date', discordUser.createdAt, true)
+    .addField('Account Creation Date', `<t:${discordUser.createdTimestamp}:F>`, true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
   if (bans) embed.addField('Bans', bans, true);
   if (warns) embed.addField('Warns', warns, true);
@@ -128,38 +113,14 @@ async function postInfractions(interaction, bans, warns) {
   postWarns(interaction, warns);
 }
 
-// function getID(interaction, args) {
-//   // check if mention is in content
-//   if (interaction.mentions.members.first()) return interaction.mentions.members.first().id;
-//   // get userID
-//   const [userID] = args;
-//   // check if id argument is present
-//   if (!userID) return interaction.author.id;
-//   // ckeck if content is not NaN
-//   if (!isNaN(userID)) return userID;
-// }
-
-async function checkUserTag(uTag, IDArr) {
-  // adds a user to the Maintainer table
-  // FIXME: lowercase DB search
-  const results = await UserIDAssociation.findAll({ limit: 4, where: { userTag: { [Op.substring]: uTag } } })
-    .catch((err) => console.error(err));
-  if (!results) return;
-  results.forEach((result) => {
-    if (IDArr.includes(result.userID)) return;
-    IDArr.push(result.userID);
-  });
-  return IDArr;
-}
-
-async function postLookup(interaction, ID, followUp) {
+async function postLookup(client, interaction, ID, followUp) {
   const bans = await getBanns(ID);
   const warns = await getWarns(ID);
-  await postUserinfo(interaction, ID, bans.length, warns.length, followUp);
+  await postUserinfo(client, interaction, ID, bans.length, warns.length, followUp);
   await postInfractions(interaction, bans, warns);
 }
 
-async function showAdditionalUsers(interaction, IDArr) {
+async function showAdditionalUsers(client, interaction, IDArr, orgID) {
   const message = await new MessageEmbed()
     .setDescription(`Show all (+${IDArr.length - 1}) results?`)
     .setColor(16739072);
@@ -181,32 +142,19 @@ async function showAdditionalUsers(interaction, IDArr) {
     }
   });
   buttonCollector.on('end', async (collected) => {
-    if (collected.size === 0) messageFail(interaction, 'Your response took too long. Please run the command again.');
+    if (collected.size === 0) messageFail(client, interaction, 'Your response took too long. Please run the command again.');
   });
 }
 
-module.exports.run = async (interaction) => {
+module.exports.run = async (client, interaction) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
   const requestedUser = interaction.options.getUser('user');
   let IDArr = [requestedUser.id];
-  // if (userID) IDArr.push(userID);
-  // else {
-  //   // parse username
-  //   const userTag = message.content.slice(prefix.length + module.exports.data.name.length + 1);
-  //   // check length
-  //   if (userTag.length < config.commands.lookup.lowerQuerryLimit) return messageFail(message, 'Your search querry must be at least 5 characters long.');
-  //   // make DB search
-  //   await checkUserTag(userTag, IDArr);
-  // }
-
-  // DEPRECATED: if no info is given, return author ID
-  // if (IDArr.length === 0 && args.length === 0) IDArr.push(message.author.id);
-  // if (IDArr.length === 0 && args.length !== 0) return messageFail(message, 'Couldn\'t find any results with your search querry.');
 
   const orgID = IDArr[0];
   // check for aliases and overwrite array
@@ -216,15 +164,13 @@ module.exports.run = async (interaction) => {
     if (output) IDArr = output;
   }
 
-  if (IDArr.length !== 1) await showAdditionalUsers(interaction, IDArr);
+  if (IDArr.length !== 1) await showAdditionalUsers(client, interaction, IDArr, orgID);
   // only post the one that has the orginal user id
-  // FIXME: bad implementation of a array filter
-  IDArr.forEach(async (ID) => {
-    if (ID === orgID) postLookup(interaction, ID, true);
-  });
+  const res = await IDArr.find(i => i === orgID);
+  postLookup(client, interaction, res, true);
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('lookup')
   .setDescription('Uses the Discord API and ABB database to look up user information.')
   .addUserOption((option) => option.setName('user').setDescription('Provide a user or a user id.').setRequired(true));

@@ -1,4 +1,8 @@
 const Ban = require('../../database/models/Ban');
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
 
 // finds a server in the ParticipatingServers table
 async function findServer(ParticipatingServer, serverID) {
@@ -12,7 +16,12 @@ async function getBanCount(serverID) {
   return result.count;
 }
 
-module.exports.run = async (interaction, ParticipatingServer) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @param {*} ParticipatingServer 
+ */
+module.exports.run = async (client, interaction, ParticipatingServer) => {
   // get entry
   const serverFound = await findServer(ParticipatingServer, interaction.guildId);
   // if entry is found
@@ -27,8 +36,8 @@ module.exports.run = async (interaction, ParticipatingServer) => {
     if (serverFound.active) content += `\nParticipating Server since \`${serverFound.updatedAt}\``;
     messageSuccess(interaction, content);
   } else {
-    messageFail(interaction,
-      `The server with the ID \`${serverID}\` couldn't be found.`);
+    messageFail(client, interaction,
+      `The server with the ID \`${interaction.guildId}\` couldn't be found.`);
   }
 };
 

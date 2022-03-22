@@ -10,7 +10,7 @@ module.exports.run = async (client, message, config) => {
   client.functions.get('FUNC_userTagRecord').run(message.author.id, message.author.tag);
   // return if unwanted
   if (message.author.bot) return;
-  if (message.channel.type === 'dm') return messageFail(message, 'This bot is meant to be used in servers, sorry.');
+  if (message.channel.type === 'dm') return messageFail(client, message, 'This bot is meant to be used in servers, sorry.');
 
   // checking if staffmember
   // DEPRECATED: use function with permissions instead
@@ -35,14 +35,14 @@ module.exports.run = async (client, message, config) => {
   const infoCMDs = ['help', 'about', 'ping'];
   // check if blocked
   if (!infoCMDs.includes(mainCMD) && await checkServer(serverID)) {
-    messageFail(message, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
+    messageFail(client, message, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
     return;
   }
   // commands to block, when guild has not been setup yet
   const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn', 'guildmgr'];
   // check if active and if its a management command
   if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('FUNC_checkServer').run(serverID, false)) {
-    messageFail(message, `You need to setup the server first before yu can use this command.\nPlease run \`/guild setup\`.\n If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot) or join our support server`);
+    messageFail(client, message, 'You need to setup the server first before yu can use this command.\nPlease run `/guild setup`.\n If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot) or join our support server');
     return;
   }
 

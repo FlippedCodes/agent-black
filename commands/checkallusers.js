@@ -1,4 +1,9 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../functions_old/GLBLFUNC_messageSuccess.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, Snowflake } = require('discord.js');
+const { reply } = require('../functions/globalFuncs.js');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -19,11 +24,20 @@ const buttons = new MessageActionRow()
   ]);
 
 async function getBanns(userID) {
-  const found = await Ban.findAll({ where: { userID } }).catch(ERR);
+  const found = await Ban.findAll({ where: { userID } }).catch(err => {
+    if (err) throw err;
+  });
   return found;
 }
 
 // send message when user is banned
+/**
+ * @param {CommandInteraction} interaction 
+ * @param {String} serverName 
+ * @param {Snowflake} serverID 
+ * @param {Snowflake} userID 
+ * @param {String} userTag 
+ */
 async function sendBanMessage(interaction, serverName, serverID, userID, userTag) {
   const message = await new MessageEmbed()
     .setDescription(`serverID: \`${serverID}\`
@@ -51,10 +65,14 @@ async function postBans(allBans, interaction) {
   });
 }
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ */
+module.exports.run = async (client, interaction) => {
   // check MANAGE_GUILD permissions
   if (!interaction.memberPermissions.has('MANAGE_GUILD')) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -80,13 +98,13 @@ module.exports.run = async (interaction) => {
   buttonCollector.on('collect', async (used) => {
     buttonCollector.stop();
     if (used.customId === 'accept') return postBans(allBans, interaction);
-    return messageFail(interaction, 'Aborted!');
+    return messageFail(client, interaction, 'Aborted!');
   });
   buttonCollector.on('end', async (collected) => {
-    if (collected.size === 0) messageFail(interaction, 'Your response took too long. Please run the command again.');
+    if (collected.size === 0) messageFail(client, interaction, 'Your response took too long. Please run the command again.');
   });
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('checkallusers')
   .setDescription('Checks all users in current server, if found on banlist.');

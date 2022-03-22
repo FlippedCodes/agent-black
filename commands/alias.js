@@ -1,11 +1,18 @@
 const UserAlias = require('../database/models/UserAlias');
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../functions_old/GLBLFUNC_messageSuccess.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
 
 function addAlias(userID, groupingID, addedBy) {
   // const [output] = await UserAlias.findOrCreate({
   UserAlias.findOrCreate({
     where: { userID, groupingID },
     defaults: { addedBy },
-  }).catch(ERR);
+  }).catch(err => {
+    if (err) throw err;
+  });
   // return output;
 }
 
@@ -15,10 +22,14 @@ async function checkAlias(userID) {
   return found;
 }
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ */
+module.exports.run = async (client, interaction) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
@@ -30,7 +41,7 @@ module.exports.run = async (interaction) => {
   const resultAliasID = await checkAlias(aliasUser);
   // check if borth are already in aliases
   if (resultMainID && resultAliasID) {
-    messageFail(interaction, 'Both users are already linked or in two different groupings!');
+    messageFail(client, interaction, 'Both users are already linked or in two different groupings!');
     return;
   }
   // add both if not found
@@ -55,7 +66,7 @@ module.exports.run = async (interaction) => {
   }
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('alias')
   .setDescription('Add an alias for secound accounts.')
   .addUserOption((option) => option.setName('mainuser').setDescription('Provide the main user the person uses.').setRequired(true))

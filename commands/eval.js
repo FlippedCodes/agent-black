@@ -1,3 +1,9 @@
+const { messageFail } = require('../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../functions_old/GLBLFUNC_messageSuccess.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
+
 const clean = (text) => {
   if (typeof (text) === 'string') {
     return text.replace(/`/g, `\`${String.fromCharCode(8203)}`)
@@ -10,9 +16,14 @@ const clean = (text) => {
   return text;
 };
 
-module.exports.run = async (interaction) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @returns 
+ */
+module.exports.run = async (client, interaction) => {
   // check owner permissions
-  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``, null, false);
+  if (interaction.user.id !== '172031697355800577') return messageFail(client, interaction, `You are not authorized to use \`/${module.exports.data.name}\``, null, false);
   const code = interaction.options.getString('codeline', true);
   try {
     let evaled = eval(code);
@@ -20,10 +31,10 @@ module.exports.run = async (interaction) => {
     if (typeof evaled !== 'string') { evaled = require('util').inspect(evaled); }
 
     messageSuccess(interaction, `\`\`\`xl\n${clean(evaled)}\n\`\`\``, null, true);
-  } catch (err) { messageFail(interaction, `\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``); }
+  } catch (err) { messageFail(client, interaction, `\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``); }
 };
 
-module.exports.data = new CmdBuilder()
+module.exports.data = new SlashCommandBuilder()
   .setName('eval')
   .setDescription('Command used to run snippets of code. [OWNER ONLY].')
   .addStringOption((option) => option.setName('codeline').setDescription('Commandline to execute').setRequired(true));

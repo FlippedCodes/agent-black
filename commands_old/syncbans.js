@@ -5,18 +5,18 @@ const Ban = require('../database/models/Ban');
 module.exports.run = async (client, message, args, config, prefix) => {
   // check maintainer permissions
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
+    messageFail(client, message, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
   const [serverID] = args;
   if (!serverID) {
     const info = module.exports.help;
-    messageFail(message, CommandUsage(prefix, info.name, info.usage));
+    messageFail(client, message, CommandUsage(prefix, info.name, info.usage));
     return;
   }
   if (!await client.functions.get('FUNC_checkID').run(serverID, client, 'server')) {
-    messageFail(message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
+    messageFail(client, message, `The server with the ID \`${serverID}\` doesn't exist or the bot hasn't been added to the server yet.`);
     return;
   }
 

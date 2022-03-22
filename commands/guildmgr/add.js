@@ -1,3 +1,8 @@
+const { messageFail } = require('../../functions_old/GLBLFUNC_messageFail.js');
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
+
 async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName) {
   await ParticipatingServer.destroy({ limit: 1, where: { serverID, active: false } });
   const added = await ParticipatingServer.findOrCreate(
@@ -12,7 +17,13 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
   return created;
 }
 
-module.exports.run = async (interaction, ParticipatingServer, serverID) => {
+/**
+ * @param {Client} client 
+ * @param {CommandInteraction} interaction 
+ * @param {*} ParticipatingServer 
+ * @param {Integer} serverID 
+ */
+module.exports.run = async (client, interaction, ParticipatingServer, serverID) => {
   // FIXME: no valid check of provided IDs
   const logChannelID = interaction.options.getString('channel', true);
   const teamRoleID = interaction.options.getString('role', true);
@@ -24,7 +35,7 @@ module.exports.run = async (interaction, ParticipatingServer, serverID) => {
     messageSuccess(interaction,
       `\`${serverName}\` with the ID \`${serverID}\` got added to / updated for the participating Servers list and marked as active.`);
   } else {
-    messageFail(interaction,
+    messageFail(client, interaction,
       `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first.`);
   }
 };

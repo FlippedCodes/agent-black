@@ -1,6 +1,13 @@
+const { messageSuccess } = require('../../functions_old/GLBLFUNC_messageSuccess.js');
+// eslint-disable-next-line no-unused-vars
+const { Client, CommandInteraction } = require('discord.js');
+
 // adds a Warn to the warning table
 async function addWarn(Warn, serverID, userID, reason) {
-  await Warn.create({ userID, serverID, reason }).catch(ERR);
+  await Warn.create({ userID, serverID, reason })
+    .catch(err => {
+      if (err) throw err;
+    });
 }
 
 module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuilds) => {
