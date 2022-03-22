@@ -25,7 +25,6 @@
         "no-restricted-globals": 0,
         "no-plusplus": 0,
         "camelcase": 0,
-        "no-eval": 0,
         "global-require":0,
         "import/no-dynamic-require": 0,
         "no-unused-expressions": 0,
