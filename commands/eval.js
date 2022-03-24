@@ -15,6 +15,7 @@ module.exports.run = async (interaction) => {
   if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``, null, false);
   const code = interaction.options.getString('codeline', true);
   try {
+    // eslint-disable-next-line no-eval
     let evaled = eval(code);
 
     if (typeof evaled !== 'string') { evaled = require('util').inspect(evaled); }
