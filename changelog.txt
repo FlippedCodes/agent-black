@@ -7,7 +7,6 @@ Important Changes:
 - completely remade agent-black with the new slash-commands (complete remake of backend)
 - the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord (Temporary)
 - **you now need use the slash commands to interact with the bot**
-- Ban command deleted: duplicate of Discords internal Ban command
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
