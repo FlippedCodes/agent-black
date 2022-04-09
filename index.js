@@ -13,6 +13,8 @@ global.client = new Client({
     Intents.FLAGS.GUILD_MEMBERS,
     Intents.FLAGS.GUILD_BANS,
     Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.DIRECT_MESSAGES,
   ],
 });
 // init config
@@ -84,6 +86,9 @@ client.on('guildCreate', (guild) => client.functions.get('EVENT_guildCreate').ru
 client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').run(guild));
 
 // TODO: create a message event and let the suer know that the bot now uses slash commands
+// TEMP: message Event gets removed once interactions are implemented on discord side
+client.on('messageCreate', (message) => client.functions.get('EVENT_messageCreate').run(message));
+// client.on('message', (message) => client.functions.get('EVENT_messageCreate').run(message));
 
 // itneraction is triggered (command, autocomplete, etc.)
 client.on('interactionCreate', async (interaction) => {
