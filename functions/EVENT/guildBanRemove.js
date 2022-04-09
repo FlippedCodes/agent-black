@@ -17,6 +17,6 @@ module.exports.run = async (guild, user) => {
     .catch(ERR);
 };
 
-module.exports.help = {
-  name: 'EVENT_guildBanRemove',
+module.exports.data = {
+  name: 'guildBanRemove',
 };

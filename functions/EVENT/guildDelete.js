@@ -20,6 +20,6 @@ module.exports.run = async (guild) => {
   await removeServer(guild.id);
 };
 
-module.exports.help = {
-  name: 'EVENT_guildDelete',
+module.exports.data = {
+  name: 'guildDelete',
 };

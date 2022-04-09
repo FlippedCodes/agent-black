@@ -60,6 +60,6 @@ We also gladly help you out, if you need any assistance with the bot. https://di
   });
 };
 
-module.exports.help = {
-  name: 'EVENT_guildCreate',
+module.exports.data = {
+  name: 'guildCreate',
 };

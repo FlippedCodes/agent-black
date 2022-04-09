@@ -104,6 +104,6 @@ module.exports.run = async (guild, user) => {
   });
 };
 
-module.exports.help = {
-  name: 'EVENT_guildBanAdd',
+module.exports.data = {
+  name: 'guildBanAdd',
 };

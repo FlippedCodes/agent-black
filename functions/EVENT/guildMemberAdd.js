@@ -63,6 +63,6 @@ module.exports.run = async (member) => {
   }
 };
 
-module.exports.help = {
-  name: 'EVENT_guildMemberAdd',
+module.exports.data = {
+  name: 'guildMemberAdd',
 };
