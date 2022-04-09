@@ -12,7 +12,7 @@ module.exports.run = async (config) => {
   } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);
   const embed = new MessageEmbed()
     .setTitle('Bot back online!')
-    .setColor(4296754)
+    .setColor('GREEN')
     .setFooter({ text: client.user.tag, iconURL: client.user.displayAvatarURL })
     .setTimestamp();
   const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(ERR);
