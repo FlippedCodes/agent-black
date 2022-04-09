@@ -1,8 +1,6 @@
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
 // const ParticipatingServer = require('../database/models/ParticipatingServer');
-
-const config = require('../config/main.json');
 
 const ERR = (err) => {
   console.error('ERROR:', err);
@@ -49,6 +47,8 @@ async function messageBannedAliasUserInGuild(client, prefix, channelID, userTag,
 }
 
 module.exports.run = async (guild, user) => {
+  // check if server is setup
+  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
   // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;

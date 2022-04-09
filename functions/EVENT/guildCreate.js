@@ -1,10 +1,8 @@
 const { MessageEmbed } = require('discord.js');
 
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
-const ParticipatingServer = require('../database/models/ParticipatingServer');
-
-const config = require('../config/main.json');
+const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
 const ERR = (err) => {
   console.error('ERROR:', err);
@@ -19,7 +17,7 @@ async function addServerEntry(serverID, serverName) {
   await ParticipatingServer.findOrCreate({ where: { serverID, serverName } }).catch(ERR);
 }
 
-module.exports.run = async (client, guild) => {
+module.exports.run = async (guild) => {
   const serverID = guild.id;
   // check if was alreads added: add a server entry in the DB
   if (!await getServerEntry(client, serverID)) await addServerEntry(serverID, guild.name);

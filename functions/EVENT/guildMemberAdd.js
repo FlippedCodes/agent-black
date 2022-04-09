@@ -1,15 +1,8 @@
 const { MessageEmbed } = require('discord.js');
 
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
-const Warn = require('../database/models/Warn');
-
-const config = require('../config/main.json');
-
-// error Handler
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
+const Warn = require('../../database/models/Warn');
 
 // checks if server is participating server
 function getServerEntry(client, serverID) {
@@ -40,7 +33,9 @@ async function sendMessage(client, prefix, serverID, userID, userTag, userBans, 
     For more information use \`/lookup ${userID}\``, title, 16739072, false);
 }
 
-module.exports.run = async (client, member) => {
+module.exports.run = async (member) => {
+  // check if server is setup
+  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
   // record user tag
   client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
   // check if user is banned on some server

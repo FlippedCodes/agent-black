@@ -68,41 +68,24 @@ client.on('ready', async () => {
   });
 });
 
-// // EVENT user gets banned
-// client.on('guildBanAdd', async (guild, user) => {
-//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-//     client.functions.get('EVENT_guildBanAdd').run(guild, user);
-//   }
-// });
+// EVENT user gets banned
+client.on('guildBanAdd', (guild, user) => client.functions.get('EVENT_guildBanAdd').run(guild, user));
 
-// // EVENT user gets unbanned
-// client.on('guildBanRemove', async (guild, user) => {
-//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-//     client.functions.get('EVENT_guildBanRemove').run(guild, user);
-//   }
-// });
+// EVENT user gets unbanned
+client.on('guildBanRemove', (guild, user) => client.functions.get('EVENT_guildBanRemove').run(guild, user));
 
-// // user joins the server
-// client.on('guildMemberAdd', async (member) => {
-//   if (await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) {
-//     client.functions.get('EVENT_guildMemberAdd').run(client, member);
-//   }
-// });
+// user joins the server
+client.on('guildMemberAdd', (member) => client.functions.get('EVENT_guildMemberAdd').run(member));
 
-// // bot joins the server
-// client.on('guildCreate', async (guild) => {
-//   client.functions.get('EVENT_guildCreate').run(client, guild);
-// });
+// bot joins the server
+client.on('guildCreate', (guild) => client.functions.get('EVENT_guildCreate').run(guild));
 
-// // bot leaves the server
-// client.on('guildDelete', async (guild) => {
-//   if (await client.functions.get('FUNC_checkServer').run(guild.id, true)) {
-//     client.functions.get('EVENT_guildDelete').run(client, guild);
-//   }
-// });
+// bot leaves the server
+client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').run(guild));
 
 // TODO: create a message event and let the suer know that the bot now uses slash commands
 
+// itneraction is triggered (command, autocomplete, etc.)
 client.on('interactionCreate', async (interaction) => {
   // only guild command
   if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');

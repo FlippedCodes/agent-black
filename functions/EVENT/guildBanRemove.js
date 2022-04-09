@@ -1,4 +1,4 @@
-const Ban = require('../database/models/Ban');
+const Ban = require('../../database/models/Ban');
 
 // error-handler for event-function
 const ERR = (err) => {
@@ -6,6 +6,8 @@ const ERR = (err) => {
 };
 
 module.exports.run = async (guild, user) => {
+  // check if server is setup
+  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
   // setting userBanned value to false for existing ban
   const userID = user.id;
   const serverID = guild.id;

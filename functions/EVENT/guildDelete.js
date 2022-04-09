@@ -1,4 +1,4 @@
-const ParticipatingServer = require('../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
 const ERR = (err) => {
   console.error('ERROR:', err);
@@ -14,7 +14,9 @@ async function removeServer(serverID) {
   return success[0];
 }
 
-module.exports.run = async (client, guild) => {
+module.exports.run = async (guild) => {
+  // check if server is setup
+  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
   await removeServer(guild.id);
 };
 
