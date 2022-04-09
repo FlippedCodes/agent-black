@@ -101,6 +101,8 @@ client.on('ready', async () => {
 //   }
 // });
 
+// TODO: create a message event and let the suer know that the bot now uses slash commands
+
 client.on('interactionCreate', async (interaction) => {
   // only guild command
   if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
