@@ -8,7 +8,7 @@ const ERR = (err) => {
 
 // checks if server is partisipating server
 function getServerEntry(client, serverID) {
-  return client.functions.get('FUNC_checkServer').run(serverID, true);
+  return client.functions.get('CHECK_registered').run(serverID, true);
 }
 
 // creates a embed messagetemplate for succeded actions
@@ -48,7 +48,7 @@ async function messageBannedAliasUserInGuild(client, prefix, channelID, userTag,
 
 module.exports.run = async (guild, user) => {
   // check if server is setup
-  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
+  if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;
   // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;

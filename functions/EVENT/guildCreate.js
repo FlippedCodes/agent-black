@@ -10,7 +10,7 @@ const ERR = (err) => {
 
 // checks if server is participating server
 function getServerEntry(client, serverID) {
-  return client.functions.get('FUNC_checkServer').run(serverID, true);
+  return client.functions.get('CHECK_registered').run(serverID, true);
 }
 
 async function addServerEntry(serverID, serverName) {

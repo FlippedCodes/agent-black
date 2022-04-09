@@ -7,7 +7,7 @@ const ERR = (err) => {
 
 module.exports.run = async (guild, user) => {
   // check if server is setup
-  if (!await client.functions.get('FUNC_checkServer').run(member.guild.id, false)) return;
+  if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;
   // setting userBanned value to false for existing ban
   const userID = user.id;
   const serverID = guild.id;
