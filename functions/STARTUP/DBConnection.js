@@ -13,6 +13,7 @@ module.exports.run = () => {
       logging: DEBUG ? console.log : false,
     },
   );
+  sequelize.query('SET NAMES utf8mb4;');
   console.log('[DB] Connected!');
 
   global.sequelize = sequelize;
