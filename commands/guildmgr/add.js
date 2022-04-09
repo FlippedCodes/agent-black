@@ -7,7 +7,7 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
         logChannelID, teamRoleID, serverName, active: true,
       },
     },
-  ).catch((err) => console.error(err));
+  ).catch(ERR);
   const created = await added[1];
   return created;
 }

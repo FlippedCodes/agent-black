@@ -2,10 +2,6 @@ const startupTime = +new Date();
 
 const OfflineStat = require('../database/models/OfflineStat');
 
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
-
 module.exports.run = async (client, config) => {
   if (!config.env.get('inDev')) {
     console.log(`[${module.exports.data.name}] Starting heartbeat!`);

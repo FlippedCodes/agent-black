@@ -1,7 +1,7 @@
 // finds a user in the Maintainers table
 async function findUser(Maintainer, userID) {
   const found = await Maintainer.findOne({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 

@@ -105,7 +105,7 @@ client.on('interactionCreate', async (interaction) => {
     async function checkServer(serverID) {
       const ParticipatingServer = require('./database/models/ParticipatingServer');
       const found = await ParticipatingServer.findOne({ where: { serverID, blocked: true } })
-        .catch((err) => console.error(err));
+        .catch(ERR);
       return found;
     }
     const mainCMD = interaction.commandName.replace('_dev', '');

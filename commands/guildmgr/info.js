@@ -3,7 +3,7 @@ const Ban = require('../../database/models/Ban');
 // finds a server in the ParticipatingServers table
 async function findServer(ParticipatingServer, serverID) {
   const found = await ParticipatingServer.findOne({ where: { serverID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 

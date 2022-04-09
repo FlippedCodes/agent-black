@@ -4,10 +4,6 @@ const Ban = require('../../database/models/Ban');
 
 const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
-
 // checks if server is participating server
 function getServerEntry(client, serverID) {
   return client.functions.get('CHECK_registered').run(serverID, true);

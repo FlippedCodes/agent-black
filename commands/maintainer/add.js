@@ -4,7 +4,7 @@ async function addUser(Maintainer, userID) {
     {
       where: { userID },
     },
-  ).catch((err) => console.error(err));
+  ).catch(ERR);
   const created = await added[1];
   return created;
 }

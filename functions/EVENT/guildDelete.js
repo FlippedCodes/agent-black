@@ -1,9 +1,5 @@
 const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
-
 // removes a server from the ParticipatingServers table
 async function removeServer(serverID) {
   const success = await ParticipatingServer.update(

@@ -2,13 +2,13 @@ const UserAlias = require('../../../database/models/UserAlias');
 
 async function getGroupID(userID) {
   const found = await UserAlias.findOne({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 
 async function getUserIDs(groupingID) {
   const found = await UserAlias.findAll({ where: { groupingID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 

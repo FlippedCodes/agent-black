@@ -3,10 +3,10 @@ const ParticipatingServer = require('../../../database/models/ParticipatingServe
 module.exports.run = async (serverID, onlyCheckEntry) => {
   if (onlyCheckEntry) {
     return ParticipatingServer.findOne({ where: { serverID } })
-      .catch((err) => console.error(err));
+      .catch(ERR);
   }
   return ParticipatingServer.findOne({ where: { serverID, active: true, blocked: false } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
 };
 
 module.exports.help = {

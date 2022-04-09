@@ -11,7 +11,7 @@ function addAlias(userID, groupingID, addedBy) {
 
 async function checkAlias(userID) {
   const found = await UserAlias.findOne({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 

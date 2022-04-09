@@ -51,21 +51,21 @@ async function postUserinfo(client, message, userID, bans, warns) {
 async function getBanns(userID) {
   // adds a user to the Maintainer table
   const found = await Ban.findAll({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 
 async function getWarns(userID) {
   // adds a user to the Maintainer table
   const found = await Warn.findAll({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 
 async function getServerName(serverID) {
   // adds a user to the Maintainer table
   const found = await ParticipatingServer.findOne({ where: { serverID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   if (!found) return 'unknown server';
   return found.serverName;
 }
@@ -132,7 +132,7 @@ async function checkUserTag(uTag, IDArr) {
   // adds a user to the Maintainer table
   // FIXME: lowercase DB search
   const results = await UserIDAssociation.findAll({ limit: 4, where: { userTag: { [Op.substring]: uTag } } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   if (!results) return;
   results.forEach((result) => {
     if (IDArr.includes(result.userID)) return;

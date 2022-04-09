@@ -38,7 +38,7 @@ async function sendBanMessage(interaction, serverName, serverID, userID, userTag
 async function getServerName(serverID) {
   // adds a user to the Maintainer table
   const found = await ParticipatingServer.findOne({ where: { serverID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   if (!found) return 'unknown server';
   return found.serverName;
 }

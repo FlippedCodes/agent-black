@@ -1,10 +1,5 @@
 const Ban = require('../../database/models/Ban');
 
-// error-handler for event-function
-const ERR = (err) => {
-  console.error('ERROR:', err);
-};
-
 module.exports.run = async (guild, user) => {
   // check if server is setup
   if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;

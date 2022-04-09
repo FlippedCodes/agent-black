@@ -4,7 +4,7 @@ const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 function getChannels() {
   return ParticipatingServer.findAll({ where: { active: true, blocked: false }, attributes: ['logChannelID'] })
-    .catch((err) => console.error(err));
+    .catch(ERR);
 }
 
 async function sendMessage(author, body) {
