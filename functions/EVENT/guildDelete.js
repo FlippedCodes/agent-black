@@ -12,7 +12,7 @@ async function removeServer(serverID) {
 
 module.exports.run = async (guild) => {
   // check if server is setup
-  if (!await client.functions.get('CHECK_registered').run(guild.id, false)) return;
+  if (!await client.functions.get('GET_DB_registered').run(guild.id, false)) return;
   await removeServer(guild.id);
 };
 

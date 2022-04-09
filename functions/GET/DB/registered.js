@@ -1,4 +1,4 @@
-const ParticipatingServer = require('../../database/models/ParticipatingServer');
+const ParticipatingServer = require('../../../database/models/ParticipatingServer');
 
 module.exports.run = async (serverID, onlyCheckEntry) => {
   if (onlyCheckEntry) return ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);

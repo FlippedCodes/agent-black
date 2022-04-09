@@ -6,7 +6,7 @@ const ParticipatingServer = require('../../database/models/ParticipatingServer')
 
 // checks if server is participating server
 function getServerEntry(serverID) {
-  return client.functions.get('CHECK_registered').run(serverID, true);
+  return client.functions.get('GET_DB_registered').run(serverID, true);
 }
 
 async function addServerEntry(serverID, serverName) {

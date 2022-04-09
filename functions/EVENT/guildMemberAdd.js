@@ -6,7 +6,7 @@ const Warn = require('../../database/models/Warn');
 
 // checks if server is participating server
 function getServerEntry(serverID) {
-  return client.functions.get('CHECK_registered').run(serverID, false);
+  return client.functions.get('GET_DB_registered').run(serverID, false);
 }
 
 // get log channel of server
@@ -35,7 +35,7 @@ async function sendMessage(prefix, serverID, userID, userTag, userBans, userWarn
 
 module.exports.run = async (member) => {
   // check if server is setup
-  if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;
+  if (!await client.functions.get('GET_DB_registered').run(member.guild.id, false)) return;
   // record user tag
   client.functions.get('SET_DB_userTagRecord').run(member.id, member.user.tag);
   // check if user is banned on some server

@@ -4,7 +4,7 @@ const Ban = require('../../database/models/Ban');
 
 // checks if server is partisipating server
 function getServerEntry(serverID) {
-  return client.functions.get('CHECK_registered').run(serverID, true);
+  return client.functions.get('GET_DB_registered').run(serverID, true);
 }
 
 // creates a embed messagetemplate for succeded actions
@@ -28,23 +28,21 @@ async function messageBannedUserInGuild(prefix, channelID, userTag, userID, banR
 }
 
 // warns other servers for aliases
-async function messageBannedAliasUserInGuild(prefix, channelID, userTag, userID, warnReason, serverName, orgUserTag) {
+async function messageBannedAliasUserInGuild(channelID, userTag, userID, warnReason, serverName, orgUserTag) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, channel,
-      `**The user \`${userTag}\` is an alias of a user that has been banned!**
+  const body = `**The user \`${userTag}\` is an alias of a user that has been banned!**
 
-      Tag: \`${orgUserTag}\`
-      ID: \`${userID}\`
-      Reason: \`\`\`${warnReason || 'none'}\`\`\``,
-      `A alias of a user on your server has been banned on '${serverName}'!`,
-      16755456,
-      `For more information and other bans and warns use '/lookup ${orgUserTag}'`);
+  Tag: \`${orgUserTag}\`
+  ID: \`${userID}\`
+  Reason: \`\`\`${warnReason || 'none'}\`\`\``;
+  const header = `A alias of a user on your server has been banned on '${serverName}'!`;
+  const footer = `For more information and other bans and warns use '/lookup ${orgUserTag}'`;
+  client.functions.get('FUNC_richEmbedMessage').run(client.user, channel, body, header, 'ORANGE', footer);
 }
 
-module.exports.run = async (guild, user) => {
+module.exports.run = async ({ guild, user }) => {
   // check if server is setup
-  if (!await client.functions.get('CHECK_registered').run(guild.id, false)) return;
+  if (!await client.functions.get('GET_DB_registered').run(guild.id, false)) return;
   // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;
@@ -90,11 +88,11 @@ module.exports.run = async (guild, user) => {
       // TODO: warn own server that there are aliases
       if (!serverMember) return;
       const serverID = toTestGuild.id;
-      const infectedGuild = await getServerEntry(user.serverID);
+      const infectedGuild = await getServerEntry(serverID);
       if (infectedGuild && infectedGuild.blocked) return;
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
         if (userID === toCheckUserID) messageBannedUserInGuild('a!', infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
-        else messageBannedAliasUserInGuild('a!', infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
+        else messageBannedAliasUserInGuild(infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
       }
     });
   });
