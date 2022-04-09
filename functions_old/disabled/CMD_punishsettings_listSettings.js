@@ -9,7 +9,7 @@ async function getSettings(serverID) {
   return found;
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (message, args, config, prefix) => {
   const serverID = message.guild.id;
   const serverSettings = await getSettings(serverID);
   // prepare message

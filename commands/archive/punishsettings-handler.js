@@ -15,7 +15,7 @@ async function checkFeature(serverID) {
 
 // is used to configure settings
 // if setting is not set, use default from config
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (message, args, config, prefix) => {
   // TODO: check permissions (Servermanager)
   // check DM
   if (message.channel.type === 'dm') return messageFail(message, 'This comamnd is for servers only.');
@@ -27,7 +27,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   if (commandValues.toLowerCase().includes(subcmd)) {
     if (subcmd === 'enable' || await checkFeature(message.guild.id)) {
       client.functions.get(`CMD_${currentCMD.name}_${subcmd}`)
-        .run(client, message, args, config, prefix);
+        .run(message, args, config, prefix);
     } else messageFail(message, `To use the comamnds, you need to enable the feature in this server first!\n${CommandUsage(prefix, currentCMD.name, 'enable true')}`);
   } else messageFail(message, CommandUsage(prefix, currentCMD.name, commandValues.join('|')));
 };

@@ -5,20 +5,20 @@ const Ban = require('../../database/models/Ban');
 const Warn = require('../../database/models/Warn');
 
 // checks if server is participating server
-function getServerEntry(client, serverID) {
+function getServerEntry(serverID) {
   return client.functions.get('CHECK_registered').run(serverID, false);
 }
 
 // get log channel of server
-function findLogChannel(client, logChannelID) {
+function findLogChannel(logChannelID) {
   return client.channels.cache.find((channel) => channel.id === logChannelID);
 }
 
 // send message when user is banned
-async function sendMessage(client, prefix, serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
-  const server = await getServerEntry(client, serverID);
+async function sendMessage(prefix, serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
+  const server = await getServerEntry(serverID);
   const logChannelID = server.logChannelID;
-  const logChannel = await findLogChannel(client, logChannelID);
+  const logChannel = await findLogChannel(logChannelID);
   const serverName = server.serverName;
 
   // update title, when alias
@@ -47,7 +47,7 @@ module.exports.run = async (member) => {
   const overallAmmount = userBans + userWarns;
   if (overallAmmount === 0) return;
   // post message
-  sendMessage(client, 'a!', serverID, orgUserID, orgUserTag, userBans, userWarns);
+  sendMessage('a!', serverID, orgUserID, orgUserTag, userBans, userWarns);
 
   // lookup aliases
   // check if user has aliases
@@ -58,7 +58,7 @@ module.exports.run = async (member) => {
       const aliasUser = await client.users.fetch(aliasUserID, false).catch(ERR);
       const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(ERR);
       const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(ERR);
-      sendMessage(client, 'a!', serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
+      sendMessage('a!', serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
     });
   }
 };

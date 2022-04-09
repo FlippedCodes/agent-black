@@ -6,7 +6,7 @@ const startupTime = +new Date();
 
 const OfflineStat = require('../database/models/OfflineStat');
 
-module.exports.run = async (client, config) => {
+module.exports.run = async (config) => {
   if (!config.env.get('inDev')) {
     console.log(`[${module.exports.data.name}] Posting bot status message!`);
   } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will not post bot status message or update the DB entry.`);

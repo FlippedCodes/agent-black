@@ -5,7 +5,7 @@ const Ban = require('../../database/models/Ban');
 const ParticipatingServer = require('../../database/models/ParticipatingServer');
 
 // checks if server is participating server
-function getServerEntry(client, serverID) {
+function getServerEntry(serverID) {
   return client.functions.get('CHECK_registered').run(serverID, true);
 }
 
@@ -16,7 +16,7 @@ async function addServerEntry(serverID, serverName) {
 module.exports.run = async (guild) => {
   const serverID = guild.id;
   // check if was alreads added: add a server entry in the DB
-  if (!await getServerEntry(client, serverID)) await addServerEntry(serverID, guild.name);
+  if (!await getServerEntry(serverID)) await addServerEntry(serverID, guild.name);
   // message owner about adding the bot and how to procceed
   const owner = await guild.members.cache.get(guild.ownerID);
   const embed = new MessageEmbed()

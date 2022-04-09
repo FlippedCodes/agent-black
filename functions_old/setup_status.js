@@ -1,4 +1,4 @@
-module.exports.run = async (client, config) => {
+module.exports.run = async (config) => {
   if (!config.env.get('inDev')) {
     console.log(`[${module.exports.data.name}] Setting status...`);
   } else return console.log(`[${module.exports.data.name}] Bot is in debugging-mode and will post the bot status-message`);

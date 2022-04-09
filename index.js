@@ -66,7 +66,7 @@ client.on('ready', async () => {
 
   // run startup functions
   config.setup.setupFunctions.forEach((FCN) => {
-    client.functions.get(FCN).run(client, config);
+    client.functions.get(FCN).run(config);
   });
 });
 

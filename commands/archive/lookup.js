@@ -19,7 +19,7 @@ async function checkTag(userTag) {
   return found;
 }
 
-async function postUserinfo(client, message, userID, bans, warns) {
+async function postUserinfo(message, userID, bans, warns) {
   const embed = new MessageEmbed().setColor(message.member.displayColor);
   let failed = false;
   const discordUser = await client.users.fetch(userID, false)
@@ -141,14 +141,14 @@ async function checkUserTag(uTag, IDArr) {
   return IDArr;
 }
 
-async function postLookup(client, message, ID) {
+async function postLookup(message, ID) {
   const bans = await getBanns(ID);
   const warns = await getWarns(ID);
-  await postUserinfo(client, message, ID, bans.length, warns.length);
+  await postUserinfo(message, ID, bans.length, warns.length);
   await postInfractions(message, bans, warns);
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (message, args, config, prefix) => {
   // check permissions if user has teamrole
   if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
     messageFail(message, `You are not authorized to use \`/${module.exports.data.name}\``);
@@ -178,7 +178,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
   }
   // only post the one that has the orginal user id
   IDArr.forEach(async (ID) => {
-    if (ID === orgID) postLookup(client, message, ID);
+    if (ID === orgID) postLookup(message, ID);
   });
   // if more then 1 entry in array...
   if (IDArr.length !== 1) {
@@ -197,7 +197,7 @@ module.exports.run = async (client, message, args, config, prefix) => {
           // post bans
           // post all besides orginal userID
           IDArr.forEach(async (ID) => {
-            if (ID !== orgID) postLookup(client, message, ID);
+            if (ID !== orgID) postLookup(message, ID);
           });
           return;
         default:

@@ -1,4 +1,4 @@
-module.exports.run = async (client, fs, config) => {
+module.exports.run = async (fs, config) => {
   const commandsFolder = config.setup.moduleFolders.commandsFolder;
   // read directory with commands
   fs.readdir(`./${commandsFolder}`, (err, files) => {

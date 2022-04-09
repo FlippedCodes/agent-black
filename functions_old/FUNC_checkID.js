@@ -1,4 +1,4 @@
-module.exports.run = async (ID, client, type) => {
+module.exports.run = async (ID, type) => {
   let existingID = false;
 
   switch (type) {

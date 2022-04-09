@@ -1,6 +1,6 @@
 const testToken = './config/config.json';
 
-module.exports.run = async (client, fs, config) => {
+module.exports.run = async (fs, config) => {
   // setting inDev var
   console.log(`[${module.exports.data.name}] Setting environment variables...`);
   if (fs.existsSync(testToken)) {
