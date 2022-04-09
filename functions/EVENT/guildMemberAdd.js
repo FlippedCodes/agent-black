@@ -37,7 +37,7 @@ module.exports.run = async (member) => {
   // check if server is setup
   if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;
   // record user tag
-  client.functions.get('FUNC_userTagRecord').run(member.id, member.user.tag);
+  client.functions.get('SET_DB_userTagRecord').run(member.id, member.user.tag);
   // check if user is banned on some server
   const [serverID, orgUserID, orgUserTag] = [member.guild.id, member.id, member.user.tag];
   // get all bans and warnings the joined user has

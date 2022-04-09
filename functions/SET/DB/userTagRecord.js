@@ -1,6 +1,6 @@
-const config = require('../config/main.json');
+const config = require('../../../config/main.json');
 
-const UserIDAssociation = require('../database/models/UserIDAssociation');
+const UserIDAssociation = require('../../../database/models/UserIDAssociation');
 
 const cachedUsers = new Set();
 
@@ -24,6 +24,6 @@ module.exports.run = async (userID, userTag) => {
     .catch(ERR);
 };
 
-module.exports.help = {
-  name: 'FUNC_userTagRecord',
+module.exports.data = {
+  name: 'userTagRecord',
 };
