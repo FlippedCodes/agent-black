@@ -88,7 +88,6 @@ client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').ru
 // TODO: create a message event and let the suer know that the bot now uses slash commands
 // TEMP: message Event gets removed once interactions are implemented on discord side
 client.on('messageCreate', (message) => client.functions.get('EVENT_messageCreate').run(message));
-// client.on('message', (message) => client.functions.get('EVENT_messageCreate').run(message));
 
 // itneraction is triggered (command, autocomplete, etc.)
 client.on('interactionCreate', async (interaction) => {
