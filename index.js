@@ -71,10 +71,10 @@ client.on('ready', async () => {
 });
 
 // EVENT user gets banned
-client.on('guildBanAdd', (guild, user) => client.functions.get('EVENT_guildBanAdd').run(guild, user));
+client.on('guildBanAdd', (ban) => client.functions.get('EVENT_guildBanAdd').run(ban));
 
 // EVENT user gets unbanned
-client.on('guildBanRemove', (guild, user) => client.functions.get('EVENT_guildBanRemove').run(guild, user));
+client.on('guildBanRemove', (ban) => client.functions.get('EVENT_guildBanRemove').run(ban));
 
 // user joins the server
 client.on('guildMemberAdd', (member) => client.functions.get('EVENT_guildMemberAdd').run(member));
