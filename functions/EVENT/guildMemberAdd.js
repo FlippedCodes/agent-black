@@ -15,7 +15,7 @@ function findLogChannel(logChannelID) {
 }
 
 // send message when user is banned
-async function sendMessage(prefix, serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
+async function sendMessage(serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
   const server = await getServerEntry(serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(logChannelID);
@@ -47,7 +47,7 @@ module.exports.run = async (member) => {
   const overallAmmount = userBans + userWarns;
   if (overallAmmount === 0) return;
   // post message
-  sendMessage('a!', serverID, orgUserID, orgUserTag, userBans, userWarns);
+  sendMessage(serverID, orgUserID, orgUserTag, userBans, userWarns);
 
   // lookup aliases
   // check if user has aliases
@@ -58,7 +58,7 @@ module.exports.run = async (member) => {
       const aliasUser = await client.users.fetch(aliasUserID, false).catch(ERR);
       const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(ERR);
       const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(ERR);
-      sendMessage('a!', serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
+      sendMessage(serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
     });
   }
 };

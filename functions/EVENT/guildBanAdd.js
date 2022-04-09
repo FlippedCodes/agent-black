@@ -15,7 +15,7 @@ async function messageBanSuccess(channelID, body) {
 }
 
 // creates a embed messagetemplate for failed actions
-async function messageBannedUserInGuild(prefix, channelID, userTag, userID, banReason, serverName) {
+async function messageBannedUserInGuild(channelID, userTag, userID, banReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
   client.functions.get('FUNC_richEmbedMessage')
     .run(client.user, channel,
@@ -91,7 +91,7 @@ module.exports.run = async ({ guild, user }) => {
       const infectedGuild = await getServerEntry(serverID);
       if (infectedGuild && infectedGuild.blocked) return;
       if (infectedGuild && infectedGuild.active && infectedGuild.logChannelID) {
-        if (userID === toCheckUserID) messageBannedUserInGuild('a!', infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
+        if (userID === toCheckUserID) messageBannedUserInGuild(infectedGuild.logChannelID, userTag, userID, banReason, guild.name);
         else messageBannedAliasUserInGuild(infectedGuild.logChannelID, serverMember.user.tag, userID, banReason, guild.name, userTag);
       }
     });
