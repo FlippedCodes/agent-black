@@ -44,7 +44,7 @@ async function messageBannedAliasUserInGuild(client, prefix, channelID, userTag,
 
 module.exports.run = async (guild, user) => {
   // check if server is setup
-  if (!await client.functions.get('CHECK_registered').run(member.guild.id, false)) return;
+  if (!await client.functions.get('CHECK_registered').run(guild.id, false)) return;
   // outside of ban due to followup code
   const userID = user.id;
   const userTag = user.tag;
