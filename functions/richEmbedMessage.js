@@ -16,6 +16,7 @@ module.exports.run = async (interaction, body, title, color, footer, ephemeral) 
   };
 
   return reply(interaction, options).catch(ERR);
+  // return channel.send(embed);
 };
 
 module.exports.data = {
