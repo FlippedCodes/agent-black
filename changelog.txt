@@ -6,12 +6,15 @@ New Stuff:
 Important Changes:
 - completely remade agent-black with the new slash-commands (complete remake of backend)
 - the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord (Temporary)
---> **you now need use the slash commands to interact with the bot**
+--> **You now need use the slash commands to interact with the bot**
 - Ban command removed: Discord already provides a Ban command with the same functionality
+- Free-Serach for user tags has been disabled temporarily as not workign properly with slash commands
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
 - added failsafe to not demote own maintainer account
+- Now using genrelized embed colors for easyer coding
+- Better error handling with output in support server for devs to stop issues more quickly
 
 Planned for the Future:
 - Hard mode: kick/ban everyone on global ban list; kick every unverified bot;...
