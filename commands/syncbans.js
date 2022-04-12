@@ -9,13 +9,15 @@ module.exports.run = async (interaction) => {
     return;
   }
 
-  const server = interaction.options.getString('server') || interaction.guild;
+  const serverID = interaction.options.getString('server');
 
-  const serverID = server.id;
+  const server = await interaction.client.guilds.cache.find((guild) => guild.id === serverID);
 
-  await reply(interaction, { embeds: [new MessageEmbed().setAuthor({ name: 'Processing banlist...' })] });
+  if (!server) return messageFail(interaction, 'Sorry, but I am unable to find that server.');
 
-  const bans = await server.fetchBans(true).catch(ERR);
+  if (!DEBUG) await interaction.deferReply({ ephemeral: false });
+
+  const bans = await server.bans.fetch({ cache: false }).catch(ERR);
   await bans.forEach(async ({ user, reason: reasonRaw }) => {
     const reason = reasonRaw === null ? reasonRaw : reasonRaw.replace(new RegExp('\'', 'g'), '`');
     const userID = user.id;
@@ -33,7 +35,7 @@ module.exports.run = async (interaction) => {
     }
   });
 
-  await reply(interaction, { embeds: [new MessageEmbed().setAuthor({ name: `Done importing **${server.name}**!` })] });
+  await reply(interaction, { embeds: [new MessageEmbed().setAuthor({ name: `Done importing bans from ${server.name}!` })] });
 };
 
 module.exports.data = new CmdBuilder()
@@ -42,4 +44,6 @@ module.exports.data = new CmdBuilder()
   .addStringOption((option) => option
     .setName('server')
     .setDescription('Provide a guild ID you want to edit.')
-    .setAutocomplete(true));
+    .setAutocomplete(true)
+    // Needs to be required, otherwise servername is passed and not the serverID from Autocomplete
+    .setRequired(true));
