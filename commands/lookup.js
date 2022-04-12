@@ -52,9 +52,16 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
     .addField('ID', `\`${userID}\``)
     // FIXME: .addField('Account Creation Date', discordUser.createdAt, true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
-  if (bans) embed.addField('Bans', bans, true);
-  if (warns) embed.addField('Warns', warns, true);
-  if (sharedServers.size) embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
+  if (sharedServers.size) {
+    // hide serverlist if not maintainer
+    if (await client.functions.get('CHECK_DB_perms').run(interaction.user.id) && userID !== client.id) {
+      const serverlist = sharedServers.map((sharedMember) => sharedMember.name).join('\n');
+      const cutServerlist = serverlist.length > 1024 ? `${serverlist.slice(0, 1021)}...` : serverlist;
+      embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${cutServerlist}\`\`\``, false);
+    } else {
+      embed.addField(`Shared servers - ${sharedServers.size}`, 'REDACTED', false);
+    }
+  }
   return reply(interaction, { embeds: [embed] }, followUp);
   // }
 }
