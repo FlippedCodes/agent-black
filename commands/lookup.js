@@ -47,11 +47,14 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
   // DEPRECATED: post userinfo if no errors accour
   // if (!failed) {
+  // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: MessageEmbed field names must be non-empty strings.' So a convertion needed to be done
   embed
     .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.lookupBotBadge : ''}`)
     .addField('ID', `\`${userID}\``)
     // FIXME: .addField('Account Creation Date', discordUser.createdAt, true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
+  if (bans) embed.addField('Bans', `${bans}`, true);
+  if (warns) embed.addField('Warns', `${warns}`, true);
   if (sharedServers.size) {
     // hide serverlist if not maintainer
     if (await client.functions.get('CHECK_DB_perms').run(interaction.user.id) && userID !== client.id) {
