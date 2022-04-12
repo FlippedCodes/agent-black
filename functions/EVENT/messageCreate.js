@@ -1,11 +1,3 @@
-// checks if server is marked as blocked
-async function checkServer(serverID) {
-  const ParticipatingServer = require('../../database/models/ParticipatingServer');
-  const found = await ParticipatingServer.findOne({ where: { serverID, blocked: true } })
-    .catch(ERR);
-  return found;
-}
-
 module.exports.run = async (message) => {
   // debug protection
   if (DEBUG) return;
