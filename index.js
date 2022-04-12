@@ -117,7 +117,7 @@ client.on('interactionCreate', async (interaction) => {
     const infoCMDs = ['about', 'ping'];
     // check if blocked
     if (!infoCMDs.includes(mainCMD) && await checkServer(interaction.guild.id)) {
-      messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in the help command.');
+      messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in /about.');
       return;
     }
     const command = client.commands.get(DEBUG ? mainCMD : interaction.commandName);
