@@ -4,9 +4,7 @@ async function editWarn(Warn, warnID, reason) {
     .catch(ERR);
 }
 
-async function getWarning(warnID) {
-  const found = await Warn.findOne({ where: { warnID } })
-    .catch(ERR);
+async function getWarning(Warn, warnID) {
   return found;
 }
 
@@ -18,7 +16,7 @@ module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuil
   // }
   const warnID = interaction.options.getNumber('warnid', true);
   const serverID = interaction.guild.id;
-  const warning = await getWarning(warnID);
+  const warning = await getWarning(Warn, warnID);
   // check if warn is existent
   if (!warning) {
     messageFail(interaction, 'A Warning with this ID doesn\'t exist!');
