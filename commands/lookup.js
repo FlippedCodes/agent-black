@@ -33,20 +33,9 @@ async function checkTag(userTag) {
 
 async function postUserinfo(interaction, userID, bans, warns, followUp = false) {
   const embed = new MessageEmbed().setColor(interaction.member.displayColor);
-  // DEPRECATED: let failed = false;
   const discordUser = await client.users.fetch(userID, false);
-  // DEPRECATED: id checking will happen on discords end
-  // .catch((err) => {
-  //   if (err.code === 10013) embed.setAuthor({ name: 'This user doesn\'t exist.' });
-  //   else embed.setAuthor({ name: 'An error occurred!' });
-  //   embed.addField('Stopcode', err.message);
-  //   failed = true;
-  //   return interaction.channel.send({ embed });
-  // });
   // get all server that the bot shares with the user
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
-  // DEPRECATED: post userinfo if no errors accour
-  // if (!failed) {
   // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: MessageEmbed field names must be non-empty strings.' So a convertion needed to be done
   embed
     .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.lookupBotBadge : ''}`)
