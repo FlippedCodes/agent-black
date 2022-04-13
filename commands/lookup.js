@@ -159,29 +159,32 @@ async function postLookup(interaction, ID, followUp) {
   await postInfractions(interaction, bans, warns);
 }
 
-async function showAdditionalUsers(interaction, IDArr) {
+async function showAdditionalUsers(interaction, IDArr, orgID) {
   const message = await new MessageEmbed()
     .setDescription(`Show all (+${IDArr.length - 1}) results?`)
-    .setColor(16739072);
+    .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {
-    embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,
+    embeds: [message], components: [buttons], fetchReply: true,
   });
   // start button collector
   const filter = (i) => interaction.user.id === i.user.id;
-  const buttonCollector = confirmMessage.createMessageComponentCollector({ filter, time: 10000 });
+  const buttonCollector = confirmMessage.createMessageComponentCollector({ filter, time: 20000 });
   buttonCollector.on('collect', async (used) => {
     buttonCollector.stop();
     if (used.customId === 'show') {
-      // post bans
-      // post all besides orginal userID
+      // post all bans besides orginal userID
       // FIXME: bad implementation of a array filter
       IDArr.forEach(async (ID) => {
         if (ID !== orgID) postLookup(interaction, ID, true);
       });
     }
+    message.setFooter({ text: `Answered with '${used.component.label}'` });
+    confirmMessage.edit({ embeds: [message], components: [] });
   });
   buttonCollector.on('end', async (collected) => {
-    if (collected.size === 0) messageFail(interaction, 'Your response took too long. Please run the command again.');
+    if (collected.size !== 0) return;
+    message.setFooter({ text: 'Your response took too long. Please run the command again.' });
+    confirmMessage.edit({ embeds: [message], components: [] });
   });
 }
 
@@ -216,7 +219,7 @@ module.exports.run = async (interaction) => {
     if (output) IDArr = output;
   }
 
-  if (IDArr.length !== 1) await showAdditionalUsers(interaction, IDArr);
+  if (IDArr.length !== 1) await showAdditionalUsers(interaction, IDArr, orgID);
   // only post the one that has the orginal user id
   // FIXME: bad implementation of a array filter
   IDArr.forEach(async (ID) => {
