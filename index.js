@@ -94,42 +94,7 @@ client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').ru
 client.on('messageCreate', (message) => client.functions.get('EVENT_messageCreate').run(message));
 
 // itneraction is triggered (command, autocomplete, etc.)
-client.on('interactionCreate', async (interaction) => {
-  // only guild command
-  // TODO: check if neseccary, because this seems to be a useless intent 'DIRECT_MESSAGES'
-  // TODO: maybe check if command deployment to DM can be supressed
-  if (!await interaction.inGuild()) return messageFail(interaction, 'The bot is for server-use only.');
-
-  // autocomplete hanlder
-  if (interaction.isAutocomplete()) return client.functions.get('EVENT_autocomplete').run(interaction).catch(ERR);
-  // command handler
-  if (interaction.isCommand()) {
-    // TODO: cleanup code to own event function
-    // eslint-disable-next-line no-inner-declarations
-    async function checkServer(serverID) {
-      const ParticipatingServer = require('./database/models/ParticipatingServer');
-      const found = await ParticipatingServer.findOne({ where: { serverID, blocked: true } })
-        .catch(ERR);
-      return found;
-    }
-    const mainCMD = interaction.commandName.replace('_dev', '');
-    // commands to let through, when guild is blocked
-    const infoCMDs = ['about', 'ping'];
-    // check if blocked
-    if (!infoCMDs.includes(mainCMD) && await checkServer(interaction.guild.id)) {
-      messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in /about.');
-      return;
-    }
-    const command = client.commands.get(DEBUG ? mainCMD : interaction.commandName);
-    if (command) {
-      // if debuging trigger application thinking
-      // TEMP: set to false to test some public commands
-      if (DEBUG) await interaction.deferReply({ ephemeral: false });
-      command.run(interaction).catch(ERR);
-      return;
-    }
-  }
-});
+client.on('interactionCreate', (interaction) => client.functions.get('EVENT_interactionCreate').run(interaction));
 
 // logging errors and warns
 client.on('error', (ERR));
