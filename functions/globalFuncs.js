@@ -25,7 +25,7 @@ global.prettyCheck = (question) => {
 
 global.date = (date) => {
   const newTimestamp = new Date(date).getTime() / 1000;
-  return `<t:${newTimestamp}:D>`;
+  return `<t:${Math.round(newTimestamp)}:D>`;
 };
 
 module.exports.data = {
