@@ -45,14 +45,15 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
   if (bans) embed.addField('Bans', `${bans}`, true);
   if (warns) embed.addField('Warns', `${warns}`, true);
   if (sharedServers.size) {
-    // hide serverlist if not maintainer
-    if (await client.functions.get('CHECK_DB_perms').run(interaction.user.id) && userID !== client.id) {
-      const serverlist = sharedServers.map((sharedMember) => sharedMember.name).join('\n');
-      const cutServerlist = serverlist.length > 1024 ? `${serverlist.slice(0, 1021)}...` : serverlist;
-      embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${cutServerlist}\`\`\``, false);
-    } else {
-      embed.addField(`Shared servers - ${sharedServers.size}`, 'REDACTED', false);
+    // FIXME: check if it really only shows one server
+    const serverlist = sharedServers.map((sharedMember) => sharedMember.name).join('\n');
+    const cutServerlist = serverlist.length > 1024 ? `${serverlist.slice(0, 1021)}...` : serverlist;
+    let serverList = `\`\`\`${cutServerlist}\`\`\``;
+    // hide serverlist for bot if not maintainer
+    if (userID === client.user.id) {
+      if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id)) serverList = 'REDACTED';
     }
+    embed.addField(`Shared servers - ${sharedServers.size}`, serverList, false);
   }
   return reply(interaction, { embeds: [embed] }, followUp);
   // }
