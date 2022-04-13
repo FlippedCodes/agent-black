@@ -23,6 +23,11 @@ global.prettyCheck = (question) => {
   return '❌';
 };
 
+global.date = (date) => {
+  const newTimestamp = new Date(date).getTime() / 1000;
+  return `<t:${newTimestamp}:D>`;
+};
+
 module.exports.data = {
   name: 'globalFunc',
 };
