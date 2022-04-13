@@ -14,5 +14,5 @@ module.exports.run = async (interaction) => {
 };
 
 module.exports.data = {
-  name: 'guildmgr',
+  name: 'syncbans',
 };
