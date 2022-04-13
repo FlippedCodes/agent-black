@@ -40,7 +40,7 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
   embed
     .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.lookupBotBadge : ''}`)
     .addField('ID', `\`${userID}\``)
-    // FIXME: .addField('Account Creation Date', discordUser.createdAt, true)
+    .addField('Account Creation Date', date(discordUser.createdAt), true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
   if (bans) embed.addField('Bans', `${bans}`, true);
   if (warns) embed.addField('Warns', `${warns}`, true);
@@ -88,8 +88,8 @@ function postBans(interaction, banns) {
       .addField('ServerID', `\`${ban.serverID}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
       .addField('BanID', `\`${ban.banID}\``, true)
-      .addField('Ban creation date', ban.createdAt, true)
-      .addField('Ban updated date', ban.updatedAt, true);
+      .addField('Ban creation date', date(ban.createdAt));
+    if (date(ban.createdAt) !== date(ban.updatedAt)) embed.addField('Ban updated date', date(ban.updatedAt));
     const serverName = await getServerName(ban.serverID);
     // check if user is still banned
     if (ban.userBanned) {
@@ -115,8 +115,8 @@ function postWarns(interaction, warns) {
       .setAuthor({ name: `Warned on ${serverName}` })
       .addField('ServerID', `\`${warn.serverID}\``, true)
       .addField('WarnID', `\`${warn.warnID}\``, true)
-      .addField('Warning creation date', warn.createdAt, true)
-      .addField('Warning updated date', warn.updatedAt, true);
+      .addField('Warning creation date', date(warn.createdAt));
+    if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addField('Warning updated date', date(warn.updatedAt));
     reply(interaction, { embeds: [embed] }, true);
   });
 }
