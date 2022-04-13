@@ -1,10 +1,10 @@
 // edits a Warn to the warning table
 async function editWarn(Warn, warnID, reason) {
-  Warn.update({ reason }, { where: { warnID } })
-    .catch(ERR);
+  Warn.update({ reason }, { where: { warnID } }).catch(ERR);
 }
 
 async function getWarning(Warn, warnID) {
+  const found = await Warn.findOne({ where: { warnID } }).catch(ERR);
   return found;
 }
 
@@ -18,10 +18,7 @@ module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuil
   const serverID = interaction.guild.id;
   const warning = await getWarning(Warn, warnID);
   // check if warn is existent
-  if (!warning) {
-    messageFail(interaction, 'A Warning with this ID doesn\'t exist!');
-    return;
-  }
+  if (!warning) return messageFail(interaction, 'A Warning with this ID doesn\'t exist!');
   // check if warn is from the same server
   if (warning.serverID !== serverID) {
     messageFail(interaction, 'You can only edit warnings form the server where they have been issued from.');
