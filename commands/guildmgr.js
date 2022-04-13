@@ -16,7 +16,7 @@ module.exports.data = new CmdBuilder()
   .setDescription('Manages guilds. [MAINTAINER ONLY]')
   .addSubcommand((SC) => SC
     .setName('add')
-    .setDescription('Add guild.')
+    .setDescription('Add guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
       .setName('server')
       .setDescription('Provide a guild ID you want to edit.')
@@ -34,7 +34,7 @@ module.exports.data = new CmdBuilder()
       .setRequired(true)))
   .addSubcommand((SC) => SC
     .setName('info')
-    .setDescription('Disply info about a guild.')
+    .setDescription('Disply info about a guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
       .setName('server')
       .setDescription('Provide a guild ID you want to edit.')
@@ -42,7 +42,7 @@ module.exports.data = new CmdBuilder()
       .setRequired(true)))
   .addSubcommand((SC) => SC
     .setName('remove')
-    .setDescription('Remove guild.')
+    .setDescription('Remove guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
       .setName('server')
       .setDescription('Provide a guild ID you want to edit.')
@@ -50,7 +50,7 @@ module.exports.data = new CmdBuilder()
       .setRequired(true)))
   .addSubcommand((SC) => SC
     .setName('block')
-    .setDescription('Block guild.')
+    .setDescription('Block guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
       .setName('server')
       .setDescription('Provide a guild ID you want to edit.')
