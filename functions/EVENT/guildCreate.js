@@ -20,7 +20,7 @@ module.exports.run = async (guild) => {
   // check if was alreads added: add a server entry in the DB
   if (!await getServerEntry(serverID)) await addServerEntry(serverID, guild.name);
   // message owner about adding the bot and how to procceed
-  const owner = await guild.members.cache.get(guild.ownerID);
+  const owner = await guild.members.fetch(guild.ownerId);
   const embed = new MessageEmbed()
     .setTitle('Hello World!')
     .setFooter({ text: 'Only you received this message.' })
@@ -36,9 +36,9 @@ If you added our bot before already: Keep in mind, that you need to run \`a!guil
 
 As the last step its recommended joining our Discord server for frequent updates or if there are questions about a ban.
 We also gladly help you out, if you need any assistance with the bot. https://discord.gg/QhfnAWgEMS`);
-  owner.send(embed);
+  owner.send({ embeds: [embed] });
   // add all bans to DB
-  const allBans = await guild.fetchBans(true);
+  const allBans = await guild.bans.fetch();
   allBans.forEach(async ({ user, reason }) => {
     const regex = config.emojiLayout;
     const userTag = user.tag.replace(regex, 'X');
