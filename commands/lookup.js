@@ -95,11 +95,11 @@ function postBans(interaction, banns) {
     // check if user is still banned
     if (ban.userBanned) {
       embed
-        .setColor(16739072) // orange
+        .setColor('ORANGE') // orange
         .setAuthor({ name: `Banned on ${serverName}` });
     } else {
       embed
-        .setColor(4296754) // green
+        .setColor('GREEN') // green
         .setAuthor({ name: `Was banned on ${serverName}` });
     }
     reply(interaction, { embeds: [embed] }, true);

@@ -11,7 +11,7 @@ module.exports.run = async () => {
   console.log(`[${module.exports.data.name}] Posting bot status message!`);
   const embed = new MessageEmbed()
     .setTitle('AgentBlack - Command Instance - Bot back online!')
-    .setColor(4296754)
+    .setColor('GREEN')
     .setFooter({ text: client.user.tag, iconURL: client.user.displayAvatarURL })
     .setTimestamp();
   const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(ERR);

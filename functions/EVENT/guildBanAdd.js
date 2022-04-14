@@ -61,6 +61,9 @@ module.exports.run = async ({ guild, user }) => {
   const userID = user.id;
   const userTag = user.tag;
   const serverID = guild.id;
+
+  // checking if user is AB
+  if (userID === client.user.id) return;
   // check if server is blacklsited before sending api request
   const bannedGuild = await getServerEntry(serverID);
   if (bannedGuild.blocked) return;

@@ -84,11 +84,11 @@ function postBans(message, banns) {
     // check if user is still banned
     if (ban.userBanned) {
       embed
-        .setColor(16739072) // orange
+        .setColor('ORANGE')
         .setAuthor({ name: `Banned on ${serverName}` });
     } else {
       embed
-        .setColor(4296754) // green
+        .setColor('GREEN')
         .setAuthor({ name: `Was banned on ${serverName}` });
     }
     message.channel.send({ embed });

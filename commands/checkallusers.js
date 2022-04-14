@@ -31,7 +31,7 @@ async function sendBanMessage(interaction, serverName, serverID, userID, userTag
     userID: \`${userID}\`
     username: \`${userTag}\``)
     .setFooter({ text: `For more information use \`/lookup ${userID}\`` })
-    .setColor(16739072);
+    .setColor('ORANGE');
   reply(interaction, { embeds: [message] }, true);
 }
 
@@ -69,7 +69,7 @@ module.exports.run = async (interaction) => {
 
   const message = await new MessageEmbed()
     .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through. \nAre you sure?`)
-    .setColor(16739072);
+    .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {
     embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,
   });

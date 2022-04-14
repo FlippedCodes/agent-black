@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 const Ban = require('../../database/models/Ban');
 
 const Warn = require('../../database/models/Warn');
@@ -12,23 +14,33 @@ function findLogChannel(logChannelID) {
   return client.channels.cache.find((channel) => channel.id === logChannelID);
 }
 
+async function sendMessage(channel, body, title, color, footer) {
+  // needs to be local as settings overlap from dofferent embed-requests
+  const embed = new MessageEmbed();
+
+  if (body) embed.setDescription(body);
+  if (title) embed.setTitle(title);
+  if (color) embed.setColor(color);
+  if (footer) embed.setFooter({ text: footer });
+
+  return channel.send({ embeds: [embed] });
+}
+
 // send message when user is banned
-async function sendMessage(serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
+async function prepareMessage(serverID, userID, userTag, userBans, userWarns, alias, orgUserTag) {
   const server = await getServerEntry(serverID);
   const logChannelID = server.logChannelID;
   const logChannel = await findLogChannel(logChannelID);
   const serverName = server.serverName;
 
   // update title, when alias
-  let title = `Known user joined '${serverName}'`;
-  if (alias) title = `Alias of '${orgUserTag}'`;
+  const title = alias ? `Alias of '${orgUserTag}'` : `Known user joined '${serverName}'`;
 
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, logChannel, `tag: \`${userTag}\`
-    ID: \`${userID}\`
-    bans: \`${userBans}\`
-    warns: \`${userWarns}\`
-    For more information use \`/lookup ${userID}\``, title, 16739072, false);
+  sendMessage(logChannel, `tag: \`${userTag}\`
+  ID: \`${userID}\`
+  bans: \`${userBans}\`
+  warns: \`${userWarns}\`
+  For more information use \`/lookup ${userID}\``, title, 'ORANGE');
 }
 
 module.exports.run = async (member) => {
@@ -45,18 +57,18 @@ module.exports.run = async (member) => {
   const overallAmmount = userBans + userWarns;
   if (overallAmmount === 0) return;
   // post message
-  sendMessage(serverID, orgUserID, orgUserTag, userBans, userWarns);
+  prepareMessage(serverID, orgUserID, orgUserTag, userBans, userWarns);
 
   // lookup aliases
   // check if user has aliases
-  const output = await client.functions.get('FUNC_checkAlias').run(member.id);
+  const output = await client.functions.get('GET_DB_alias').run(member.id);
   if (output) {
     output.forEach(async (aliasUserID) => {
       if (orgUserID === aliasUserID) return;
       const aliasUser = await client.users.fetch(aliasUserID, false).catch(ERR);
       const aliasUserBans = await Ban.count({ where: { userID: aliasUserID } }).catch(ERR);
       const aliasUserWarns = await Warn.count({ where: { userID: aliasUserID } }).catch(ERR);
-      sendMessage(serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
+      prepareMessage(serverID, aliasUserID, aliasUser.tag, aliasUserBans, aliasUserWarns, true, orgUserTag);
     });
   }
 };
