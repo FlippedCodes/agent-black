@@ -14,6 +14,8 @@ async function addServerEntry(serverID, serverName) {
 }
 
 module.exports.run = async (guild) => {
+  // debug protection
+  if (DEBUG) return;
   const serverID = guild.id;
   // check if was alreads added: add a server entry in the DB
   if (!await getServerEntry(serverID)) await addServerEntry(serverID, guild.name);
