@@ -1,5 +1,6 @@
 module.exports.run = async (interaction) => {
   const commandName = DEBUG ? interaction.commandName.replace('_dev', '') : interaction.commandName;
+  console.log(commandName);
   return client.functions.get(`AUTOCOMPLETE_${commandName}`).run(interaction).catch(ERR);
 };
 
