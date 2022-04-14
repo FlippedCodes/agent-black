@@ -1,5 +1,3 @@
-const { MessageEmbed } = require('discord.js');
-
 const Ban = require('../../database/models/Ban');
 
 const Warn = require('../../database/models/Warn');

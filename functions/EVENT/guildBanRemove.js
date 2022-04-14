@@ -7,9 +7,7 @@ module.exports.run = async ({ guild, user }) => {
   const userID = user.id;
   const serverID = guild.id;
   // update ban-DB entry
-  Ban.update({ userBanned: false },
-    { where: { userID, serverID } })
-    .catch(ERR);
+  Ban.update({ userBanned: false }, { where: { userID, serverID } }).catch(ERR);
 };
 
 module.exports.data = {
