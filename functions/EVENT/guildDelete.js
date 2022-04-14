@@ -5,8 +5,7 @@ async function removeServer(serverID) {
   const success = await ParticipatingServer.update(
     { active: false },
     { where: { serverID, active: true } },
-  )
-    .catch(ERR);
+  ).catch(ERR);
   return success[0];
 }
 
