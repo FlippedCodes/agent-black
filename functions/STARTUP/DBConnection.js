@@ -4,11 +4,11 @@ module.exports.run = () => {
   console.log('[DB] Connecting...');
 
   const sequelize = new Sequelize(
-    process.env.DBdatabase,
-    process.env.DBusername,
-    process.env.DBpassword,
+    process.env.DBName,
+    process.env.DBUsername,
+    process.env.DBPassword,
     {
-      host: process.env.DBhost || 'db-aB',
+      host: process.env.DBHost,
       dialect: 'mysql',
       logging: DEBUG ? console.log : false,
     },
