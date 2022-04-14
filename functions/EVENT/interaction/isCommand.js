@@ -13,6 +13,18 @@ module.exports.run = async (interaction) => {
     messageFail(interaction, 'It seems your server got blocked from the bot usage. If you want to know the reason and/or want to appeal, feel free to join the server linked in /about.');
     return;
   }
+  // commands to block, when guild has not been setup yet
+  const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn'];
+  // check if active and if its a management command
+  if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('GET_DB_server').run(interaction.guild.id, false)) {
+    messageFail(interaction,
+      `You need to setup the server first before you can use this command.
+      Please run \`/guild setup\`.
+      If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot)
+      or join our support server (https://discord.gg/QhfnAWgEMS).`);
+    return;
+  }
+
   const command = client.commands.get(DEBUG ? mainCMD : interaction.commandName);
   if (command) {
     // if debuging trigger application thinking
