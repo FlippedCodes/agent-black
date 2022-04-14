@@ -27,7 +27,7 @@ module.exports.run = async () => {
   setInterval(async () => {
     // loop db update in 5 sec intervall
     const [offlineStat] = await OfflineStat.findOrCreate({
-      where: { ID: 2 }, defaults: { time: startupTime },
+      where: { ID: 1 }, defaults: { time: startupTime },
     }).catch(ERR);
     if (!offlineStat.isNewRecord) {
       OfflineStat.update({ time: +new Date() }, { where: { ID: 1 } }).catch(ERR);
