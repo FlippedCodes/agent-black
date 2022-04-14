@@ -51,9 +51,7 @@ We also gladly help you out, if you need any assistance with the bot. https://di
       defaults: { reason: fixedReason, userTag, userBanned },
     }).catch(ERR);
     if (!banEntry.isNewRecord) {
-      Ban.update({ reason: fixedReason, userBanned },
-        { where: { userID, serverID } })
-        .catch(ERR);
+      Ban.update({ reason: fixedReason, userBanned }, { where: { userID, serverID } }).catch(ERR);
     }
   });
 };
