@@ -1,83 +1,92 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const Ban = require('../database/models/Ban');
 
+const buttons = new MessageActionRow()
+  .addComponents([
+    new MessageButton()
+      .setCustomId('accept')
+      .setEmoji('✅')
+      .setLabel('Show \'em all')
+      .setStyle('PRIMARY'),
+    new MessageButton()
+      .setCustomId('deny')
+      .setEmoji('❌')
+      .setLabel('Abort')
+      .setStyle('SECONDARY'),
+  ]);
+
 async function getBanns(userID) {
-  // adds a user to the Maintainer table
-  const found = await Ban.findAll({ where: { userID } })
-    .catch((err) => console.error(err));
+  const found = await Ban.findAll({ where: { userID } }).catch(ERR);
   return found;
 }
 
 // send message when user is banned
-async function sendBanMessage(prefix, message, serverName, serverID, userID, userTag) {
-  const client = message.client;
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, message.channel,
-      `serverID: \`${serverID}\`
-      servername: \`${serverName}\`
-      userID: \`${userID}\`
-      username: \`${userTag}\``,
-      '',
-      16739072, `For more information use \`${prefix}lookup ${userID}\``);
+async function sendBanMessage(interaction, serverName, serverID, userID, userTag) {
+  const message = await new MessageEmbed()
+    .setDescription(`serverID: \`${serverID}\`
+    servername: \`${serverName}\`
+    userID: \`${userID}\`
+    username: \`${userTag}\``)
+    .setFooter({ text: `For more information use \`/lookup ${userID}\`` })
+    .setColor('ORANGE');
+  reply(interaction, { embeds: [message] }, true);
 }
 
 async function getServerName(serverID) {
   // adds a user to the Maintainer table
   const found = await ParticipatingServer.findOne({ where: { serverID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   if (!found) return 'unknown server';
   return found.serverName;
 }
 
-function postBans(allBans, prefix, message) {
+async function postBans(allBans, interaction) {
+  await messageSuccess(interaction, 'Starting... Please note, because of Discords API limit, the messages take some time to process.');
   allBans.forEach(async (foundBan) => {
     const serverID = foundBan.serverID;
-    sendBanMessage(prefix, message, await getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
+    sendBanMessage(interaction, await getServerName(serverID), serverID, foundBan.userID, foundBan.userTag);
   });
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (interaction) => {
   // check MANAGE_GUILD permissions
-  if (!await client.functions.get('FUNC_checkPermissionsChannel').run(message.member, message, 'MANAGE_GUILD')) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+  if (!interaction.memberPermissions.has('MANAGE_GUILD')) {
+    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
   // get all userIDs
-  const IDs = [];
-  message.guild.members.cache.map((user) => IDs.push(user.id));
+  const users = await interaction.guild.members.fetch({ cache: false });
+  const IDs = users.map((user) => user.id);
   // get all user bans
   const allBans = await getBanns(IDs);
-  if (allBans.length === 0) return messageSuccess(message, 'Your server is clear! No users banned on other servers have been found.');
+  if (allBans.length === 0) return messageSuccess(interaction, 'Your server is clear! No known users so far.');
   // check if up to 5 entries
-  if (allBans.length < 5) return postBans(allBans, prefix, message);
-  // sends pre waring message
-  const confirmMessage = await messageFail(message, `You are about to display ${allBans.length} listed bans! This action can not be stopped midway through. \nAre you sure?`, true);
-  await confirmMessage.react('❌');
-  await confirmMessage.react('✅');
-  // start reaction collector
-  const filter = (reaction, user) => user.id === message.author.id;
-  const reactionCollector = confirmMessage.createReactionCollector(filter, { time: 10000 });
-  reactionCollector.on('collect', async (reaction) => {
-    reactionCollector.stop();
-    switch (reaction.emoji.name) {
-      case '❌':
-        // cancel
-        return messageFail(message, 'Aborted!', true);
-      case '✅':
-        messageSuccess(message, 'Starting... Please note, because of Discords API limit, the messages take some time to process.');
-        // post bans
-        return postBans(allBans, prefix, message);
-      default:
-        // wrong reaction
-        return messageFail(message, 'Please only choose one of the two options! Try again.');
-    }
+  if (allBans.length < 5) return postBans(allBans, interaction);
+
+  const message = await new MessageEmbed()
+    .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through. \nAre you sure?`)
+    .setColor('ORANGE');
+  const confirmMessage = await reply(interaction, {
+    embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,
   });
-  reactionCollector.on('end', () => confirmMessage.delete());
+
+  // start button collector
+  const filter = (i) => interaction.user.id === i.user.id;
+  const buttonCollector = confirmMessage.createMessageComponentCollector({ filter, time: 10000 });
+  buttonCollector.on('collect', async (used) => {
+    buttonCollector.stop();
+    if (used.customId === 'accept') return postBans(allBans, interaction);
+    return messageFail(interaction, 'Aborted!');
+  });
+  buttonCollector.on('end', async (collected) => {
+    if (collected.size === 0) messageFail(interaction, 'Your response took too long. Please run the command again.');
+  });
 };
 
-module.exports.help = {
-  name: 'checkallusers',
-  desc: 'Checks all users in current server, if found on banlist',
-};
+module.exports.data = new CmdBuilder()
+  .setName('checkallusers')
+  .setDescription('Checks all users in current server, if found on banlist.');

@@ -1,98 +1,62 @@
 const UserAlias = require('../database/models/UserAlias');
 
-// prepares command usage message
-function CommandUsage(prefix, cmdName, subcmd) {
-  return `Command usage: 
-    \`\`\`${prefix}${cmdName} ${subcmd}\`\`\``;
-}
-
 function addAlias(userID, groupingID, addedBy) {
   // const [output] = await UserAlias.findOrCreate({
   UserAlias.findOrCreate({
     where: { userID, groupingID },
     defaults: { addedBy },
-  }).catch(errHandler);
+  }).catch(ERR);
   // return output;
 }
 
 async function checkAlias(userID) {
   const found = await UserAlias.findOne({ where: { userID } })
-    .catch((err) => console.error(err));
+    .catch(ERR);
   return found;
 }
 
-// check for correct values
-async function checkValues(message, prefix, mainUser, aliasUser) {
-  if (!mainUser) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
-    return false;
-  }
-  if (isNaN(mainUser)) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, 'MAINUSERID ALIASUSERID'));
-    return false;
-  }
-  // check if ID exists as a user
-  if (!await message.client.functions.get('FUNC_checkID').run(mainUser, message.client, 'user')) {
-    messageFail(message, `A user with the ID \`${mainUser}\` doesn't exist!`);
-    return false;
-  }
-  if (!aliasUser) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
-    return false;
-  }
-  if (isNaN(aliasUser)) {
-    messageFail(message, CommandUsage(prefix, module.exports.help.name, `${mainUser} ALIASUSERID`));
-    return false;
-  }
-  // check if ID exists as a user
-  if (!await message.client.functions.get('FUNC_checkID').run(aliasUser, message.client, 'user')) {
-    messageFail(message, `A user with the ID \`${aliasUser}\` doesn't exist!`);
-    return false;
-  }
-  return true;
-}
-
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (interaction) => {
   // check permissions if user has teamrole
-  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id, 'staff', message.guild.id, message.member)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+  if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id, 'staff', interaction.guild.id, interaction.member)) {
+    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
 
-  const [mainUser, aliasUser] = args;
-  if (!await checkValues(message, prefix, mainUser, aliasUser)) return;
+  const mainUser = interaction.options.getUser('mainuser').id;
+  const aliasUser = interaction.options.getUser('user2').id;
+
   // get entries for both IDs
   const resultMainID = await checkAlias(mainUser);
   const resultAliasID = await checkAlias(aliasUser);
   // check if borth are already in aliases
   if (resultMainID && resultAliasID) {
-    messageFail(message, 'Both users are in two different groupings or are already linked!');
+    messageFail(interaction, 'Both users are already linked or in two different groupings!');
     return;
   }
   // add both if not found
   if (!resultMainID && !resultAliasID) {
-    const groupingID = await message.id;
-    [mainUser, aliasUser].forEach((uID) => addAlias(uID, groupingID, message.author.id));
-    messageSuccess(message, 'Added entry!');
+    const groupingID = await interaction.id;
+    [mainUser, aliasUser].forEach((uID) => addAlias(uID, groupingID, interaction.user.id));
+    messageSuccess(interaction, 'Entry added!');
     return;
   }
   // add mainUser if not found
   if (!resultMainID && resultAliasID) {
-    addAlias(mainUser, resultAliasID.groupingID, message.author.id);
-    messageSuccess(message, 'Added entry!');
+    addAlias(mainUser, resultAliasID.groupingID, interaction.user.id);
+    messageSuccess(interaction, 'Entry added!');
     return;
   }
   // add aliasUser if not found
   if (resultMainID && !resultAliasID) {
     console.log(resultAliasID);
-    addAlias(aliasUser, resultMainID.groupingID, message.author.id);
-    messageSuccess(message, 'Added entry!');
+    addAlias(aliasUser, resultMainID.groupingID, interaction.user.id);
+    messageSuccess(interaction, 'Entry added!');
     return;
   }
 };
 
-module.exports.help = {
-  name: 'alias',
-  usage: 'MAINUSERID ALIASUSERID',
-  desc: 'Add an alias for secound accounts.',
-};
+module.exports.data = new CmdBuilder()
+  .setName('alias')
+  .setDescription('Add an alias for secound accounts.')
+  .addUserOption((option) => option.setName('mainuser').setDescription('Provide the main user the person uses.').setRequired(true))
+  .addUserOption((option) => option.setName('user2').setDescription('2. user').setRequired(true));

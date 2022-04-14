@@ -1,32 +1,38 @@
+const { MessageEmbed } = require('discord.js');
+
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 function getChannels() {
   return ParticipatingServer.findAll({ where: { active: true, blocked: false }, attributes: ['logChannelID'] })
-    .catch((err) => console.error(err));
+    .catch(ERR);
 }
 
-async function sendMessages(client, author, body) {
+async function sendMessage(author, body) {
   const channels = await getChannels();
   channels.forEach((DBchannel) => {
     const channelID = DBchannel.logChannelID;
     const channel = client.channels.cache.find((channel) => channel.id === channelID);
-    client.functions.get('FUNC_richEmbedMessage')
-      .run(client.user, channel, body, `${author} broadcasted`, 4182379, false);
+    const embed = new MessageEmbed()
+      .setAuthor({ name: `${author} broadcasted` })
+      .setDescription(body)
+      .setColor(4182379);
+    channel.send({ embeds: [embed] });
   });
 }
 
-module.exports.run = async (client, message, args, config, prefix) => {
+module.exports.run = async (interaction) => {
   // check maintainer permissions
-  if (!await client.functions.get('FUNC_checkPermissionsDB').run(message.author.id)) {
-    messageFail(message, `You are not authorized to use \`${prefix}${module.exports.help.name}\``);
+  if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id)) {
+    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
-  const body = message.content.slice(prefix.length + module.exports.help.name.length + 1);
-  sendMessages(client, message.author.tag, body);
+  const body = interaction.options.getString('message', true);
+  await messageSuccess(interaction, 'Sending messages...');
+  await sendMessage(interaction.user.tag, body);
+  await messageSuccess(interaction, 'Sent messages to all servers!');
 };
 
-module.exports.help = {
-  name: 'broadcast',
-  usage: 'MESSAGE',
-  desc: 'Broadcasts a message to all servers.',
-};
+module.exports.data = new CmdBuilder()
+  .setName('broadcast')
+  .setDescription('Broadcasts a message to all servers.')
+  .addStringOption((option) => option.setName('message').setDescription('Message that should be broadcasted').setRequired(true));

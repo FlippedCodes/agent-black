@@ -1,29 +1,29 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = async (client, message, args, config, prefix) => {
-  let [userID] = args;
-  if (!userID) userID = message.author.id;
+module.exports.run = async (interaction) => {
+  // needs to be local as settings overlap from dofferent embed-requests
+  const embedDefault = new MessageEmbed();
+  const command = interaction.options;
+  // get user and ID
+  const rawUser = command.get('user', true);
+  const user = rawUser.user;
+  const member = rawUser.member;
+  const defaultPFP = user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
+  embedDefault.setAuthor({ name: user.tag })
+    .setImage(defaultPFP);
+  await reply(interaction, { embeds: [embedDefault] });
 
-  const embed = new MessageEmbed().setColor(message.member.displayColor);
-  const discordUser = await client.users.fetch(userID, false)
-    .catch((err) => {
-      if (err.code === 10013) embed.setAuthor('This user doesn\'t exist.');
-      else embed.setAuthor('An error occurred!');
-      embed.addField('Stopcode', err.message);
-    });
-
-  if (discordUser) {
-    const pfp = discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 });
-    embed.setAuthor(discordUser.tag, null, pfp);
-    embed.setImage(pfp);
+  if (member && member.avatar) {
+    const embedServer = new MessageEmbed();
+    const serverPFP = member.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
+    embedServer.setAuthor({ name: member.nickname })
+      .setImage(serverPFP)
+      .setFooter({ text: 'Server profile picture' });
+    interaction.followUp({ embeds: [embedServer] });
   }
-
-  message.channel.send({ embed });
 };
 
-module.exports.help = {
-  name: 'avatar',
-  title: 'Get Avatar',
-  usage: 'USERID',
-  desc: 'Retrieves the profile picture of the provided user ID.',
-};
+module.exports.data = new CmdBuilder()
+  .setName('avatar')
+  .setDescription('Retrieves the profile picture of the provided user ID.')
+  .addUserOption((option) => option.setName('user').setDescription('Provide a user to get the avatar from.').setRequired(true));

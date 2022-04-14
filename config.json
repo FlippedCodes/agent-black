@@ -1,0 +1,29 @@
+{
+    "name": "Agent Black",
+    "teamRole": "638670637052854282",
+    "logChannel": "638793508202741790",
+    "setup": {
+        "setupFunctions": [
+            "SETUP_heartbeat",
+            "SETUP_offlineStat",
+            "SETUP_status"
+        ]
+    },
+    "commands": {
+        "lookup": {
+            "lowerQuerryLimit": 5,
+            "botBadge": "<:system_bot_notifier:813101401646432298>"
+        },
+        "about": {
+            "text": "./about.txt"
+        },
+        "changelog": {
+            "text": "./changelog.txt"
+        }
+    },
+    "functions": {
+        "userTagRecord": {
+            "maxCacheTimeout": 10800000
+        }
+    }
+}

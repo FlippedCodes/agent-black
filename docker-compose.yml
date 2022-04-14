@@ -12,6 +12,7 @@ services:
       DBName: agentBlack
       DBUsername: agentBlack
       DBPassword: ${DB_PASSWORD}
+      token_uptime: ${TOKEN_UPTIME}
   db-aB:
     image: mariadb:latest
     restart: always

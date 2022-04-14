@@ -1,0 +1,4 @@
+/*
+A command to check if all the permissions are setup correctly.
+It should take a server as a non reqiered argument
+*/

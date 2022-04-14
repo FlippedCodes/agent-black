@@ -1,32 +1,33 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 // Ping kickoff for bot latency
-function kickoff(client, message) {
-  const sendMessage = client.functions.get('FUNC_richEmbedMessage');
-  return sendMessage.run(client.user, message.channel, '📤 Ping...', null, null, false);
+async function kickoff(interaction) {
+  const sendMessage = await new MessageEmbed()
+    .setDescription('📤 Pong...')
+    .setColor();
+  const sentMessage = await reply(interaction, { embeds: [sendMessage], fetchReply: true });
+  return sentMessage;
 }
 
 // message for data return
-function editedMessage(sentMessage, message) {
+function editedMessage(sentMessage, interaction) {
   const api_latency = Math.round(sentMessage.client.ws.ping);
   const body = `📥 Pong!
-  Latency is \`${sentMessage.createdTimestamp - message.createdTimestamp}\`ms.
-  API Latency is \`${api_latency}\`ms`;
+  Bot latency is \`${sentMessage.createdTimestamp - interaction.createdTimestamp}\`ms.
+  API latency is \`${api_latency}\`ms`;
   return new MessageEmbed()
     .setDescription(body)
     .setColor();
 }
 
 // posts ping message and edits it afterwards
-function checkPing(client, message) {
-  kickoff(client, message).then((sentMessage) => {
-    sentMessage.edit(editedMessage(sentMessage, message));
-  });
+async function checkPing(interaction) {
+  const sentReply = await kickoff(interaction);
+  reply(interaction, { embeds: [editedMessage(sentReply, interaction)] });
 }
 
-module.exports.run = async (client, message) => checkPing(client, message);
+module.exports.run = async (interaction) => checkPing(interaction);
 
-module.exports.help = {
-  name: 'ping',
-  desc: 'Shows API and bot latencies.',
-};
+module.exports.data = new CmdBuilder()
+  .setName('ping')
+  .setDescription('Shows API and bot latencies.');

@@ -1,4 +1,5 @@
 # get node version 10
+# TODO: update node version
 FROM node:12.18.4-buster-slim
 
 # Create app directory
