@@ -21,6 +21,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_PASSWORD_ROOT: ${{ secrets.DB_PASSWORD_ROOT }}
       DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      TOKEN_UPTIME: ${{ secrets.TOKEN_UPTIME }}
 
     steps:
       - uses: actions/checkout@v2

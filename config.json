@@ -4,6 +4,7 @@
     "logChannel": "638793508202741790",
     "setup": {
         "setupFunctions": [
+            "SETUP_heartbeat",
             "SETUP_offlineStat",
             "SETUP_status"
         ]
