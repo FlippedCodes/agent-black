@@ -7,7 +7,7 @@ services:
       - db-aB
     restart: always
     environment:
-      BotTokenAgentBlack: ${DISCORD_BOT_TOKEN}
+      DCtoken: ${DISCORD_BOT_TOKEN}
       DBHost: db-aB
       DBName: agentBlack
       DBUsername: agentBlack
