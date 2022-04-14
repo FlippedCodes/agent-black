@@ -5,6 +5,10 @@ async function checkServerBlockStatus(serverID) {
 }
 
 module.exports.run = async (interaction) => {
+  // debug protection
+  if (!DEBUG && interaction.commandName.includes('_dev')) return;
+  if (DEBUG && !interaction.commandName.includes('_dev')) return;
+
   const mainCMD = interaction.commandName.replace('_dev', '');
   // commands to let through, when guild is blocked
   const infoCMDs = ['about', 'ping'];
