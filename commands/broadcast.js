@@ -28,7 +28,8 @@ module.exports.run = async (interaction) => {
   }
   const body = interaction.options.getString('message', true);
   await messageSuccess(interaction, 'Sending messages...');
-  await sendMessage(interaction.user.tag, body);
+  await sendMessage(interaction.user.tag, body.replaceAll('\\n', `
+  `));
   await messageSuccess(interaction, 'Sent messages to all servers!');
 };
 
