@@ -10,7 +10,7 @@ module.exports.run = async () => {
   if (DEBUG) return;
   console.log(`[${module.exports.data.name}] Posting bot status message!`);
   const embed = new MessageEmbed()
-    .setTitle('AgentBlack - Command Instance - Bot back online!')
+    .setTitle('AgentBlack - Bot back online!')
     .setColor('GREEN')
     .setFooter({ text: client.user.tag, iconURL: client.user.displayAvatarURL })
     .setTimestamp();
@@ -30,7 +30,7 @@ module.exports.run = async () => {
       where: { ID: 2 }, defaults: { time: startupTime },
     }).catch(ERR);
     if (!offlineStat.isNewRecord) {
-      OfflineStat.update({ time: +new Date() }, { where: { ID: 2 } }).catch(ERR);
+      OfflineStat.update({ time: +new Date() }, { where: { ID: 1 } }).catch(ERR);
     }
   }, 1 * 5000);
 };
