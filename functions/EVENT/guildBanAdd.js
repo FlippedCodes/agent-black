@@ -1,6 +1,22 @@
+// TODO: better message implementation
+
+const { MessageEmbed } = require('discord.js');
+
 const Ban = require('../../database/models/Ban');
 
 // const ParticipatingServer = require('../database/models/ParticipatingServer');
+
+async function sendMessage(channel, body, title, color, footer) {
+  // needs to be local as settings overlap from dofferent embed-requests
+  const embed = new MessageEmbed();
+
+  if (body) embed.setDescription(body);
+  if (title) embed.setTitle(title);
+  if (color) embed.setColor(color);
+  if (footer) embed.setFooter({ text: footer });
+
+  return channel.send({ embeds: [embed] });
+}
 
 // checks if server is partisipating server
 function getServerEntry(serverID) {
@@ -10,21 +26,19 @@ function getServerEntry(serverID) {
 // creates a embed messagetemplate for succeded actions
 async function messageBanSuccess(channelID, body) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, channel, body, 'A user has been banned!', 4296754, 'The ban has been recorded and other servers are getting warned!');
+  sendMessage(channel, body, 'A user has been banned!', 'GREEN', 'The ban has been recorded and other servers are getting warned!');
 }
 
 // creates a embed messagetemplate for failed actions
 async function messageBannedUserInGuild(channelID, userTag, userID, banReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('FUNC_richEmbedMessage')
-    .run(client.user, channel,
-      `Tag: \`${userTag}\`
-      ID: \`${userID}\`
-      Reason: \`\`\`${banReason || 'none'}\`\`\``,
-      `A user on your server has been banned on '${serverName}'!`,
-      16739072,
-      `For more information and other bans and warns use '/lookup ${userID}'`);
+  sendMessage(channel,
+    `Tag: \`${userTag}\`
+    ID: \`${userID}\`
+    Reason: \`\`\`${banReason || 'none'}\`\`\``,
+    `A user on your server has been banned on '${serverName}'!`,
+    'ORANGE',
+    `For more information and other bans and warns use '/lookup ${userID}'`);
 }
 
 // warns other servers for aliases
@@ -35,9 +49,9 @@ async function messageBannedAliasUserInGuild(channelID, userTag, userID, warnRea
   Tag: \`${orgUserTag}\`
   ID: \`${userID}\`
   Reason: \`\`\`${warnReason || 'none'}\`\`\``;
-  const header = `A alias of a user on your server has been banned on '${serverName}'!`;
+  const title = `A alias of a user on your server has been banned on '${serverName}'!`;
   const footer = `For more information and other bans and warns use '/lookup ${orgUserTag}'`;
-  client.functions.get('FUNC_richEmbedMessage').run(client.user, channel, body, header, 'ORANGE', footer);
+  sendMessage(channel, body, title, 'ORANGE', footer);
 }
 
 module.exports.run = async ({ guild, user }) => {
@@ -53,29 +67,29 @@ module.exports.run = async ({ guild, user }) => {
   // declaring so ban reason can be used in foreach loop
   // getting newly added ban
   const ban = await guild.bans.fetch(user);
-      // assign simpler values
-      const userBanned = '1';
-      const reason = ban.reason;
-      // fix ban reason by filtering new line breaks
+  // assign simpler values
+  const userBanned = '1';
+  const reason = ban.reason;
+  // fix ban reason by filtering new line breaks
   const fixedReason = reason === null ? reason : reason.replace(new RegExp('\'', 'g'), '`');
-      // create of find DB entry
-      const [banEntry] = await Ban.findOrCreate({
-        where: { userID, serverID },
-        defaults: { userTag, reason: fixedReason, userBanned },
-      }).catch(ERR);
-      // check if entry is already on DB
-      if (await !banEntry.isNewRecord) {
-        // update DB entry
-        Ban.update({ reason: fixedReason, userTag, userBanned },
-          { where: { userTag, userID, serverID } })
-          .catch(ERR);
-      }
+  // create of find DB entry
+  const [banEntry] = await Ban.findOrCreate({
+    where: { userID, serverID },
+    defaults: { userTag, reason: fixedReason, userBanned },
+  }).catch(ERR);
+  // check if entry is already on DB
+  if (await !banEntry.isNewRecord) {
+    // update DB entry
+    Ban.update({ reason: fixedReason, userTag, userBanned },
+      { where: { userTag, userID, serverID } })
+      .catch(ERR);
+  }
   // logic, to only output if not banned, is active and has a log channel
-      if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
-        messageBanSuccess(bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
-      }
+  if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
+    messageBanSuccess(bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
+  }
   // post for other servers
-  let aliases = await user.client.functions.get('FUNC_checkAlias').run(userID);
+  let aliases = await user.client.functions.get('GET_DB_alias').run(userID);
   if (!aliases) aliases = [userID];
   aliases.forEach((toCheckUserID) => {
     user.client.guilds.cache.forEach(async (toTestGuild) => {
