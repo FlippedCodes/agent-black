@@ -27,14 +27,14 @@ module.exports.run = async (guild) => {
     .setDescription(`Thanks for adding me to your delightful server.
 Before you expect anything from me, I need you to complete some more steps before I get completely functional.
 
-Please tell me, where to log new members and what server role belongs to the team/staff. When you got the information, fill it into the command below and run it in any channel.
-\`a!guild setup [logChannelID] [teamRoleID]\`
-Example: \`a!guild setup 123456789123456 987654321987654\`
+In order to use me properly, you need to run the following commands in your server:
+\`/guild setup\`
+Then I will ask you for a log channel, where I am allowed to send messages, and a staff/team role that are authorized to use some of the commands.
 After you run the command you need to confirm the Terms of Service and you are good to go!
 
-If you added our bot before already: Keep in mind, that you need to run \`a!guild enable\`.
+If you added our bot before already: Keep in mind, that you need to run \`/guild enable\` to use the old configuration.
 
-As the last step its recommended joining our Discord server for frequent updates or if there are questions about a ban.
+As the last step, it's recommended joining our Discord server for frequent updates or if there are questions about a ban.
 We also gladly help you out, if you need any assistance with the bot. https://discord.gg/QhfnAWgEMS`);
   owner.send({ embeds: [embed] });
   // add all bans to DB
