@@ -8,7 +8,7 @@ Important Changes:
 - the help comamnd has been stripped down to just display a simple message to now use the build in slash command help provided by discord (Temporary)
 --> **You now need use the slash commands to interact with the bot**
 - Ban command removed: Discord already provides a Ban command with the same functionality EDIT: Ban reason correction cannot be done this way, so a implementation of the old ban command will come
-- Free-Serach for user tags has been disabled temporarily as not workign properly with slash commands
+- Free-Search for user tags has been disabled temporarily as not working properly with slash commands
 
 Boring Bug Fixes:
 - Updated dependencies to new versions
