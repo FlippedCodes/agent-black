@@ -24,6 +24,12 @@
     "functions": {
         "userTagRecord": {
             "maxCacheTimeout": 10800000
+        },
+        "heartbeat": {
+            "uptime": {
+                "interval": 50000,
+                "endpoint": "https://status.flipped.codes/api/push/"
+            }
         }
     }
 }
