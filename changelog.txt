@@ -2,6 +2,7 @@
 __Bot update - 3.0.0 - Discord-App-y-fyed the bot__
 New Stuff:
 - A new command to retrieve user banners
+- Added bot to status monitoring: status.flipped.codes
 
 Important Changes:
 - completely remade agent-black with the new slash-commands (complete remake of backend)
@@ -15,6 +16,7 @@ Boring Bug Fixes:
 - added failsafe to not demote own maintainer account
 - Now using genrelized embed colors for easyer coding
 - Better error handling with output in support server for devs to stop issues more quickly
+- Blacklisting Bot ID from ban recording
 
 Planned for the Future:
 - Hard mode: kick/ban everyone on global ban list; kick every unverified bot;...
