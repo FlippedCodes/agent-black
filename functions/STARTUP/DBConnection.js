@@ -3,6 +3,13 @@ const Sequelize = require('sequelize');
 module.exports.run = () => {
   console.log('[DB] Connecting...');
 
+  console.log(process.env.DBhost);
+  console.log(process.env.DBhost);
+  console.log(process.env.DBhost);
+  console.log(process.env.DBhost);
+  console.log(process.env.DBhost);
+  console.log(process.env.DBhost);
+
   const sequelize = new Sequelize(
     process.env.DBdatabase,
     process.env.DBusername,
