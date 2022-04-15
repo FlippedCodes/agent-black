@@ -219,11 +219,12 @@ module.exports.run = async (interaction) => {
     if (output) IDArr = output;
   }
 
-  if (IDArr.length !== 1) await showAdditionalUsers(interaction, IDArr, orgID);
+  const multipleAccounts = IDArr.length !== 1;
+  if (multipleAccounts) await showAdditionalUsers(interaction, IDArr, orgID);
   // only post the one that has the orginal user id
   // FIXME: bad implementation of a array filter
   IDArr.forEach(async (ID, i) => {
-    if (ID === orgID) postLookup(interaction, ID, i !== 0);
+    if (ID === orgID) postLookup(interaction, ID, multipleAccounts);
   });
 };
 
