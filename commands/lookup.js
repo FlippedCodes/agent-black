@@ -38,7 +38,7 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
   // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: MessageEmbed field names must be non-empty strings.' So a convertion needed to be done
   embed
-    .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.lookupBotBadge : ''}`)
+    .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.commands.lookup.botBadge : ''}`)
     .addField('ID', `\`${userID}\``)
     .addField('Account Creation Date', date(discordUser.createdAt), true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));

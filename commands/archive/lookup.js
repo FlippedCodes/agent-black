@@ -35,7 +35,7 @@ async function postUserinfo(message, userID, bans, warns) {
   // post userinfo if no errors accour
   if (!failed) {
     let botBadge = '';
-    if (discordUser.bot) botBadge = config.lookupBotBadge;
+    if (discordUser.bot) botBadge = config.commands.lookup.botBadge;
     embed
       .addField('Usertag', `\`${discordUser.tag}\` ${botBadge}`)
       .addField('ID', `\`${userID}\``)
