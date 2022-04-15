@@ -222,8 +222,8 @@ module.exports.run = async (interaction) => {
   if (IDArr.length !== 1) await showAdditionalUsers(interaction, IDArr, orgID);
   // only post the one that has the orginal user id
   // FIXME: bad implementation of a array filter
-  IDArr.forEach(async (ID) => {
-    if (ID === orgID) postLookup(interaction, ID, false);
+  IDArr.forEach(async (ID, i) => {
+    if (ID === orgID) postLookup(interaction, ID, i);
   });
 };
 
