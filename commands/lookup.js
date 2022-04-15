@@ -223,7 +223,7 @@ module.exports.run = async (interaction) => {
   // only post the one that has the orginal user id
   // FIXME: bad implementation of a array filter
   IDArr.forEach(async (ID, i) => {
-    if (ID === orgID) postLookup(interaction, ID, i);
+    if (ID === orgID) postLookup(interaction, ID, i !== 0);
   });
 };
 
