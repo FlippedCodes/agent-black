@@ -1,7 +1,7 @@
 const clean = (text) => {
   if (typeof (text) === 'string') {
     Object.values(process.env).forEach((env) => {
-      if (env.length === 0) return;
+      if (env.length >= 3) return;
       // eslint-disable-next-line no-param-reassign
       text = text.replaceAll(env, '****NOPE****');
     });
