@@ -28,7 +28,7 @@
         "heartbeat": {
             "uptime": {
                 "interval": 50000,
-                "endpoint": "https://status.flipped.codes/api/push/"
+                "endpoint": "http://statuspage_app_sp_1:3001/api/push/"
             }
         }
     }
