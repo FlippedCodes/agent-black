@@ -11,7 +11,7 @@ async function getWarning(Warn, warnID) {
 module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuilds) => {
   // check if user exists
   // if (isNaN(userIDOrWarnID)) {
-  //   messageFail(message, 'This is not a warn-ID!');
+  //   messageFail(interaction, 'This is not a warn-ID!');
   //   return;
   // }
   const warnID = interaction.options.getNumber('warnid', true);
