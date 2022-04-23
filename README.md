@@ -44,7 +44,7 @@ No, the bot still stores the information regardless of whether they were unbanne
 
 ### Can I host the bot myself?
 
-The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind, that your DB is not going to have any content/listed bans.
+The bot can be self-hosted, if there is any interest, please let me know on Discord `Phil | Flipper#3621`. Please keep in mind, that your DB is not going to have any content/listed bans from our bot instance!
 
 ## Future Features
 
