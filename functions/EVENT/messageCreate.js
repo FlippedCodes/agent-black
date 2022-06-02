@@ -29,8 +29,10 @@ async function checkUser(userID) {
 module.exports.run = async (message) => {
   // debug protection
   if (DEBUG) return;
-  // return if not prefix
   if (message.author.bot) return;
+  // check, if bot has permission to send messages
+  if (!message.channel.guild.me.permissionsIn(channel).has('SEND_MESSAGES')) return;
+  // return if not prefix
   if (!message.content.startsWith('a!')) return;
 
   const userID = message.author.id;
