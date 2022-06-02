@@ -10,7 +10,7 @@ function getServerEntry(serverID) {
 // warns other servers
 async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage, serverName) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('FUNC_richEmbedMessage')
+  client.functions.get('richEmbedMessage')
     .run(client.user, channel,
       `Tag: \`${userTag}\`
       ID: \`${userID}\`
