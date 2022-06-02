@@ -27,7 +27,7 @@ module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuil
   // add warn
   await editWarn(Warn, warnID, warnMessage);
   messageSuccess(interaction, `The warning with the the ID ${warnID} has been edited. Warning other servers.`);
-  checkforInfectedGuilds(message.guild, warning.userID, warnMessage);
+  checkforInfectedGuilds(interaction.guild, warning.userID, warnMessage);
 };
 
 module.exports.data = { subcommand: true };
