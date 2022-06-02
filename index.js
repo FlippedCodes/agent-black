@@ -28,9 +28,10 @@ global.ERR = (err) => {
   console.error('ERROR:', err);
   if (DEBUG) return;
   const { MessageEmbed } = require('discord.js');
+  const stack = err.stack.length > 1024 ? `${err.stack.slice(0, 1021)}...` : err.stack;
   const embed = new MessageEmbed()
     .setAuthor({ name: `Error: '${err.message}'` })
-    .setDescription(`STACKTRACE:\n\`\`\`${err.stack.slice(0, 4000)}\`\`\``)
+    .setDescription(`STACKTRACE:\n\`\`\`${stack}\`\`\``)
     .setColor('RED');
   // client.channels.fetch(config.logChannel).send({ embeds: [embed] });
   client.channels.cache.get(config.logChannel).send({ embeds: [embed] });
