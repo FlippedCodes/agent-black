@@ -31,7 +31,7 @@ module.exports.run = async (message) => {
   if (DEBUG) return;
   if (message.author.bot) return;
   // check, if bot has permission to send messages
-  if (!message.channel.guild.me.permissionsIn(channel).has('SEND_MESSAGES')) return;
+  if (!message.channel.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) return;
   // return if not prefix
   if (!message.content.startsWith('a!')) return;
 
