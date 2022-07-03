@@ -91,7 +91,6 @@ client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').ru
 // // record user tag
 // client.functions.get('SET_DB_userTagRecord').run(member.id, member.user.tag);
 
-// TODO: create a message event and let the suer know that the bot now uses slash commands
 // TEMP: message Event gets removed once interactions are implemented on discord side
 client.on('messageCreate', (message) => client.functions.get('EVENT_messageCreate').run(message));
 
