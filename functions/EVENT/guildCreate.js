@@ -35,7 +35,7 @@ After you run the command you need to confirm the Terms of Service and you are g
 If you added our bot before already: Keep in mind, that you need to run \`/guild enable\` to use the old configuration.
 
 As the last step, it's recommended joining our Discord server for frequent updates or if there are questions about a ban.
-We also gladly help you out, if you need any assistance with the bot. https://discord.gg/QhfnAWgEMS`);
+We also gladly help you out, if you need any assistance with the bot. https://discord.gg/TqBwHtzzhD`);
   owner.send({ embeds: [embed] });
   // add all bans to DB
   const allBans = await guild.bans.fetch();

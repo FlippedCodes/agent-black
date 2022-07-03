@@ -8,7 +8,7 @@ Agent Black is a blacklist bot. It stores every ban of every participating serve
 
 ## Getting Started
 
-The guide on how to add the bot to your server, can be found [here](https://github.com/FlippedCode/agent-black/wiki/Bot---Getting-Started). If you have trouble with something, feel free to [have a look into the wiki](https://github.com/FlippedCode/agent-black/wiki) or [join our Discord server](https://discord.gg/QhfnAWgEMS)
+The guide on how to add the bot to your server, can be found [here](https://github.com/FlippedCode/agent-black/wiki/Bot---Getting-Started). If you have trouble with something, feel free to [have a look into the wiki](https://github.com/FlippedCode/agent-black/wiki) or [join our Discord server](https://discord.gg/TqBwHtzzhD)
 
 ## Features
 

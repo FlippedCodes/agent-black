@@ -25,7 +25,7 @@ module.exports.run = async (interaction) => {
       `You need to setup the server first before you can use this command.
       Please run \`/guild setup\`.
       If you need help, please view the respective wiki article here (https://github.com/FlippedCode/agent-black/wiki/Adding-the-Bot)
-      or join our support server (https://discord.gg/QhfnAWgEMS).`);
+      or join our support server (https://discord.gg/TqBwHtzzhD).`);
     return;
   }
 

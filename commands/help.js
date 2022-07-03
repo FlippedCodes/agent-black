@@ -7,7 +7,7 @@ module.exports.run = async (interaction) => {
     .setDescription('This command is deprecated, please use discord embedded slash-commands feature instead.')
     .addField('Still need help?', `
   Read the wiki here: https://github.com/FlippedCode/agent-black/wiki
-  or join our server here: https://discord.gg/QhfnAWgEMS`);
+  or join our server here: https://discord.gg/TqBwHtzzhD`);
   return reply(interaction, { embeds: [embed] });
 };
 
