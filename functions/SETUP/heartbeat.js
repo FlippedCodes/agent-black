@@ -7,7 +7,6 @@ module.exports.run = async () => {
   // TODO: Generelize function as all are quite simmilar
   // client.functions.get('HEARTBEAT_BOTLIST_botsondiscord').run();
   // client.functions.get('HEARTBEAT_BOTLIST_discordbotlist').run();
-  // client.functions.get('HEARTBEAT_BOTLIST_discordlist').run();
   // client.functions.get('HEARTBEAT_BOTLIST_discords').run();
   // client.functions.get('HEARTBEAT_BOTLIST_discordbots').run();
   // client.functions.get('HEARTBEAT_BOTLIST_motiondevelopment').run();
