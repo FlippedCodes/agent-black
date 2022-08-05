@@ -28,7 +28,7 @@ global.ERR = (err) => {
   console.error('ERROR:', err);
   if (DEBUG) return;
   const { MessageEmbed } = require('discord.js');
-  const stack = err.stack.length > 1024 ? `${err.stack.slice(0, 1021)}...` : err.stack;
+  const stack = err.stack.length > 4000 ? `${err.stack.slice(0, 4000)}...` : err.stack;
   const embed = new MessageEmbed()
     .setAuthor({ name: `Error: '${err.message}'` })
     .setDescription(`STACKTRACE:\n\`\`\`${stack}\`\`\``)
