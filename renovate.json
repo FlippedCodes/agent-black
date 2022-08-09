@@ -1,5 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "reviewers": [
+    "coder-tavi"
+  ],
+  "assignees": [
+    "coder-tavi"
+  ],
   "extends": [
     "config:base"
   ]
