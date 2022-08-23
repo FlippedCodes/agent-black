@@ -39,7 +39,7 @@ module.exports.run = async (message) => {
 
   if (await checkUser(userID)) return;
 
-  const confirmMessage = await message.reply({ embeds: [embed('Hi there! I have been upgraded to Slash-Commands (v.3.0.0) and no longer support the old prefix of `a!` (Blame Discord). Please use the new `/` instead!')], components: [buttons], fetchReply: true });
+  const confirmMessage = await message.reply({ embeds: [embed('Hi there! I have been upgraded to Slash-Commands (v.3.0.1) and no longer support the old prefix of `a!` (Blame Discord). Please use the new `/` instead!')], components: [buttons], fetchReply: true });
   // For some reason that isnta-deletes the message?
   // await sentMessage.delete({ timeout: 20000 });
   // start button collector
