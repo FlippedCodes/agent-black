@@ -19,7 +19,6 @@ module.exports.BanManager = class BanManager {
   }
 
   /**
-   * @private
    * @description Adds a ban to the manager
    * @param {GuildBan} ban Ban to add to the manager
    * @returns {Promise<GuildBan>} Promise of the ban added
