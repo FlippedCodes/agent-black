@@ -1,6 +1,6 @@
 # get node version 10
 # TODO: update node version
-FROM node:16.14.2-buster-slim
+FROM node:16.17.0-buster-slim
 
 # Create app directory
 WORKDIR /usr/src/app
