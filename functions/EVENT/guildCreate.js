@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const Ban = require('../../database/models/Ban');
 
@@ -21,7 +21,7 @@ module.exports.run = async (guild) => {
   if (!await getServerEntry(serverID)) await addServerEntry(serverID, guild.name);
   // message owner about adding the bot and how to procceed
   const owner = await guild.members.fetch(guild.ownerId);
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle('Hello World!')
     .setFooter({ text: 'Only you received this message.' })
     .setDescription(`Thanks for adding me to your delightful server.

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
@@ -35,7 +35,7 @@ module.exports.run = async (interaction) => {
     }
   });
 
-  await reply(interaction, { embeds: [new MessageEmbed().setAuthor({ name: `Done importing bans from ${server.name}!` })] });
+  await reply(interaction, { embeds: [new EmbedBuilder().setAuthor({ name: `Done importing bans from ${server.name}!` })] });
 };
 
 module.exports.data = new CmdBuilder()

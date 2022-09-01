@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 
 const discardDeprecationWarning = require('../../database/models/discardDeprecationWarning');
 
@@ -11,7 +11,7 @@ const buttons = new MessageActionRow()
       .setStyle('PRIMARY'),
   ]);
 
-const embed = (body) => new MessageEmbed()
+const embed = (body) => new EmbedBuilder()
   .setDescription(body)
   .setColor('RED');
 

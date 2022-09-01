@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const ServerSetting = require('../../database/models/ServerSetting');
 
@@ -13,7 +13,7 @@ module.exports.run = async (message, args, config, prefix) => {
   const serverID = message.guild.id;
   const serverSettings = await getSettings(serverID);
   // prepare message
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle('Punishment Settings')
     .addFields([
       {

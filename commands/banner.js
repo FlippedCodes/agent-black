@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports.run = async (interaction) => {
   // needs to be local as settings overlap from dofferent embed-requests
-  const embed = new MessageEmbed();
+  const embed = new EmbedBuilder();
   const command = interaction.options;
   // get user and Pic
   const user = command.getUser('user', true);

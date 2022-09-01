@@ -1,11 +1,11 @@
 global.messageFail = async (interaction, body, color, ephemeral) => {
-  const sentMessage = await client.functions.get('richEmbedMessage')
+  const sentMessage = await client.functions.get('embedBuilder')
     .run(interaction, body, '', color || 'RED', false, ephemeral || true);
   return sentMessage;
 };
 
 global.messageSuccess = async (interaction, body, color, ephemeral) => {
-  const sentMessage = await client.functions.get('richEmbedMessage')
+  const sentMessage = await client.functions.get('embedBuilder')
     .run(interaction, body, '', color || 'GREEN', false, ephemeral || false);
   return sentMessage;
 };

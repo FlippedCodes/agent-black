@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports.run = async (interaction, body, title, color, footer, ephemeral) => {
   // needs to be local as settings overlap from dofferent embed-requests
-  const embed = new MessageEmbed();
+  const embed = new EmbedBuilder();
 
   if (body) embed.setDescription(body);
   if (title) embed.setTitle(title);
@@ -20,5 +20,5 @@ module.exports.run = async (interaction, body, title, color, footer, ephemeral) 
 };
 
 module.exports.data = {
-  name: 'richEmbedMessage',
+  name: 'embedBuilder',
 };

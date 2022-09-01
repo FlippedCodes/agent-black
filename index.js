@@ -1,22 +1,21 @@
 // init Discord
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, IntentsBitField, Collection } = require('discord.js');
 // init file system
 const fs = require('fs');
 // init command builder
 const { SlashCommandBuilder } = require('@discordjs/builders');
+// use contructor to create intent bit field
+const intents = new IntentsBitField([
+  IntentsBitField.Flags.DirectMessages,
+  IntentsBitField.Flags.Guilds,
+  IntentsBitField.Flags.GuildMessages,
+  IntentsBitField.Flags.GuildMessageReactions,
+  IntentsBitField.Flags.GuildMembers,
+  IntentsBitField.Flags.MessageContent,
+]);
 // setting essential global values
 // init Discord client
-global.client = new Client({
-  disableEveryone: true,
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_BANS,
-    Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.DIRECT_MESSAGES,
-  ],
-});
+global.client = new Client({ disableEveryone: true, intents });
 // init config
 global.config = require('./config.json');
 
@@ -27,9 +26,9 @@ global.CmdBuilder = SlashCommandBuilder;
 global.ERR = (err) => {
   console.error('ERROR:', err);
   if (DEBUG) return;
-  const { MessageEmbed } = require('discord.js');
+  const { EmbedBuilder } = require('discord.js');
   const stack = err.stack.length > 4000 ? `${err.stack.slice(0, 4000)}...` : err.stack;
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: `Error: '${err.message}'` })
     .setDescription(`STACKTRACE:\n\`\`\`${stack}\`\`\``)
     .setColor('RED');

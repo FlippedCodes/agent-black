@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -25,7 +25,7 @@ async function getBanns(userID) {
 
 // send message when user is banned
 async function sendBanMessage(interaction, serverName, serverID, userID, userTag) {
-  const message = await new MessageEmbed()
+  const message = await new EmbedBuilder()
     .setDescription(`serverID: \`${serverID}\`
     servername: \`${serverName}\`
     userID: \`${userID}\`
@@ -67,7 +67,7 @@ module.exports.run = async (interaction) => {
   // check if up to 5 entries
   if (allBans.length < 5) return postBans(allBans, interaction);
 
-  const message = await new MessageEmbed()
+  const message = await new EmbedBuilder()
     .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through. \nAre you sure?`)
     .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {

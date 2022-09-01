@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports.run = async (interaction) => {
   // needs to be local as settings overlap from dofferent embed-requests
-  const embedDefault = new MessageEmbed();
+  const embedDefault = new EmbedBuilder();
   const command = interaction.options;
   // get user and ID
   const rawUser = command.get('user', true);
@@ -14,7 +14,7 @@ module.exports.run = async (interaction) => {
   await reply(interaction, { embeds: [embedDefault] });
 
   if (member && member.avatar) {
-    const embedServer = new MessageEmbed();
+    const embedServer = new EmbedBuilder();
     const serverPFP = member.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
     embedServer.setAuthor({ name: member.nickname })
       .setImage(serverPFP)

@@ -1,7 +1,7 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports.run = async (interaction) => {
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle('Halp')
     .setColor(interaction.member.displayColor)
     .setDescription('This command is deprecated, please use discord embedded slash-commands feature instead.')

@@ -1,8 +1,8 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 
 // Ping kickoff for bot latency
 async function kickoff(interaction) {
-  const sendMessage = await new MessageEmbed()
+  const sendMessage = await new EmbedBuilder()
     .setDescription('📤 Pong...')
     .setColor();
   const sentMessage = await reply(interaction, { embeds: [sendMessage], fetchReply: true });
@@ -15,7 +15,7 @@ function editedMessage(sentMessage, interaction) {
   const body = `📥 Pong!
   Bot latency is \`${sentMessage.createdTimestamp - interaction.createdTimestamp}\`ms.
   API latency is \`${api_latency}\`ms`;
-  return new MessageEmbed()
+  return new EmbedBuilder()
     .setDescription(body)
     .setColor();
 }

@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 
 const buttons = new MessageActionRow()
   .addComponents([
@@ -34,7 +34,7 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 }
 
 module.exports.run = async (interaction, ParticipatingServer) => {
-  const message = await new MessageEmbed()
+  const message = await new EmbedBuilder()
     .setDescription('Please confirm that you have read the ToS and Privacy Policy.')
     .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {

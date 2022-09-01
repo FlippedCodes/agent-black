@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
@@ -32,11 +32,11 @@ async function checkTag(userTag) {
 }
 
 async function postUserinfo(interaction, userID, bans, warns, followUp = false) {
-  const embed = new MessageEmbed().setColor(interaction.member.displayColor);
+  const embed = new EmbedBuilder().setColor(interaction.member.displayColor);
   const discordUser = await client.users.fetch(userID, false);
   // get all server that the bot shares with the user
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
-  // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: MessageEmbed field names must be non-empty strings.' So a convertion needed to be done
+  // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: EmbedBuilder field names must be non-empty strings.' So a convertion needed to be done
   embed
     .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.commands.lookup.botBadge : ''}`)
     .addField('ID', `\`${userID}\``)
@@ -84,7 +84,7 @@ async function getServerName(serverID) {
 // final ban posting function
 function postBans(interaction, banns) {
   banns.forEach(async (ban) => {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setDescription(`**Reason**:\n\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('ServerID', `\`${ban.serverID}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
@@ -110,7 +110,7 @@ function postBans(interaction, banns) {
 function postWarns(interaction, warns) {
   warns.forEach(async (warn) => {
     const serverName = await getServerName(warn.serverID);
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(16755456) // yellow
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
       .setAuthor({ name: `Warned on ${serverName}` })
@@ -160,7 +160,7 @@ async function postLookup(interaction, ID, followUp) {
 }
 
 async function showAdditionalUsers(interaction, IDArr, orgID) {
-  const message = await new MessageEmbed()
+  const message = await new EmbedBuilder()
     .setDescription(`Show all (+${IDArr.length - 1}) results?`)
     .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {

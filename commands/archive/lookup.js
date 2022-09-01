@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const config = require('../../config/main.json');
 
@@ -20,7 +20,7 @@ async function checkTag(userTag) {
 }
 
 async function postUserinfo(message, userID, bans, warns) {
-  const embed = new MessageEmbed().setColor(message.member.displayColor);
+  const embed = new EmbedBuilder().setColor(message.member.displayColor);
   let failed = false;
   const discordUser = await client.users.fetch(userID, false)
     .catch((err) => {
@@ -73,7 +73,7 @@ async function getServerName(serverID) {
 // final ban posting function
 function postBans(message, banns) {
   banns.forEach(async (ban) => {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setDescription(`**Reason**:\n\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('ServerID', `\`${ban.serverID}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
@@ -99,7 +99,7 @@ function postBans(message, banns) {
 function postWarns(message, warns) {
   warns.forEach(async (warn) => {
     const serverName = await getServerName(warn.serverID);
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(16755456) // yellow
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
       .setAuthor({ name: `Warned on ${serverName}` })

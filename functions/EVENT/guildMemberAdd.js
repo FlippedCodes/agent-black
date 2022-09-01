@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const Ban = require('../../database/models/Ban');
 
@@ -16,7 +16,7 @@ function findLogChannel(logChannelID) {
 
 async function sendMessage(channel, body, title, color, footer) {
   // needs to be local as settings overlap from dofferent embed-requests
-  const embed = new MessageEmbed();
+  const embed = new EmbedBuilder();
 
   if (body) embed.setDescription(body);
   if (title) embed.setTitle(title);

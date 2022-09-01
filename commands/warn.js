@@ -10,7 +10,7 @@ function getServerEntry(serverID) {
 // warns other servers
 async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage, serverName) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('richEmbedMessage')
+  client.functions.get('embedBuilder')
     .run(client.user, channel,
       `Tag: \`${userTag}\`
       ID: \`${userID}\`
@@ -23,7 +23,7 @@ async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage,
 // warns other servers for aliases
 async function messageWarnedAliasUserInGuild(channelID, userTag, userID, warnMessage, serverName, orgUserTag) {
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('richEmbedMessage')
+  client.functions.get('embedBuilder')
     .run(client.user, channel,
       `**The user \`${userTag}\` is an alias of a user that has been warned!**
 

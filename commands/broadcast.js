@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -12,7 +12,7 @@ async function sendMessage(author, body) {
   channels.forEach((DBchannel) => {
     const channelID = DBchannel.logChannelID;
     const channel = client.channels.cache.find((channel) => channel.id === channelID);
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: `${author} broadcasted` })
       .setDescription(body)
       .setColor(4182379);
