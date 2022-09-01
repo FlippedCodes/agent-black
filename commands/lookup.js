@@ -1,6 +1,8 @@
 const { Op } = require('sequelize');
 
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,
+} = require('discord.js');
 
 const Ban = require('../database/models/Ban');
 
@@ -10,18 +12,18 @@ const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const UserIDAssociation = require('../database/models/UserIDAssociation');
 
-const buttons = new MessageActionRow()
+const buttons = new ActionRowBuilder()
   .addComponents([
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId('show')
       .setEmoji('✅')
       .setLabel('Show all users')
-      .setStyle('PRIMARY'),
-    new MessageButton()
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
       .setCustomId('dontshow')
       .setEmoji('❌')
       .setLabel('Nah, im good')
-      .setStyle('SECONDARY'),
+      .setStyle(ButtonStyle.Secondary),
   ]);
 
 // looksup usertag in list if recorded
@@ -38,12 +40,14 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
   const sharedServers = await client.guilds.cache.filter((guild) => !!guild.members.cache.get(discordUser.id));
   // There seems to be a bug on the discord api that doesnt allow intigers in body: 'RangeError [EMBED_FIELD_NAME]: EmbedBuilder field names must be non-empty strings.' So a convertion needed to be done
   embed
-    .addField('Usertag', `\`${discordUser.tag}\` ${discordUser.bot ? config.commands.lookup.botBadge : ''}`)
-    .addField('ID', `\`${userID}\``)
-    .addField('Account Creation Date', date(discordUser.createdAt), true)
+    .addFields([
+      { name: 'Usertag', value: `\`${discordUser.tag}\` ${discordUser.bot ? config.commands.lookup.botBadge : ''}` },
+      { name: 'ID', value: `\`${userID}\`` },
+      { name: 'Account Creation Date', value: date(discordUser.createdAt), inline: true },
+    ])
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
-  if (bans) embed.addField('Bans', `${bans}`, true);
-  if (warns) embed.addField('Warns', `${warns}`, true);
+  if (bans) embed.addFields([{ name: 'Bans', value: `${bans}`, inline: true }]);
+  if (warns) embed.addFields([{ name: 'Warns', value: `${warns}`, inline: true }]);
   if (sharedServers.size) {
     // FIXME: check if it really only shows one server
     const serverlist = sharedServers.map((sharedMember) => sharedMember.name).join('\n');
@@ -53,7 +57,7 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
     if (userID === client.user.id) {
       if (!await client.functions.get('CHECK_DB_perms').run(interaction.user.id)) serverList = 'REDACTED';
     }
-    embed.addField(`Shared servers - ${sharedServers.size}`, serverList, false);
+    embed.addFields([{ name: `Shared servers - ${sharedServers.size}`, value: serverList }]);
   }
   return reply(interaction, { embeds: [embed] }, followUp);
   // }
@@ -86,20 +90,22 @@ function postBans(interaction, banns) {
   banns.forEach(async (ban) => {
     const embed = new EmbedBuilder()
       .setDescription(`**Reason**:\n\`\`\`${ban.reason || 'None'}\`\`\``)
-      .addField('ServerID', `\`${ban.serverID}\``, true)
-      .addField('Is banned', `\`${ban.userBanned}\``, true)
-      .addField('BanID', `\`${ban.banID}\``, true)
-      .addField('Ban creation date', date(ban.createdAt));
-    if (date(ban.createdAt) !== date(ban.updatedAt)) embed.addField('Ban updated date', date(ban.updatedAt));
+      .addFields([
+        { name: 'ServerID', value: `\`${ban.serverID}\``, inline: true },
+        { name: 'Is banned', value: `\`${ban.userBanned}\``, inline: true },
+        { name: 'BanID', value: `\`${ban.banID}\``, inline: true },
+        { name: 'Ban creation date', value: date(ban.createdAt), inline: true },
+      ]);
+    if (date(ban.createdAt) !== date(ban.updatedAt)) embed.addFields([{ name: 'Ban updated date', value: date(ban.updatedAt) }]);
     const serverName = await getServerName(ban.serverID);
     // check if user is still banned
     if (ban.userBanned) {
       embed
-        .setColor('ORANGE') // orange
+        .setColor('Orange')
         .setAuthor({ name: `Banned on ${serverName}` });
     } else {
       embed
-        .setColor('GREEN') // green
+        .setColor('Green')
         .setAuthor({ name: `Was banned on ${serverName}` });
     }
     reply(interaction, { embeds: [embed] }, true);
@@ -111,13 +117,15 @@ function postWarns(interaction, warns) {
   warns.forEach(async (warn) => {
     const serverName = await getServerName(warn.serverID);
     const embed = new EmbedBuilder()
-      .setColor(16755456) // yellow
+      .setColor('Yellow')
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
       .setAuthor({ name: `Warned on ${serverName}` })
-      .addField('ServerID', `\`${warn.serverID}\``, true)
-      .addField('WarnID', `\`${warn.warnID}\``, true)
-      .addField('Warning creation date', date(warn.createdAt));
-    if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addField('Warning updated date', date(warn.updatedAt));
+      .addFields([
+        { name: 'ServerID', value: `\`${warn.serverID}\``, inline: true },
+        { name: 'WarnID', value: `\`${warn.warnID}\``, inline: true },
+        { name: 'Warning creation date', value: date(warn.createdAt), inline: true },
+      ]);
+    if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addFields([{ name: 'Warning updated date', value: date(warn.updatedAt) }]);
     reply(interaction, { embeds: [embed] }, true);
   });
 }
@@ -162,7 +170,7 @@ async function postLookup(interaction, ID, followUp) {
 async function showAdditionalUsers(interaction, IDArr, orgID) {
   const message = await new EmbedBuilder()
     .setDescription(`Show all (+${IDArr.length - 1}) results?`)
-    .setColor('ORANGE');
+    .setColor('Orange');
   const confirmMessage = await reply(interaction, {
     embeds: [message], components: [buttons], fetchReply: true,
   });

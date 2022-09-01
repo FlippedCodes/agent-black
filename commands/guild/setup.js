@@ -1,21 +1,23 @@
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,
+} = require('discord.js');
 
-const buttons = new MessageActionRow()
+const buttons = new ActionRowBuilder()
   .addComponents([
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId('accept')
       .setEmoji('✅')
       .setLabel('Accept')
-      .setStyle('PRIMARY'),
-    new MessageButton()
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
       .setCustomId('deny')
       .setEmoji('❌')
       .setLabel('Deny')
-      .setStyle('SECONDARY'),
-    new MessageButton()
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
       .setLabel('ToS')
       .setURL('https://github.com/FlippedCode/agent-black/wiki/ToS-and-Privacy-Policy')
-      .setStyle('LINK'),
+      .setStyle(ButtonStyle.Link),
   ]);
 
 // adds a server to the ParticipatingServers table
@@ -36,7 +38,7 @@ async function addServer(ParticipatingServer, serverID, logChannelID, teamRoleID
 module.exports.run = async (interaction, ParticipatingServer) => {
   const message = await new EmbedBuilder()
     .setDescription('Please confirm that you have read the ToS and Privacy Policy.')
-    .setColor('ORANGE');
+    .setColor('Orange');
   const confirmMessage = await reply(interaction, {
     embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,
   });

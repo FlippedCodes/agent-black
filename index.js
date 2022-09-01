@@ -6,12 +6,10 @@ const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 // use contructor to create intent bit field
 const intents = new IntentsBitField([
-  IntentsBitField.Flags.DirectMessages,
   IntentsBitField.Flags.Guilds,
-  IntentsBitField.Flags.GuildMessages,
-  IntentsBitField.Flags.GuildMessageReactions,
+  IntentsBitField.Flags.GuildBans,
   IntentsBitField.Flags.GuildMembers,
-  IntentsBitField.Flags.MessageContent,
+  IntentsBitField.Flags.GuildEmojisAndStickers,
 ]);
 // setting essential global values
 // init Discord client
@@ -31,7 +29,7 @@ global.ERR = (err) => {
   const embed = new EmbedBuilder()
     .setAuthor({ name: `Error: '${err.message}'` })
     .setDescription(`STACKTRACE:\n\`\`\`${stack}\`\`\``)
-    .setColor('RED');
+    .setColor('Red');
   // client.channels.fetch(config.logChannel).send({ embeds: [embed] });
   client.channels.cache.get(config.logChannel).send({ embeds: [embed] });
   return;

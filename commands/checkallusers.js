@@ -1,21 +1,23 @@
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,
+} = require('discord.js');
 
 const ParticipatingServer = require('../database/models/ParticipatingServer');
 
 const Ban = require('../database/models/Ban');
 
-const buttons = new MessageActionRow()
+const buttons = new ActionRowBuilder()
   .addComponents([
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId('accept')
       .setEmoji('✅')
       .setLabel('Show \'em all')
-      .setStyle('PRIMARY'),
-    new MessageButton()
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
       .setCustomId('deny')
       .setEmoji('❌')
       .setLabel('Abort')
-      .setStyle('SECONDARY'),
+      .setStyle(ButtonStyle.Secondary),
   ]);
 
 async function getBanns(userID) {
@@ -31,7 +33,7 @@ async function sendBanMessage(interaction, serverName, serverID, userID, userTag
     userID: \`${userID}\`
     username: \`${userTag}\``)
     .setFooter({ text: `For more information use \`/lookup ${userID}\`` })
-    .setColor('ORANGE');
+    .setColor('Orange');
   reply(interaction, { embeds: [message] }, true);
 }
 
@@ -69,7 +71,7 @@ module.exports.run = async (interaction) => {
 
   const message = await new EmbedBuilder()
     .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through. \nAre you sure?`)
-    .setColor('ORANGE');
+    .setColor('Orange');
   const confirmMessage = await reply(interaction, {
     embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,
   });

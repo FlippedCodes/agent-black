@@ -11,14 +11,15 @@ module.exports.run = async () => {
   console.log(`[${module.exports.data.name}] Posting bot status message!`);
   const embed = new EmbedBuilder()
     .setTitle('AgentBlack - Bot back online!')
-    .setColor('GREEN')
+    .setColor('Green')
     .setFooter({ text: client.user.tag, iconURL: client.user.displayAvatarURL })
     .setTimestamp();
   const offlineTime = await OfflineStat.findOne({ where: { ID: 1 } }).catch(ERR);
   if (offlineTime) {
-    embed
-      .addField('The time the bot went offline:', `${toTime(startupTime - offlineTime.time * 1)}`, false)
-      .addField('The bot went offline at:', `${new Date(offlineTime.time * 1)}`, false);
+    embed.addFields([
+      { name: 'The time the bot went offline:', value: `${toTime(startupTime - offlineTime.time * 1)}` },
+      { name: 'The bot went offline at:', value: `${new Date(offlineTime.time * 1)}` },
+    ]);
   } else {
     embed.setDescription('The time that the bot was offline, is missing. A new entry got created!');
   }

@@ -1,19 +1,21 @@
-const { EmbedBuilder, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle,
+} = require('discord.js');
 
 const discardDeprecationWarning = require('../../database/models/discardDeprecationWarning');
 
-const buttons = new MessageActionRow()
+const buttons = new ActionRowBuilder()
   .addComponents([
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId('discard')
       .setEmoji('✅')
       .setLabel('Don\'t show this again')
-      .setStyle('PRIMARY'),
+      .setStyle(ButtonStyle.Primary),
   ]);
 
 const embed = (body) => new EmbedBuilder()
   .setDescription(body)
-  .setColor('RED');
+  .setColor('Red');
 
 async function addUser(userID) {
   const added = await discardDeprecationWarning.findOrCreate({ where: { userID } }).catch(ERR);

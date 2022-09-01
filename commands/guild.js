@@ -31,7 +31,7 @@ module.exports.data = new CmdBuilder()
     .addChannelOption((option) => option
       .setName('channel')
       .setDescription('Provide a channel you want Agent Black to report to.')
-      .addChannelType(0)
+      .addChannelTypes([0])
       .setRequired(true))
     .addRoleOption((option) => option
       .setName('role')
