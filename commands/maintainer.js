@@ -17,9 +17,9 @@ module.exports.data = new CmdBuilder()
   .addStringOption((option) => option
     .setName('action')
     .setDescription('What do you want to do with this user?')
-    .addChoices([
-      ['Add user', 'add'],
-      ['Remove user', 'remove'],
-      ['Disply info about user', 'info'],
-    ])
+    .addChoices(
+      { name: 'Add user', value: 'add' },
+      { name: 'Remove user', value: 'remove' },
+      { name: 'Disply info about user', value: 'info' },
+    )
     .setRequired(true));
