@@ -7,7 +7,7 @@ const startupTime = +new Date();
 const OfflineStat = require('../../database/models/OfflineStat');
 
 module.exports.run = async () => {
-  // if (DEBUG) return;
+  if (DEBUG) return;
   console.log(`[${module.exports.data.name}] Posting bot status message!`);
   const embed = new EmbedBuilder()
     .setTitle('AgentBlack - Bot back online!')
