@@ -1,12 +1,12 @@
 global.messageFail = async (interaction, body, color, ephemeral) => {
   const sentMessage = await client.functions.get('embedBuilder')
-    .run(interaction, body, '', color || 'RED', false, ephemeral || true);
+    .run(interaction, body, '', color || 'Red', false, ephemeral || true);
   return sentMessage;
 };
 
 global.messageSuccess = async (interaction, body, color, ephemeral) => {
   const sentMessage = await client.functions.get('embedBuilder')
-    .run(interaction, body, '', color || 'GREEN', false, ephemeral || false);
+    .run(interaction, body, '', color || 'Green', false, ephemeral || false);
   return sentMessage;
 };
 

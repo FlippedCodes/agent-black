@@ -40,7 +40,7 @@ async function prepareMessage(serverID, userID, userTag, userBans, userWarns, al
   ID: \`${userID}\`
   bans: \`${userBans}\`
   warns: \`${userWarns}\`
-  For more information use \`/lookup ${userID}\``, title, 'ORANGE');
+  For more information use \`/lookup ${userID}\``, title, 'Orange');
 }
 
 module.exports.run = async (member) => {

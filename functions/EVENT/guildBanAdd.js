@@ -2,7 +2,9 @@
 
 const { EmbedBuilder } = require('discord.js');
 
-const Ban = require('../../database/models/Ban');
+// const Ban = require('../../database/models/Ban');
+
+const Ban = require('../../classes/banManager');
 
 // const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -37,7 +39,7 @@ async function messageBannedUserInGuild(channelID, userTag, userID, banReason, s
     ID: \`${userID}\`
     Reason: \`\`\`${banReason || 'none'}\`\`\``,
     `A user on your server has been banned on '${serverName}'!`,
-    'ORANGE',
+    'Orange',
     `For more information and other bans and warns use '/lookup ${userID}'`);
 }
 
@@ -51,7 +53,7 @@ async function messageBannedAliasUserInGuild(channelID, userTag, userID, warnRea
   Reason: \`\`\`${warnReason || 'none'}\`\`\``;
   const title = `A alias of a user on your server has been banned on '${serverName}'!`;
   const footer = `For more information and other bans and warns use '/lookup ${orgUserTag}'`;
-  sendMessage(channel, body, title, 'ORANGE', footer);
+  sendMessage(channel, body, title, 'Orange', footer);
 }
 
 module.exports.run = async ({ guild, user }) => {
