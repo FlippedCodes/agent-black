@@ -9,7 +9,7 @@
     "discord.js": "^13.6.0",
     "html-to-image": "^1.6.2",
     "mysql2": "^2.3.2",
-    "pretty-ms": "^5.1.0",
+    "pretty-ms": "^8.0.0",
     "sequelize": "^6.9.0",
     "utf-8-validate": "^5.0.7"
   },
