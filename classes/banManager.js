@@ -35,7 +35,7 @@ module.exports.BanManager = class BanManager {
    */
   addGuildBans(guild) {
     if (guild instanceof Guild === false) return Promise.reject(new SyntaxError('Invalid Guild instance'));
-    if (!guild.me.permissions.has('BAN_MEMBERS')) return Promise.reject(new SyntaxError('Missing BAN_MEMBERS in guild'));
+    if (!guild.me.permissions.has('BanMembers')) return Promise.reject(new SyntaxError('Missing BanMembers in guild'));
     return Promise.resolve(guild.bans.fetch().then((bans) => {
       if (bans instanceof Collection === false) return this.addBan(bans.first());
       return Array.from(bans.values()).forEach((ban) => this.addBan(ban));
