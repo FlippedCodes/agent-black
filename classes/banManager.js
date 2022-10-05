@@ -12,8 +12,8 @@ module.exports.BanManager = class BanManager {
    * @param {ManagerData} data Data to initialize the manager with
    */
   constructor(data) {
-    if (Array.isArray(data.bans) === false) throw new SyntaxError('Invalid bans array');
-    this.bans = data.bans;
+    if (data.bans !== undefined && Array.isArray(data.bans) === false) throw new SyntaxError('Invalid bans array');
+    this.bans = data.bans || [];
     if (!data.sequelize || data.sequelize instanceof Sequelize === false || !data.sequelize.models.Ban) throw new SyntaxError('Invalid Sequelize instance');
     this.sequelize = data.sequelize;
   }
@@ -50,10 +50,10 @@ module.exports.BanManager = class BanManager {
     this.bans.forEach((ban) => {
       if (ban.user.bot && ban.user.fetchFlags().then((f) => f.has('VERIFIED_BOT'))) return; // Ignore verified bots
       this.sequelize.models.Ban.upsert({
-          serverID: ban.guild.id,
-          userID: ban.user.id,
-          reason: ban.reason,
-          userTag: ban.user.tag,
+        serverID: ban.guild.id,
+        userID: ban.user.id,
+        reason: ban.reason,
+        userTag: ban.user.tag,
       });
     })
       .then(() => Promise.resolve(this.bans), (err) => Promise.reject(err));
