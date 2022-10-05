@@ -49,18 +49,11 @@ module.exports.BanManager = class BanManager {
   sync() {
     this.bans.forEach((ban) => {
       if (ban.user.bot && ban.user.fetchFlags().then((f) => f.has('VERIFIED_BOT'))) return; // Ignore verified bots
-      this.sequelize.models.Ban.findOrCreate({
-        where: {
+      this.sequelize.models.Ban.upsert({
           serverID: ban.guild.id,
           userID: ban.user.id,
           reason: ban.reason,
-        },
-        defaults: {
-          // userID: ban.user.id,
-          // serverID: ban.guild.id,
           userTag: ban.user.tag,
-          // reason: ban.reason,
-        },
       });
     })
       .then(() => Promise.resolve(this.bans), (err) => Promise.reject(err));
