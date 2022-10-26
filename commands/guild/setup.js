@@ -56,11 +56,15 @@ module.exports.run = async (interaction, ParticipatingServer) => {
       const serverAdded = await addServer(ParticipatingServer, serverID, logChannelID, teamRoleID, serverName);
       // post outcome
       if (serverAdded) {
-        messageSuccess(interaction,
-          `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.\nConsider running \`/checkallusers\` in your log channel once.`);
+        messageSuccess(
+          interaction,
+          `\`${serverName}\` with the ID \`${serverID}\` got added to / updated in the participating Servers list.\nYou can now use all the other commands in this server.\nConsider running \`/checkallusers\` in your log channel once.`,
+        );
       } else {
-        messageFail(interaction,
-          `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first with \`/${interaction.commandName} disable\``);
+        messageFail(
+          interaction,
+          `An active server entry for \`${serverName}\` with the ID \`${serverID}\` already exists! If you want to change info, remove it first with \`/${interaction.commandName} disable\``,
+        );
       }
       return;
     }

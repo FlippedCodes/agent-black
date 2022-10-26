@@ -1,5 +1,7 @@
 const { Guild, GuildBan } = require('discord.js');
 
+const { UserFlags, PermissionFlagsBits } = require('discord-api-types/v10');
+
 const { Sequelize } = require('sequelize');
 
 module.exports.BanManager = class BanManager {
@@ -19,13 +21,13 @@ module.exports.BanManager = class BanManager {
   }
 
   /**
-   * @description Adds a ban to the manager
-   * @param {GuildBan} ban Ban to add to the manager
-   * @returns {Promise<GuildBan>} Promise of the ban added
+   * @description Adds one or more bans to the manager
+   * @param {Array<GuildBan>|GuildBan} bans Bans to add to the manager
+   * @returns {Promise<Array<GuildBan>>} Promise of the bans added
    */
-  addBan(ban) {
-    if (ban instanceof GuildBan === false) return Promise.reject(new SyntaxError('Invalid Ban instance'));
-    return Promise.resolve(this.bans.push(ban));
+  addBans(bans) {
+    this.bans.push(bans);
+    return Promise.resolve(this.validateBans());
   }
 
   /**
@@ -33,13 +35,12 @@ module.exports.BanManager = class BanManager {
    * @param {Guild} guild Guild to add bans from
    * @returns {Promise<Array<GuildBan>>} Array of bans added
    */
-  addGuildBans(guild) {
+  async addGuildBans(guild) {
     if (guild instanceof Guild === false) return Promise.reject(new SyntaxError('Invalid Guild instance'));
-    if (!guild.me.permissions.has('BanMembers')) return Promise.reject(new SyntaxError('Missing BanMembers in guild'));
-    return Promise.resolve(guild.bans.fetch().then((bans) => {
-      if (bans instanceof Collection === false) return this.addBan(bans.first());
-      return Array.from(bans.values()).forEach((ban) => this.addBan(ban));
-    }));
+    if (!guild.me.permissions.has(PermissionFlagsBits.BanMembers)) return Promise.reject(new SyntaxError('Missing BanMembers in guild'));
+    const bans = await guild.bans.fetch();
+    if (bans instanceof Collection === false) return this.addBans(bans);
+    return this.addBans(Array.from(bans.values()));
   }
 
   /**
@@ -48,14 +49,25 @@ module.exports.BanManager = class BanManager {
    */
   sync() {
     this.bans.forEach((ban) => {
-      if (ban.user.bot && ban.user.fetchFlags().then((f) => f.has('VERIFIED_BOT'))) return; // Ignore verified bots
       this.sequelize.models.Ban.upsert({
         serverID: ban.guild.id,
         userID: ban.user.id,
         reason: ban.reason,
         userTag: ban.user.tag,
-      });
-    })
-      .then(() => Promise.resolve(this.bans), (err) => Promise.reject(err));
+      }).catch((err) => Promise.reject(err));
+    });
+    Promise.resolve(this.bans);
+  }
+
+  /**
+   * @private
+   * @description Validates and verifies all bans in the ban manager
+   */
+  validateBans() {
+    let valid = [];
+    if (!Array.isArray(this.bans)) this.bans = [];
+    valid = this.bans.filter((ban) => ban instanceof GuildBan);
+    valid = valid.filter((ban) => ban.user.bot && ban.user.fetchFlags().then((f) => f.has(UserFlags.VerifiedBot)));
+    return Promise.resolve(this.bans = valid);
   }
 };
