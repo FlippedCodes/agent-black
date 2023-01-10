@@ -5,7 +5,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ never ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -45,5 +45,5 @@ jobs:
       #   run: sequelize db:migrate
 
       # - name: Spin up all other containers
-      - name: Spin up containers
-        run: docker-compose up -d
+      - name: sundown server
+        run: docker-compose down -v
