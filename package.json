@@ -6,6 +6,7 @@
     "@discordjs/builders": "^1.2.0",
     "axios": "^0.26.1",
     "bufferutil": "^4.0.5",
+    "discord-api-types": "^0.37.11",
     "discord.js": "^14.3.0",
     "html-to-image": "^1.6.2",
     "moment": "^2.29.4",

@@ -42,30 +42,27 @@ client.functions = new Collection();
 // anouncing debug mode
 if (DEBUG) console.log(`[${config.name}] Bot is on Debug-Mode. Some functions are not going to be loaded.`);
 
-// Login the bot
-client.login(process.env.DCtoken)
-// TODO: cleanup
-  .then(() => {
-    // import Functions and Commands; startup database connection
-    fs.readdirSync('./functions/STARTUP').forEach((FCN) => {
-      if (FCN.search('.js') === -1) return;
-      const INIT = require(`./functions/STARTUP/${FCN}`);
-      INIT.run(fs);
-    });
+(async () => {
+  // startup functions in order
+  // const startupQueue = new PQueue({ concurrency: 1 });
+  const files = await fs.readdirSync('./functions/STARTUP');
+  files.forEach(async (FCN) => {
+    if (!FCN.endsWith('.js')) return;
+    const INIT = require(`./functions/STARTUP/${FCN}`);
+    await INIT.run(fs);
   });
+
+  // When done: Login the bot
+  await client.login(process.env.DCtoken);
+})();
 
 client.on('ready', async () => {
   // confirm user logged in
   console.log(`[${config.name}] Logged in as "${client.user.tag}"!`);
 
-  // setup tables
-  console.log('[DB] Syncing tables...');
-  await sequelize.sync();
-  await console.log('[DB] Done syncing!');
-
   // run startup functions
   config.setup.setupFunctions.forEach((FCN) => {
-    client.functions.get(FCN).run(config);
+    client.functions.get(FCN).run();
   });
 });
 
