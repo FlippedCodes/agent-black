@@ -91,9 +91,6 @@ client.on('guildDelete', (guild) => client.functions.get('EVENT_guildDelete').ru
 // // record user tag
 // client.functions.get('SET_DB_userTagRecord').run(member.id, member.user.tag);
 
-// TEMP: message Event gets removed once interactions are implemented on discord side
-client.on('messageCreate', (message) => client.functions.get('EVENT_messageCreate').run(message));
-
 // itneraction is triggered (command, autocomplete, etc.)
 client.on('interactionCreate', (interaction) => client.functions.get('EVENT_interactionCreate').run(interaction));
 
