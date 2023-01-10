@@ -4,7 +4,7 @@ const { EmbedBuilder } = require('discord.js');
 
 // const Ban = require('../../database/models/Ban');
 
-const Ban = require('../../classes/banManager');
+const BanManager = require('../../classes/banManager');
 
 // const ParticipatingServer = require('../database/models/ParticipatingServer');
 
@@ -78,17 +78,20 @@ module.exports.run = async ({ guild, user }) => {
   // fix ban reason by filtering new line breaks
   const fixedReason = reason === null ? reason : reason.replace(new RegExp('\'', 'g'), '`');
   // create of find DB entry
-  const [banEntry] = await Ban.findOrCreate({
-    where: { userID, serverID },
-    defaults: { userTag, reason: fixedReason, userBanned },
-  }).catch(ERR);
-  // check if entry is already on DB
-  if (await !banEntry.isNewRecord) {
-    // update DB entry
-    Ban.update({ reason: fixedReason, userTag, userBanned },
-      { where: { userTag, userID, serverID } })
-      .catch(ERR);
-  }
+  // const [banEntry] = await Ban.findOrCreate({
+  //   where: { userID, serverID },
+  //   defaults: { userTag, reason: fixedReason, userBanned },
+  // }).catch(ERR);
+  // // check if entry is already on DB
+  // if (await !banEntry.isNewRecord) {
+  //   // update DB entry
+  //   Ban.update({ reason: fixedReason, userTag, userBanned },
+  //     { where: { userTag, userID, serverID } })
+  //     .catch(ERR);
+  // }
+  const test = new BanManager().addBan();
+
+  // ######################################################################################################################################################
   // logic, to only output if not banned, is active and has a log channel
   if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
     messageBanSuccess(bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);

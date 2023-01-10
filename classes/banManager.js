@@ -46,8 +46,8 @@ module.exports.BanManager = class BanManager {
    * @description Syncs the manager with the database, adding bans that don't exist in the database
    * @returns {Promise<Array<GuildBan>>} Array of bans added
    */
-  sync() {
-    this.bans.forEach((ban) => {
+  async sync() {
+    await this.bans.forEach((ban) => {
       if (ban.user.bot && ban.user.fetchFlags().then((f) => f.has('VERIFIED_BOT'))) return; // Ignore verified bots
       this.sequelize.models.Ban.findOrCreate({
         where: {
@@ -62,7 +62,7 @@ module.exports.BanManager = class BanManager {
           // reason: ban.reason,
         },
       });
-    })
-      .then(() => Promise.resolve(this.bans), (err) => Promise.reject(err));
+    }).catch((err) => Promise.reject(err));
+    Promise.resolve(this.bans);
   }
 };
