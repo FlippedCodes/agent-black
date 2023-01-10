@@ -20,6 +20,6 @@ module.exports.data = new CmdBuilder()
     .addChoices([
       ['Add user', 'add'],
       ['Remove user', 'remove'],
-      ['Disply info about user', 'info'],
+      ['Display info about user', 'info'],
     ])
     .setRequired(true));
