@@ -11,7 +11,7 @@
     "mysql2": "^2.3.2",
     "pretty-ms": "^5.1.0",
     "sequelize": "^6.9.0",
-    "utf-8-validate": "^5.0.7"
+    "utf-8-validate": "^6.0.0"
   },
   "devDependencies": {
     "eslint": "8.23.0",
