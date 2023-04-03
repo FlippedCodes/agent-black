@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 const Warn = require('../database/models/Warn');
 
 // TODO: recreate richmessage embed sender to it can be sent to other servers
@@ -9,30 +11,30 @@ function getServerEntry(serverID) {
 
 // warns other servers
 async function messageWarnedUserInGuild(channelID, userTag, userID, warnMessage, serverName) {
+  const embed = new MessageEmbed();
+  embed.setColor(16755456);
+  embed.setFooter({ text: `For more information about this user, use '/lookup ${userID}'` });
+  embed.setTitle(`A user on your server has been warned on '${serverName}'!`);
+  embed.setDescription(`Tag: \`${userTag}\`
+  ID: \`${userID}\`
+  Reason: \`\`\`${warnMessage || 'none'}\`\`\``);
   const channel = await client.channels.cache.get(channelID);
-  client.functions.get('richEmbedMessage')
-    .run(client.user, channel,
-      `Tag: \`${userTag}\`
-      ID: \`${userID}\`
-      Reason: \`\`\`${warnMessage || 'none'}\`\`\``,
-      `A user on your server has been warned on '${serverName}'!`,
-      16755456,
-      `For more information about this user, use '/lookup ${userID}'`);
+  channel.send({ embeds: [embed] });
 }
 
 // warns other servers for aliases
 async function messageWarnedAliasUserInGuild(channelID, userTag, userID, warnMessage, serverName, orgUserTag) {
-  const channel = await client.channels.cache.get(channelID);
-  client.functions.get('richEmbedMessage')
-    .run(client.user, channel,
-      `**The user \`${userTag}\` is an alias of a user that has been warned!**
+  const embed = new MessageEmbed();
+  embed.setColor(16755456);
+  embed.setFooter({ text: `For more information about this user, use '/lookup ${orgUserTag}'` });
+  embed.setTitle(`An alias of a user on your server has been warned on '${serverName}'!`);
+  embed.setDescription(`**The user \`${userTag}\` is an alias of a user that has been warned!**
 
-      Tag: \`${orgUserTag}\`
-      ID: \`${userID}\`
-      Reason: \`\`\`${warnMessage || 'none'}\`\`\``,
-      `An alias of a user on your server has been warned on '${serverName}'!`,
-      16755456,
-      `For more information about this user, use '/lookup ${orgUserTag}'`);
+  Tag: \`${orgUserTag}\`
+  ID: \`${userID}\`
+  Reason: \`\`\`${warnMessage || 'none'}\`\`\``);
+  const channel = await client.channels.cache.get(channelID);
+  channel.send({ embeds: [embed] });
 }
 
 async function checkforInfectedGuilds(guild, orgUserID, warnMessage) {
