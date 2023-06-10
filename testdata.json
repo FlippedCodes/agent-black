@@ -1,0 +1,56 @@
+{
+  "user": {
+    "id": "887318735197720596",
+    "username": "Arosaybleye",
+    "global_name": "Aro Arosay",
+    "avatar": "bc07e09e3b38b0f719ac5ba9698802b4",
+    "discriminator": "0001",
+    "public_flags": 0,
+    "flags": 0,
+    "banner": "a_2646a1d05697dc3e4eb4a1ec8cd97286",
+    "banner_color": "#7e0909",
+    "accent_color": 8259849,
+    "bio": "\ud83d\udc99 Filled with *INTEGRITY* a <:aroace_flag:1108526292447543318> who just wants to hang around with friends talking hobbies\n\ud83d\udfe2Up to chat and stuff\n\ud83c\udf19PREFER to be left alone\n\u26d4Go away\n\u26abOffline",
+    "avatar_decoration": "v3_a_9cd7e573f48859a995266a0a8345f336"
+  },
+  "connected_accounts": [{ "type": "xbox", "id": "3067249045609961", "name": "Doomsday7826", "verified": true }],
+  "premium_since": "2023-05-17T22:17:05.125413+00:00",
+  "premium_type": 2,
+  "premium_guild_since": "2023-05-17T22:24:32.408000+00:00",
+  "profile_themes_experiment_bucket": 4,
+  "mutual_guilds": [
+    { "id": "1114040703211810816", "nick": null },
+    { "id": "773830685659496449", "nick": "Aisling" },
+    { "id": "1094449303965147177", "nick": null },
+    { "id": "949389505658494986", "nick": null },
+    { "id": "631009009578672142", "nick": "Aro Arosay[VC!/TVD]" },
+    { "id": "1103628895070208110", "nick": null },
+    { "id": "713845644237733970", "nick": null },
+    { "id": "842867018172334100", "nick": null },
+    { "id": "486365781207154719", "nick": null }
+  ],
+  "user_profile": {
+    "bio": "\ud83d\udc99 Filled with *INTEGRITY* a <:aroace_flag:1108526292447543318> who just wants to hang around with friends talking hobbies\n\ud83d\udfe2Up to chat and stuff\n\ud83c\udf19PREFER to be left alone\n\u26d4Go away\n\u26abOffline",
+    "accent_color": 8259849,
+    "banner": "a_2646a1d05697dc3e4eb4a1ec8cd97286",
+    "theme_colors": [9504776, 4013659],
+    "popout_animation_particle_type": null,
+    "emoji": null
+  },
+  "badges": [
+    {
+      "id": "premium",
+      "description": "Subscriber since 17 May 2023",
+      "icon": "2ba85e8026a8614b640c2837bcdfe21b",
+      "link": "https://discord.com/settings/premium"
+    },
+    {
+      "id": "guild_booster_lvl1",
+      "description": "Server Boosting since 17 May 2023",
+      "icon": "51040c70d4f20a921ad6674ff86fc95c",
+      "link": "https://discord.com/settings/premium"
+    }
+  ],
+  "guild_badges": [],
+  "legacy_username": null
+}
