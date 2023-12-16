@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Agent Black",
+      "program": "index.js",
+      "cwd": "${workspaceFolder}/dist",
+      "runtimeArgs": ["--no-warnings"], // Experimental notice
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
