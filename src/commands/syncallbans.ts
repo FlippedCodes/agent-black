@@ -1,35 +1,40 @@
-const Ban = require('../database/models/Ban');
+import { ChatInputCommandInteraction, SlashCommandBuilder, Team } from 'discord.js';
+import { BanManager } from '../classes/banManager.js';
+import { CustomClient } from '../typings/Extensions.js';
 
-module.exports.run = async (interaction) => {
-  // check owner permissions
-  if (interaction.user.id !== '172031697355800577') return messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+function authorised(client: CustomClient, user: string): boolean {
+  return (
+    (client.application.owner instanceof Team && client.application.owner.members.has(user)) ||
+    client.application.owner.id === user
+  );
+}
 
-  if (!DEBUG) await interaction.deferReply();
-  await client.guilds.cache.forEach(async (guild) => {
-    const bans = await guild.bans.fetch({ cache: false });
-    await bans.forEach(async ({ user, reason }) => {
-      const userTag = user.tag;
-      const userBanned = true;
-      const userID = user.id;
-      const serverID = guild.id;
-      let fixedReason = reason;
-      if (reason !== null) fixedReason = reason.replace(new RegExp('\'', 'g'), '`');
-      const [banEntry] = await Ban.findOrCreate({
-        where: { userID, serverID },
-        defaults: { reason: fixedReason, userTag, userBanned },
-      }).catch(ERR);
-      if (!banEntry.isNewRecord) {
-        Ban.update({ reason: fixedReason, userBanned },
-          { where: { userID, serverID } })
-          .catch(ERR);
-      }
-    });
-  });
-  await setTimeout(() => {
-    messageSuccess(interaction, 'Done!');
-  }, client.guilds.cache.size * 300);
-};
-
-module.exports.data = new CmdBuilder()
+export const name = 'syncallbans';
+export const data = new SlashCommandBuilder()
   .setName(name)
-  .setDescription('Adds all bans from all participating servers. [OWNER ONLY].');
+  .setDescription('Adds all bans from all participating servers [OWNER ONLY]');
+export async function run(
+  client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  _options: ChatInputCommandInteraction['options']
+): Promise<void> {
+  // Check owner
+  if (!authorised(client, interaction.user.id)) {
+    interaction.editReply({ content: 'You are not authorised to use this command' });
+    return;
+  }
+  // Fetch guilds
+  const guilds = await client.guilds.fetch();
+  const manager = new BanManager({ bans: [], sequelize: client.sequelize });
+  // Loop through guilds, adding promises
+  const p = [];
+  for (const g of guilds.values()) {
+    // Add guild, using ID from OAuthGuild
+    p.push(manager.addGuild(client.guilds.cache.get(g.id), true));
+  }
+  await Promise.all(p);
+  // Sync bans
+  await manager.sync();
+  // Reply
+  interaction.editReply({ content: `Synced ${manager.bans.length} bans` });
+}

@@ -1,5 +1,5 @@
-import { CommandInteraction, CommandInteractionOptionResolver, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.ts';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { CustomClient } from '../typings/Extensions.js';
 
 export const name = 'banner';
 export const data = new SlashCommandBuilder()
@@ -10,15 +10,19 @@ export const data = new SlashCommandBuilder()
   });
 export async function run(
   _client: CustomClient,
-  interaction: CommandInteraction,
-  options: CommandInteractionOptionResolver
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
 ): Promise<void> {
-  await interaction.deferReply({ ephemeral: false });
+  await options.getUser('user').fetch();
   interaction.editReply({
     embeds: [
-      new EmbedBuilder().setImage(
-        options.getUser('user', true).bannerURL({ size: 4096 }) || 'https://cdn.discordapp.com/embed/avatars/5.png'
-      )
+      {
+        description: `Banner for ${options.getUser('user', true).toString()}`,
+        image: {
+          url:
+            options.getUser('user', true).bannerURL({ size: 2048 }) || 'https://cdn.discordapp.com/embed/avatars/5.png'
+        }
+      }
     ]
   });
 }

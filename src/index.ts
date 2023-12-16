@@ -1,18 +1,12 @@
 //#region Packages
-import { Client, IntentsBitField, Collection } from 'discord.js';
-import { CustomClient } from './typings/Extensions.ts';
-import { default as bunyan, createLogger } from 'bunyan';
-import { readdirSync } from 'node:fs';
-const stdrr: bunyan = createLogger({
-  name: 'main',
-  stream: Deno.stdout
-});
+import { Client, Collection, IntentsBitField, InteractionType } from 'discord.js';
+import { CustomClient } from './typings/Extensions.js';
 // Log developer mode
-if (Deno.env.get('NODE_ENV') === 'development') stdrr.debug('Starting in development mode');
+if (process.env.NODE_ENV === 'development') console.debug('Starting in development mode');
 //#endregion
 
 //#region Discord init
-const client: CustomClient = new Client({
+const client: CustomClient<false> = new Client({
   intents: [
     IntentsBitField.Flags.Guilds,
     IntentsBitField.Flags.GuildMembers,
@@ -22,21 +16,43 @@ const client: CustomClient = new Client({
     IntentsBitField.Flags.DirectMessages
   ]
 });
-client.stdrr = stdrr;
+client.logs = console;
+await import('./functions/load.js').then((f) => f.run(client)).catch((e) => client.logs.error(e));
+Array.from(client.functions.keys())
+  .filter((f) => f.startsWith('startup_'))
+  .forEach((f) => client.functions.get(f).execute(client));
 //#endregion
 //#region Variables
 client.commands = new Collection();
-
 //#endregion
 //#region Discord events
 client.on('ready', () => {
-  stdrr.info(`Logged in as ${client.user?.tag}!`);
-  // Functions
-  readdirSync('./functions/READY').forEach(async (file: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    (await import(`./functions/READY/${file}`))(client);
-  });
+  client.logs.info(`Logged in as ${client.user.tag}!`);
+  // Run all ready functions
+  Array.from(client.functions.keys())
+    .filter((f) => f.startsWith('events_ready'))
+    .forEach((f) => client.functions.get(f).execute(client));
 });
-client.login(Deno.env.get('DCtoken'));
+
+client.on('interactionCreate', async (interaction) => {
+  let func: string;
+  switch (interaction.type) {
+    case InteractionType.ApplicationCommand: {
+      func = 'command';
+      break;
+    }
+    case InteractionType.MessageComponent: {
+      func = 'component';
+      break;
+    }
+    case InteractionType.ApplicationCommandAutocomplete: {
+      func = 'autocomplete';
+      break;
+    }
+  }
+  // Run all interaction functions
+  client.functions.get(`events_interactionCreate_${func}`).execute(client, interaction);
+});
+
+client.login(process.env.DCtoken);
 //#endregion
-//#region Error handling

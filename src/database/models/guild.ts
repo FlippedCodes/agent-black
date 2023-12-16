@@ -1,12 +1,12 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { ban, banId } from './ban.ts';
-import type { warn, warnId } from './warn.ts';
+import type { ban, banId } from './ban.js';
+import type { warn, warnId } from './warn.js';
 
 export interface guildAttributes {
   guildId: string;
-  enabled: number;
-  banned: number;
+  enabled: boolean;
+  banned: boolean;
   settings: guildSettings;
   createdAt: Date;
   updatedAt: Date;
@@ -22,37 +22,37 @@ export type guildSettings = {
 };
 
 export class guild extends Model<guildAttributes, guildCreationAttributes> implements guildAttributes {
-  guildId!: string;
-  enabled!: number;
-  banned!: number;
-  settings!: guildSettings;
-  createdAt!: Date;
-  updatedAt!: Date;
+  declare guildId: string;
+  declare enabled: boolean;
+  declare banned: boolean;
+  declare settings: guildSettings;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 
   // guild hasMany ban via guildId
-  bans!: ban[];
-  getBans!: Sequelize.HasManyGetAssociationsMixin<ban>;
-  setBans!: Sequelize.HasManySetAssociationsMixin<ban, banId>;
-  addBan!: Sequelize.HasManyAddAssociationMixin<ban, banId>;
-  addBans!: Sequelize.HasManyAddAssociationsMixin<ban, banId>;
-  createBan!: Sequelize.HasManyCreateAssociationMixin<ban>;
-  removeBan!: Sequelize.HasManyRemoveAssociationMixin<ban, banId>;
-  removeBans!: Sequelize.HasManyRemoveAssociationsMixin<ban, banId>;
-  hasBan!: Sequelize.HasManyHasAssociationMixin<ban, banId>;
-  hasBans!: Sequelize.HasManyHasAssociationsMixin<ban, banId>;
-  countBans!: Sequelize.HasManyCountAssociationsMixin;
+  declare bans: ban[];
+  declare getBans: Sequelize.HasManyGetAssociationsMixin<ban>;
+  declare setBans: Sequelize.HasManySetAssociationsMixin<ban, banId>;
+  declare addBan: Sequelize.HasManyAddAssociationMixin<ban, banId>;
+  declare addBans: Sequelize.HasManyAddAssociationsMixin<ban, banId>;
+  declare createBan: Sequelize.HasManyCreateAssociationMixin<ban>;
+  declare removeBan: Sequelize.HasManyRemoveAssociationMixin<ban, banId>;
+  declare removeBans: Sequelize.HasManyRemoveAssociationsMixin<ban, banId>;
+  declare hasBan: Sequelize.HasManyHasAssociationMixin<ban, banId>;
+  declare hasBans: Sequelize.HasManyHasAssociationsMixin<ban, banId>;
+  declare countBans: Sequelize.HasManyCountAssociationsMixin;
   // guild hasMany warn via guildId
-  warns!: warn[];
-  getWarns!: Sequelize.HasManyGetAssociationsMixin<warn>;
-  setWarns!: Sequelize.HasManySetAssociationsMixin<warn, warnId>;
-  addWarn!: Sequelize.HasManyAddAssociationMixin<warn, warnId>;
-  addWarns!: Sequelize.HasManyAddAssociationsMixin<warn, warnId>;
-  createWarn!: Sequelize.HasManyCreateAssociationMixin<warn>;
-  removeWarn!: Sequelize.HasManyRemoveAssociationMixin<warn, warnId>;
-  removeWarns!: Sequelize.HasManyRemoveAssociationsMixin<warn, warnId>;
-  hasWarn!: Sequelize.HasManyHasAssociationMixin<warn, warnId>;
-  hasWarns!: Sequelize.HasManyHasAssociationsMixin<warn, warnId>;
-  countWarns!: Sequelize.HasManyCountAssociationsMixin;
+  declare warns: warn[];
+  declare getWarns: Sequelize.HasManyGetAssociationsMixin<warn>;
+  declare setWarns: Sequelize.HasManySetAssociationsMixin<warn, warnId>;
+  declare addWarn: Sequelize.HasManyAddAssociationMixin<warn, warnId>;
+  declare addWarns: Sequelize.HasManyAddAssociationsMixin<warn, warnId>;
+  declare createWarn: Sequelize.HasManyCreateAssociationMixin<warn>;
+  declare removeWarn: Sequelize.HasManyRemoveAssociationMixin<warn, warnId>;
+  declare removeWarns: Sequelize.HasManyRemoveAssociationsMixin<warn, warnId>;
+  declare hasWarn: Sequelize.HasManyHasAssociationMixin<warn, warnId>;
+  declare hasWarns: Sequelize.HasManyHasAssociationsMixin<warn, warnId>;
+  declare countWarns: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof guild {
     return guild.init(
@@ -63,14 +63,14 @@ export class guild extends Model<guildAttributes, guildCreationAttributes> imple
           primaryKey: true
         },
         enabled: {
-          type: DataTypes.TINYINT,
+          type: DataTypes.BOOLEAN,
           allowNull: false,
-          defaultValue: 0
+          defaultValue: false
         },
         banned: {
-          type: DataTypes.TINYINT,
+          type: DataTypes.BOOLEAN,
           allowNull: false,
-          defaultValue: 0
+          defaultValue: false
         },
         settings: {
           type: DataTypes.JSON,

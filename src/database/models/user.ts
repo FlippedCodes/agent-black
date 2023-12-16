@@ -1,23 +1,22 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import { StaffFlagsBitField } from '../../typings/Bitfield.js';
 
 export interface userAttributes {
   userId: string;
-  flags: number;
-  createdAt: Date;
-  updatedAt: Date;
+  flags: StaffFlagsBitField;
 }
 
 export type userPk = 'userId';
 export type userId = user[userPk];
-export type userOptionalAttributes = 'flags' | 'createdAt' | 'updatedAt';
+export type userOptionalAttributes = 'flags';
 export type userCreationAttributes = Optional<userAttributes, userOptionalAttributes>;
 
 export class user extends Model<userAttributes, userCreationAttributes> implements userAttributes {
-  userId!: string;
-  flags!: number;
-  createdAt!: Date;
-  updatedAt!: Date;
+  declare userId: string;
+  declare flags: StaffFlagsBitField;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof user {
     return user.init(
@@ -30,23 +29,21 @@ export class user extends Model<userAttributes, userCreationAttributes> implemen
         flags: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          defaultValue: 0
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+          defaultValue: 0,
+          get() {
+            const f = BigInt(this.getDataValue('flags') as unknown as number);
+            return new StaffFlagsBitField(f);
+          },
+          set(val: StaffFlagsBitField) {
+            // @ts-expect-error Intentional assignment
+            this.setDataValue('flags', val.bitfield);
+          }
         }
       },
       {
         sequelize,
         tableName: 'user',
-        timestamps: false,
+        timestamps: true,
         indexes: [
           {
             name: 'PRIMARY',

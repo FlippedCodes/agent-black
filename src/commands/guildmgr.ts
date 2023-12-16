@@ -1,9 +1,9 @@
-import { CommandInteraction, CommandInteractionOptionResolver, SlashCommandBuilder } from "discord.js";
-import { CustomClient } from "../typings/Extensions.ts";
-import StaffFlagsBitField from "../typings/StaffFlagsBitField.ts";
-import { StaffFlags } from "../typings/StaffFlags.ts";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { CustomClient } from '../typings/Extensions.js';
+import { StaffFlags } from '../typings/StaffFlags.js';
 
 export const name = 'guildmgr';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
   .setName(name)
   .setDescription('[Maintainer] Manages guilds')
@@ -12,25 +12,17 @@ export const data = new SlashCommandBuilder()
       .setName('add')
       .setDescription('Add guild')
       .addStringOption((option) => {
-        return option
-          .setName('server')
-          .setDescription('Guild ID to add')
-          .setAutocomplete(true)
-          .setRequired(true);
+        return option.setName('server').setDescription('Guild ID to add').setAutocomplete(true).setRequired(true);
       })
       .addStringOption((option) => {
         return option
           .setName('channel')
-          .setDescription('Guild\'s staff channel')
+          .setDescription("Guild's staff channel")
           .setAutocomplete(true)
           .setRequired(true);
       })
       .addStringOption((option) => {
-        return option
-          .setName('role')
-          .setDescription('Guild\'s authorised role')
-          .setAutocomplete(true)
-          .setRequired(true);
+        return option.setName('role').setDescription("Guild's authorised role").setAutocomplete(true).setRequired(true);
       });
   })
   .addSubcommand((subcommand) => {
@@ -50,11 +42,7 @@ export const data = new SlashCommandBuilder()
       .setName('remove')
       .setDescription('Remove guild')
       .addStringOption((option) => {
-        return option
-          .setName('server')
-          .setDescription('Guild ID to remove')
-          .setAutocomplete(true)
-          .setRequired(true);
+        return option.setName('server').setDescription('Guild ID to remove').setAutocomplete(true).setRequired(true);
       });
   })
   .addSubcommand((subcommand) => {
@@ -62,25 +50,23 @@ export const data = new SlashCommandBuilder()
       .setName('block')
       .setDescription('Block guild')
       .addStringOption((option) => {
-        return option
-          .setName('server')
-          .setDescription('Guild ID to block')
-          .setAutocomplete(true)
-          .setRequired(true);
+        return option.setName('server').setDescription('Guild ID to block').setAutocomplete(true).setRequired(true);
       });
   });
-export async function run(client: CustomClient, interaction: CommandInteraction, options: CommandInteractionOptionResolver): Promise<void> {
-  await interaction.deferReply({ ephemeral: true });
-  const user = await client.models?.User.findOne({ where: { userId: interaction.user.id } });
+export async function run(
+  client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
+): Promise<void> {
+  const user = await client.models.user.findOne({ where: { userId: interaction.user.id } });
   if (!user) {
     interaction.editReply({ content: 'You are not authorized to use this command.' });
-    return Promise.resolve();
+    return;
   }
-  const flags = new StaffFlagsBitField(BigInt(user.flags));
-  if (!flags.has(StaffFlags.Maintainer)) {
+  if (!user.flags.has(StaffFlags.Maintainer)) {
     interaction.editReply({ content: 'You are not authorized to use this command.' });
-    return Promise.resolve();
+    return;
   }
-  await client.functions?.get(`guildmgr_${options.getSubcommand(true)}`)?.run(client, interaction, options);
-  return Promise.resolve();
+  await client.commands.get(`guildmgr_${options.getSubcommand(true)}`).run(client, interaction, options);
+  return;
 }

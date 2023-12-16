@@ -1,21 +1,23 @@
-// removes a user from the Maintainer table
-async function removeUser(Maintainer, userID) {
-  const destroyed = await Maintainer.destroy({ limit: 1, where: { userID } });
-  return destroyed;
-}
+import { ChatInputCommandInteraction } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
 
-// adds user entry
-module.exports.run = async (interaction, Maintainer) => {
-  const userID = await interaction.options.getUser('user').id;
-  if (userID === interaction.user.id) return messageFail(interaction, 'You cant edit yourself.');
-  const userRemoved = await removeUser(Maintainer, userID);
-  if (userRemoved >= 1) {
-    messageSuccess(interaction,
-      `The user with the ID \`${userID}\` got removed from the maintainers list.`);
-  } else {
-    messageFail(interaction,
-      `The user with the ID \`${userID}\` couldn't be found of the list.`);
+export const name = 'remove';
+export async function run(
+  client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
+): Promise<void> {
+  const u = await client.models.user.findOne({ where: { userId: options.getUser('user').id } });
+  if (!u) {
+    interaction.editReply({ content: 'User is not a member of staff' });
+    return;
   }
-};
-
-module.exports.data = { subcommand: true };
+  if (u.flags.has('Owner') || u.userId === interaction.user.id) {
+    interaction.editReply({ content: 'You cannot remove this user' });
+    return;
+  }
+  // -- //
+  u.flags.remove('Maintainer');
+  u.save();
+  interaction.editReply({ content: 'Removed maintainer' });
+}

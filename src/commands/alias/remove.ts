@@ -1,19 +1,20 @@
-import { CommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.ts';
+import { ChatInputCommandInteraction } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
 
-export default async function remove(
+export const name = 'remove';
+export async function run(
   client: CustomClient,
-  interaction: CommandInteraction,
-  options: CommandInteractionOptionResolver
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
 ): Promise<void> {
-  const dbAlias = await client.models?.Alias.findOne({
-    where: { aliasId: options.getString('aliasId', true) }
+  const dbAlias = await client.models.alias.findOne({
+    where: { aliasId: options.getString('alias', true) }
   });
   if (!dbAlias) {
     interaction.editReply({
       content: 'The alias you attempted to remove does not exist'
     });
-    return Promise.resolve();
+    return;
   }
   // Delete the alias
   await dbAlias.destroy();

@@ -1,28 +1,22 @@
-// adds a user to the Maintainer table
-async function addUser(Maintainer, userID) {
-  const added = await Maintainer.findOrCreate(
-    {
-      where: { userID },
-    },
-  ).catch(ERR);
-  const created = await added[1];
-  return created;
-}
+import { ChatInputCommandInteraction } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
 
-// adds user entry
-module.exports.run = async (interaction, Maintainer) => {
-  const userID = await interaction.options.getUser('user').id;
-  if (userID === interaction.user.id) return messageFail(interaction, 'You cant edit yourself.');
-  // add server
-  const userAdded = await addUser(Maintainer, userID);
-  // post outcome
-  if (userAdded) {
-    messageSuccess(interaction,
-      `<@${userID}> with the ID \`${userID}\` got added to the maintainers list.`);
-  } else {
-    messageFail(interaction,
-      `The entry for the user <@${userID}> with the ID \`${userID}\` already exists!`);
+export const name = 'add';
+export async function run(
+  client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
+): Promise<void> {
+  const m = await options.getUser('user');
+  const [u] = await client.models.user.findOrCreate({
+    where: { userId: m.id }
+  });
+  if (!u) {
+    interaction.editReply({ content: 'Sequelize failed to find or create the staff member' });
+    return;
   }
-};
-
-module.exports.data = { subcommand: true };
+  // -- //
+  u.flags.add('Maintainer');
+  u.save();
+  interaction.editReply({ content: 'Added maintainer' });
+}

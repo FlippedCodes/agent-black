@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, CommandInteraction, PermissionsBitField, PermissionFlagsBits } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.ts';
+import { ChatInputCommandInteraction, PermissionFlagsBits, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
+import { CustomClient } from '../typings/Extensions.js';
 
 export const name = 'checkallusers';
 export const data = new SlashCommandBuilder()
@@ -14,29 +14,28 @@ export const data = new SlashCommandBuilder()
         value: 'yes'
       });
   });
-export async function run(client: CustomClient, interaction: CommandInteraction): Promise<void> {
-  await interaction.deferReply({ ephemeral: true });
-  if ((interaction.member?.permissions as PermissionsBitField).has(PermissionFlagsBits.ManageGuild)) {
+export async function run(client: CustomClient, interaction: ChatInputCommandInteraction): Promise<void> {
+  if ((interaction.member.permissions as PermissionsBitField).has(PermissionFlagsBits.ManageGuild)) {
     interaction.editReply({
       content: 'You are not authorized to use this command'
     });
-    return Promise.resolve();
+    return;
   }
 
-  const users = await interaction.guild?.members.fetch();
+  const users = await interaction.guild.members.fetch();
   if (!users) {
     interaction.editReply({ content: 'Could not fetch users' });
-    return Promise.resolve();
+    return;
   }
   const ids = users.map((user) => user.id);
-  const allBans = await client.models?.Ban.findAll({
+  const allBans = await client.models.ban.findAll({
     where: { targetId: ids }
   });
   if (!allBans || allBans.length === 0) {
     interaction.editReply({
       content: `Success! Scanned all members and found no bans. Your server is clean`
     });
-    return Promise.resolve();
+    return;
   }
   if (allBans.length <= 5) {
     allBans.forEach(async (ban) => {
@@ -55,9 +54,9 @@ export async function run(client: CustomClient, interaction: CommandInteraction)
     interaction.editReply({
       content: `Success! Scanned all members and found ${allBans.length} bans. See below for details`
     });
-    return Promise.resolve();
+    return;
   }
   // @ts-expect-error This function has different parameters
-  await client.commands?.get('checkallusers_handler')?.run(client, interaction, allBans);
-  return Promise.resolve();
+  await client.commands.get('checkallusers_handler').run(client, interaction, allBans);
+  return;
 }

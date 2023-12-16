@@ -1,41 +1,40 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { guild, guildId } from './guild.ts';
+import type { guild, guildId } from './guild.js';
 
 export interface warnAttributes {
-  banId: number;
+  warnId: number;
   guildId: string;
   targetId: string;
   reason: string;
-  active: number;
-  createdAt: Date;
-  updatedAt: Date;
+  active: boolean;
 }
 
-export type warnPk = 'banId';
+export type warnPk = 'warnId';
 export type warnId = warn[warnPk];
-export type warnOptionalAttributes = 'active' | 'createdAt' | 'updatedAt';
+export type warnOptionalAttributes = warnPk;
 export type warnCreationAttributes = Optional<warnAttributes, warnOptionalAttributes>;
 
 export class warn extends Model<warnAttributes, warnCreationAttributes> implements warnAttributes {
-  banId!: number;
-  guildId!: string;
-  targetId!: string;
-  reason!: string;
-  active!: number;
-  createdAt!: Date;
-  updatedAt!: Date;
+  declare warnId: number;
+  declare guildId: string;
+  declare targetId: string;
+  declare reason: string;
+  declare active: boolean;
+  declare createdAt: Date;
+  declare updatedAt: Date;
+  declare deletedAt: Date;
 
   // warn belongsTo guild via guildId
-  guild!: guild;
-  getGuild!: Sequelize.BelongsToGetAssociationMixin<guild>;
-  setGuild!: Sequelize.BelongsToSetAssociationMixin<guild, guildId>;
-  createGuild!: Sequelize.BelongsToCreateAssociationMixin<guild>;
+  declare guild: guild;
+  declare getGuild: Sequelize.BelongsToGetAssociationMixin<guild>;
+  declare setGuild: Sequelize.BelongsToSetAssociationMixin<guild, guildId>;
+  declare createGuild: Sequelize.BelongsToCreateAssociationMixin<guild>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof warn {
     return warn.init(
       {
-        banId: {
+        warnId: {
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
@@ -58,31 +57,23 @@ export class warn extends Model<warnAttributes, warnCreationAttributes> implemen
           allowNull: false
         },
         active: {
-          type: DataTypes.BOOLEAN,
-          allowNull: false,
-          defaultValue: 1
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+          type: DataTypes.VIRTUAL,
+          get() {
+            return this.isSoftDeleted();
+          }
         }
       },
       {
         sequelize,
         tableName: 'warn',
-        timestamps: false,
+        timestamps: true,
+        paranoid: true,
         indexes: [
           {
             name: 'PRIMARY',
             unique: true,
             using: 'BTREE',
-            fields: [{ name: 'banId' }]
+            fields: [{ name: 'warnId' }]
           },
           {
             name: 'warns_ibfk_1',

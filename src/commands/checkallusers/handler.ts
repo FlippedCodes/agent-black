@@ -1,8 +1,9 @@
-import { CustomClient } from '../../typings/Extensions.ts';
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Ban } from '../../typings/Models.ts';
+import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
+import { Ban } from '../../typings/Models.js';
 
-export function handler(client: CustomClient, interaction: CommandInteraction, bans: Ban[]): Promise<void> {
+export const name = 'handler';
+export async function run(client: CustomClient, interaction: ChatInputCommandInteraction, bans: Ban[]): Promise<void> {
   // Split the bans into groups of 5
   const banGroups: EmbedBuilder[][] = [];
   let temp: EmbedBuilder[] = [];
@@ -38,5 +39,5 @@ export function handler(client: CustomClient, interaction: CommandInteraction, b
       });
     }
   }, 10_000);
-  return Promise.resolve();
+  return;
 }

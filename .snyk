@@ -1,0 +1,5 @@
+exclude:
+  global:
+    - dist/**
+    - src/typings/Bitfield.js
+    - src/configs/**

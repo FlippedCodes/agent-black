@@ -1,25 +1,25 @@
-import { CommandInteraction, CommandInteractionOptionResolver, EmbedBuilder } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.ts';
+import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
 
 export const name = 'info';
 export async function run(
   client: CustomClient,
-  interaction: CommandInteraction,
-  options: CommandInteractionOptionResolver
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
 ): Promise<void> {
   const guildId = options.getString('server', true);
-  const guild = await client.models?.Guild.findOne({
+  const guild = await client.models.guild.findOne({
     where: { guildId }
   });
-  const owner = await interaction.guild?.fetchOwner();
+  const owner = await interaction.guild.fetchOwner();
   if (!owner) {
     interaction.editReply({
       content: 'An error occurred while fetching guild data. Please try again later'
     });
-    return Promise.resolve();
+    return;
   }
   const embed = new EmbedBuilder()
-    .setTitle(`Statistics for ${interaction.guild?.name}`)
+    .setTitle(`Statistics for ${interaction.guild.name}`)
     .setAuthor({
       name: owner.user.tag,
       iconURL: owner.displayAvatarURL({ size: 1024 })
@@ -27,7 +27,7 @@ export async function run(
     .addFields([
       {
         name: 'Server Info',
-        value: `${interaction.guild?.name} (\`${interaction.guildId}\`)`,
+        value: `${interaction.guild.name} (\`${interaction.guildId}\`)`,
         inline: true
       }
     ])
@@ -53,5 +53,5 @@ export async function run(
     ]);
   }
   interaction.editReply({ embeds: [embed] });
-  return Promise.resolve();
+  return;
 }

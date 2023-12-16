@@ -1,7 +1,8 @@
-import { CommandInteraction, CommandInteractionOptionResolver, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.ts';
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { CustomClient } from '../typings/Extensions.js';
 
 export const name = 'alias';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
   .setName(name)
   .setDescription('Creates, updates, or removes an alias for a user')
@@ -12,7 +13,7 @@ export const data = new SlashCommandBuilder()
       .addUserOption((option) => {
         return option.setName('user').setDescription('Primary user').setRequired(true);
       })
-      .addStringOption((option) => {
+      .addUserOption((option) => {
         return option.setName('alias').setDescription('Alternative account').setRequired(true);
       });
   })
@@ -20,10 +21,10 @@ export const data = new SlashCommandBuilder()
     return subcommand
       .setName('update')
       .setDescription('Updates an alias')
-      .addStringOption((option) => {
-        return option.setName('aliasId').setDescription('Alias ID in the database').setRequired(true);
+      .addUserOption((option) => {
+        return option.setName('target').setDescription('Alias ID in the database').setRequired(true);
       })
-      .addStringOption((option) => {
+      .addUserOption((option) => {
         return option.setName('alias').setDescription('New alternative account').setRequired(true);
       });
   })
@@ -31,25 +32,24 @@ export const data = new SlashCommandBuilder()
     return subcommand
       .setName('remove')
       .setDescription('Deletes an alias from the database')
-      .addUserOption((option) => {
-        return option.setName('aliasId').setDescription('Alias ID to delete').setRequired(true);
+      .addStringOption((option) => {
+        return option.setName('alias').setDescription('Alias ID to delete').setRequired(true);
       });
   });
 export async function run(
   client: CustomClient,
-  interaction: CommandInteraction,
-  options: CommandInteractionOptionResolver
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
 ): Promise<void> {
-  await interaction.deferReply({ ephemeral: true });
-  const dbUser = await client.models?.User.findOne({
+  const dbUser = await client.models.user.findOne({
     where: { userId: interaction.user.id }
   });
-  if (!dbUser || dbUser.flags < 1) {
+  if (!dbUser || !dbUser.flags.any(['Moderator', 'Maintainer'])) {
     interaction.editReply({
       content: 'You are not authorized to use this command'
     });
-    return Promise.resolve();
+    return;
   }
-  await client.commands?.get(`${name}_${options.getSubcommand()}`)?.run(client, interaction, options);
-  return Promise.resolve();
+  await client.commands.get(`${name}_${options.getSubcommand()}`).run(client, interaction, options);
+  return;
 }

@@ -1,11 +1,11 @@
-import { CommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.ts';
+import { ChatInputCommandInteraction } from 'discord.js';
+import { CustomClient } from '../../typings/Extensions.js';
 
 export const name = 'add';
 export async function run(
   client: CustomClient,
-  interaction: CommandInteraction,
-  options: CommandInteractionOptionResolver
+  interaction: ChatInputCommandInteraction,
+  options: ChatInputCommandInteraction['options']
 ): Promise<void> {
   const rawChannel = options.getString('channel', true);
   const rawGuild = options.getString('server', true);
@@ -25,15 +25,15 @@ export async function run(
     await interaction.editReply('Invalid argument: Role not found');
     return;
   }
-  if(!client.models) return; // Suppress ESLint unsafe optional chaining
-  const [_dbGuild, created] = await client.models.Guild.findOrCreate({
+  if (!client.models) return; // Suppress ESLint unsafe optional chaining
+  const [, created] = await client.models.guild.findOrCreate({
     where: {
       guildId: guild.id
     },
     defaults: {
       guildId: guild.id,
-      banned: 0,
-      enabled: 1,
+      banned: false,
+      enabled: true,
       settings: {
         channel: channel.id,
         role: role.id
@@ -41,5 +41,5 @@ export async function run(
     }
   });
   interaction.editReply(`Guild ${guild.name} has been ${created ? 'added' : 'updated'} with the settings provided`);
-  return Promise.resolve();
+  return;
 }

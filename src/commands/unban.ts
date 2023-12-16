@@ -1,33 +1,29 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { CustomClient } from '../typings/Extensions.js';
 
-const { CommandInteraction } = require('discord.js');
-
-/**
- * @param { CommandInteraction } interaction
- */
-
-module.exports.run = async (interaction) => {
-  // check MANAGE_GUILD permissions
-  if (!interaction.memberPermissions.has('BAN_MEMBERS')) {
-    messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
+export const name = 'unban';
+export const data = new SlashCommandBuilder()
+  .setName(name)
+  .setDescription('Unbans a user')
+  .addUserOption((option) => option.setName('user').setDescription('Banned user').setRequired(true));
+export async function run(
+  _client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  interaction2: LockInfo,
+  options: ChatInputCommandInteraction['options']
+): Promise<void> {
+  if (!interaction.memberPermissions.has('BanMembers')) {
+    interaction.editReply({ content: 'You are not authorised to use this command' });
     return;
   }
-  const guild = interaction.guild;
-  // TODO: Filter the reason - update event-guildBanRemove
-  // const reason = options.getString('reason');
-
-  const user = interaction.options.getUser('user');
-
-  // Existing ban?
-  // FIXME: Bad implementation of catch()
-  const existingBan = await guild.bans.fetch(user).catch((e) => e);
-  if (existingBan.code) return messageFail(interaction, 'That user is not banned.');
-  // unban user
-  await guild.bans.remove(user);
-  messageSuccess(interaction, `\`${user.tag}\` has been unbanned!`);
-};
-
-module.exports.data = new SlashCommandBuilder()
-  .setName(name)
-  .setDescription('Unbans a user.')
-  .addUserOption((option) => option.setName('user').setDescription('Provide a user.').setRequired(true));
+  // Find ban
+  const b = await interaction.guild.bans.fetch(options.getUser('user'));
+  if (!b) {
+    interaction.editReply({ content: 'The supplied user is not banned' });
+    return;
+  }
+  // Unban
+  await interaction.guild.bans.remove(b.user);
+  // Reply
+  interaction.editReply({ content: `Unbanned ${b.user.toString()}` });
+}

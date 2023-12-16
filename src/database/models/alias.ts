@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { user, userId } from './user.ts';
+import type { user, userId } from './user.js';
 
 export interface aliasAttributes {
   aliasId: number;
@@ -13,28 +13,22 @@ export interface aliasAttributes {
 
 export type aliasPk = 'aliasId';
 export type aliasId = alias[aliasPk];
-export type aliasOptionalAttributes = 'aliasId' | 'createdAt' | 'updatedAt';
-export type aliasCreationAttributes = Optional<
-  aliasAttributes,
-  aliasOptionalAttributes
->;
+export type aliasOptionalAttributes = aliasPk | 'createdAt' | 'updatedAt';
+export type aliasCreationAttributes = Optional<aliasAttributes, aliasOptionalAttributes>;
 
-export class alias
-  extends Model<aliasAttributes, aliasCreationAttributes>
-  implements aliasAttributes
-{
-  aliasId!: number;
-  user!: string;
-  alternative!: string;
-  moderator!: string;
-  createdAt!: Date;
-  updatedAt!: Date;
+export class alias extends Model<aliasAttributes, aliasCreationAttributes> implements aliasAttributes {
+  declare aliasId: number;
+  declare user: string;
+  declare alternative: string;
+  declare moderator: string;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 
   // alias belongsTo user via moderator
-  moderator_user!: user;
-  getModerator_user!: Sequelize.BelongsToGetAssociationMixin<user>;
-  setModerator_user!: Sequelize.BelongsToSetAssociationMixin<user, userId>;
-  createModerator_user!: Sequelize.BelongsToCreateAssociationMixin<user>;
+  declare moderator_user: user;
+  declare getModerator_user: Sequelize.BelongsToGetAssociationMixin<user>;
+  declare setModerator_user: Sequelize.BelongsToSetAssociationMixin<user, userId>;
+  declare createModerator_user: Sequelize.BelongsToCreateAssociationMixin<user>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof alias {
     return alias.init(

@@ -1,29 +1,27 @@
 import { Sequelize } from 'sequelize';
-import { CustomClient } from '../../typings/Extensions.ts';
-import { initModels } from '../../typings/Models.ts';
+import { CustomClient } from '../../typings/Extensions.js';
 
-export default async function (client: CustomClient): Promise<void> {
-  const env = Deno.env.toObject();
-  const { DBname, DBuser, DBpassword, NODE_ENV } = env;
-  if (!DBname || !DBuser || !DBpassword)
-    throw new SyntaxError('Missing database credentials');
-  const sequelize = new Sequelize(DBname, DBuser, DBpassword, {
+export const name = 'database';
+export async function execute(client: CustomClient<true>): Promise<void> {
+  const { DBdatabase, DBusername, DBpassword, NODE_ENV } = process.env;
+  // Intentional delay to allow other startup functions to finish
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  // Login to Sequelize
+  const sequelize = new Sequelize(DBdatabase, DBusername, DBpassword, {
     dialect: 'mysql',
-    logging: NODE_ENV === "development" ? client.stdrr?.debug : false
+    logging: NODE_ENV === 'development' ? (sql, timings) => client.logs.debug({ msg: sql, timings }) : false,
+    benchmark: true
   });
-  // Import models
+  // Load models
+  const loader = await import('../../typings/Models.js');
+  client.models = loader.initModels(sequelize);
+  await sequelize
+    .authenticate()
+    .then(() => sequelize.sync())
+    .then(() => client.logs.info(`F | ✓ Database connection established`))
+    .catch((err) => client.logs.warn({ msg: `F | ✘ Failed to create database connection`, err }));
+  // Add Sequelize
+  client.models = sequelize.models as unknown as ReturnType<typeof loader.initModels>;
   client.sequelize = sequelize;
-  client.models? = initModels(sequelize);
-
-  // Test database connection & sync models
-  try {
-    await sequelize.authenticate();
-    client.stdrr?.info('Connected to database');
-    await sequelize.sync();
-    client.stdrr?.info('Synced models with database');
-  } catch (e) {
-    client.stdrr?.error('Failed to connect or sync database', { error: e });
-    return Promise.reject(e);
-  }
-  return Promise.resolve();
+  return;
 }
