@@ -11,9 +11,7 @@
       "program": "index.js",
       "cwd": "${workspaceFolder}/dist",
       "runtimeArgs": [
-        // "--experimental-json-modules",
-        "--experimental-specifier-resolution=node",
-        // "--no-warnings"
+        "--no-warnings"
       ],
       "envFile": "${workspaceFolder}/.env",
       "preLaunchTask": "tsc: build - tsconfig.json",
