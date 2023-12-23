@@ -3,6 +3,7 @@ const axios = require('axios');
 
 const params = (pingRaw) => (
   {
+    status: 'up',
     msg: 'OK',
     ping: Math.round(pingRaw),
   }
@@ -15,7 +16,7 @@ function sendHeartbeat() {
 module.exports.run = async () => {
   setInterval(() => {
     sendHeartbeat();
-  }, config.functions.heartbeat.uptime.interval);
+  }, config.functions.heartbeat.uptime.interval * 1000);
 };
 
 module.exports.data = {
