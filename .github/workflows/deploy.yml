@@ -13,6 +13,7 @@ jobs:
 
     env:
       DB_PORT: ${{ secrets.DB_PORT }}
+      DB_IP: ${{ secrets.DB_IP }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_PASSWORD_ROOT: ${{ secrets.DB_PASSWORD_ROOT }}
       DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
