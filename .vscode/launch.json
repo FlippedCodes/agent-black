@@ -1,15 +1,23 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Agent Black",
-            "program": "${workspaceFolder}/index.js",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Agent Black",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "index.js",
+      "cwd": "${workspaceFolder}/dist",
+      "runtimeArgs": [
+        "--no-warnings"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ]
+    }
+  ]
 }

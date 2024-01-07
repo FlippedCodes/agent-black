@@ -21,5 +21,4 @@ node_modules/
 dist
 
 # Custom
-.vscode/*.json
-!.vscode/launch.json
+.vscode/settings.json

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    // Module resolution
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "newLine": "LF",
+    // Setup project files
+    "rootDir": "src",
+    "outDir": "dist",
+    "allowJs": true,
+    // Skip checking of library files
+    "skipLibCheck": true
+  },
+  // Ignores
+  "exclude": ["node_modules", "dist", "assets"],
+  "watchOptions": {
+    "excludeDirectories": ["**/node_modules", "dist", "assets"]
+  }
+}
