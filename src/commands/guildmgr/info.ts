@@ -1,15 +1,12 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { EmbedBuilder } from 'discord.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'info';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const guildId = options.getString('server', true);
   const guild = await client.models.guild.findOne({
-    where: { guildId }
+    where: { guildId },
+    include: [{ model: client.models.guildsettings, as: 'setting' }]
   });
   const owner = await interaction.guild.fetchOwner();
   if (!owner) {
@@ -36,12 +33,12 @@ export async function run(
     embed.addFields([
       {
         name: 'Logging Channel',
-        value: `<#${guild.settings.channel}> (\`${guild.settings.channel}\`)`,
+        value: `<#${guild.setting.logChannel}> (\`${guild.setting.logChannel}\`)`,
         inline: true
       },
       {
         name: 'Authorised Role',
-        value: `<@&${guild.settings.role}> (\`${guild.settings.role}\`)`,
+        value: `<@&${guild.setting.staffRole}> (\`${guild.setting.staffRole}\`)`,
         inline: true
       },
       {

@@ -1,10 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 
-export const name = 'alias';
 export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('alias')
   .setDescription('Creates, updates, or removes an alias for a user')
   .addSubcommand((subcommand) => {
     return subcommand
@@ -36,20 +35,16 @@ export const data = new SlashCommandBuilder()
         return option.setName('alias').setDescription('Alias ID to delete').setRequired(true);
       });
   });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
-  const dbUser = await client.models.user.findOne({
-    where: { userId: interaction.user.id }
-  });
-  if (!dbUser || !dbUser.flags.any(['Moderator', 'Maintainer'])) {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
+  // If they don't have the staff role, they can't use this command
+  if (!(await client.functions.get('utils_guildAuth').execute(client, interaction.member))) {
     interaction.editReply({
       content: 'You are not authorized to use this command'
     });
     return;
   }
-  await client.commands.get(`${name}_${options.getSubcommand()}`).run(client, interaction, options);
+  await client.commands
+    .get(`${interaction.commandName}_${options.getSubcommand()}`)
+    .execute({ client, interaction, options });
   return;
 }

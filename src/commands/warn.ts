@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 
-export const name = 'warn';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('warn')
   .setDescription('Warns other servers about a specific user')
   .addSubcommand((cmd) => {
     return cmd
@@ -25,16 +25,12 @@ export const data = new SlashCommandBuilder()
         option.setName('message').setDescription('Statement regarding the user').setRequired(true)
       );
   });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const dbUser = await client.models.user.findOne({ where: { userId: interaction.user.id } });
   if ((!dbUser || dbUser.flags.has('Staff')) && interaction.memberPermissions.has('ModerateMembers')) {
     interaction.editReply({ content: 'You are not authorised to perform that action' });
     return;
   }
   const act = options.getSubcommand(true);
-  client.commands.get(`${name}_${act}`).run(client, interaction, options);
+  client.commands.get(`${interaction.commandName}_${act}`).execute({ client, interaction, options });
 }

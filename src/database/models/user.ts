@@ -13,6 +13,7 @@ export type userOptionalAttributes = 'flags';
 export type userCreationAttributes = Optional<userAttributes, userOptionalAttributes>;
 
 export class user extends Model<userAttributes, userCreationAttributes> implements userAttributes {
+  //? Convert non null assertions to declare to prevent shadowing
   declare userId: string;
   declare flags: StaffFlagsBitField;
   declare createdAt: Date;
@@ -22,7 +23,7 @@ export class user extends Model<userAttributes, userCreationAttributes> implemen
     return user.init(
       {
         userId: {
-          type: DataTypes.CHAR(20),
+          type: DataTypes.CHAR(30),
           allowNull: false,
           primaryKey: true
         },

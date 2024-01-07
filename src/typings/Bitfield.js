@@ -217,7 +217,7 @@ export class StaffFlagsBitField extends BitField {
    * @returns {string[]}
    */
   missing(bits, checkAdmin = true) {
-    return checkAdmin && super.has(StaffFlags.Maintainer) ? [] : super.missing(bits, null);
+    return checkAdmin && super.has(StaffFlags.Owner) ? [] : super.missing(bits, null);
   }
 
   /**
@@ -227,7 +227,7 @@ export class StaffFlagsBitField extends BitField {
    * @returns {boolean}
    */
   any(flag, checkAdmin = true) {
-    return (checkAdmin && super.has(StaffFlags.Maintainer)) || super.any(flag);
+    return (checkAdmin && super.has(StaffFlags.Owner)) || super.any(flag);
   }
 
   /**
@@ -237,7 +237,7 @@ export class StaffFlagsBitField extends BitField {
    * @returns {boolean}
    */
   has(flag, checkAdmin = true) {
-    return (checkAdmin && super.has(StaffFlags.Maintainer)) || super.has(flag);
+    return (checkAdmin && super.has(StaffFlags.Owner)) || super.has(flag);
   }
 
   /**

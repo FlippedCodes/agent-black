@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 import { CustomClient } from '../../typings/Extensions.js';
 
 export const name = 'aliasOverview';
-export async function run(client: CustomClient, target: string): Promise<EmbedBuilder[]> {
+export async function execute(client: CustomClient, target: string): Promise<EmbedBuilder[]> {
   // Variables
   const aliases = await client.models.alias.findAll({ where: { user: target } });
   // No aliases

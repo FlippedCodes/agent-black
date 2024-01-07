@@ -1,5 +1,5 @@
 //#region Packages
-import { Client, Collection, IntentsBitField, InteractionType } from 'discord.js';
+import { Client, Collection, IntentsBitField } from 'discord.js';
 import { CustomClient } from './typings/Extensions.js';
 // Log developer mode
 if (process.env.NODE_ENV === 'development') console.debug('Starting in development mode');
@@ -17,7 +17,11 @@ const client: CustomClient<false> = new Client({
   ]
 });
 client.logs = console;
-await import('./functions/load.js').then((f) => f.run(client)).catch((e) => client.logs.error(e));
+// Load all functions
+const funcs = await import('./functions/load.js').then((f) => f.execute(client)).catch((e) => client.logs.error(e));
+if (!funcs) process.exit(1);
+client.functions = funcs;
+// Run all startup functions
 Array.from(client.functions.keys())
   .filter((f) => f.startsWith('startup_'))
   .forEach((f) => client.functions.get(f).execute(client));
@@ -35,23 +39,7 @@ client.on('ready', () => {
 });
 
 client.on('interactionCreate', async (interaction) => {
-  let func: string;
-  switch (interaction.type) {
-    case InteractionType.ApplicationCommand: {
-      func = 'command';
-      break;
-    }
-    case InteractionType.MessageComponent: {
-      func = 'component';
-      break;
-    }
-    case InteractionType.ApplicationCommandAutocomplete: {
-      func = 'autocomplete';
-      break;
-    }
-  }
-  // Run all interaction functions
-  client.functions.get(`events_interactionCreate_${func}`).execute(client, interaction);
+  client.functions.get('events_interactionCreate_main').execute(client, interaction);
 });
 
 client.login(process.env.DCtoken);

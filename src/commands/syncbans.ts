@@ -1,25 +1,23 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import { BanManager } from '../classes/banManager.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { CmdFileArgs, CustomClient } from '../typings/Extensions.js';
 
-function authorised(client: CustomClient, user: string): Promise<boolean> {
-  return client.models.user
-    .findOne({ where: { userId: user } })
-    .then((u) => u.flags.has('Maintainer'))
-    .catch(() => false);
+async function authorised(client: CustomClient, user: string): Promise<boolean> {
+  try {
+    const u = await client.models.user.findOne({ where: { userId: user } });
+    return u.flags.has('Maintainer');
+  } catch {
+    return false;
+  }
 }
 
-export const name = 'syncbans';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('syncbans')
   .setDescription('Adds bans from the current guild [MAINTAINER ONLY]');
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  _options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction }: CmdFileArgs): Promise<void> {
   // Check owner
-  if (!authorised(client, interaction.user.id)) {
+  if (!(await authorised(client, interaction.user.id))) {
     interaction.editReply({ content: 'You are not authorised to use this command' });
     return;
   }

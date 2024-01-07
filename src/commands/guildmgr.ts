@@ -1,11 +1,10 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 import { StaffFlags } from '../typings/StaffFlags.js';
 
-export const name = 'guildmgr';
 export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('guildmgr')
   .setDescription('[Maintainer] Manages guilds')
   .addSubcommand((subcommand) => {
     return subcommand
@@ -53,11 +52,7 @@ export const data = new SlashCommandBuilder()
         return option.setName('server').setDescription('Guild ID to block').setAutocomplete(true).setRequired(true);
       });
   });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const user = await client.models.user.findOne({ where: { userId: interaction.user.id } });
   if (!user) {
     interaction.editReply({ content: 'You are not authorized to use this command.' });
@@ -67,6 +62,6 @@ export async function run(
     interaction.editReply({ content: 'You are not authorized to use this command.' });
     return;
   }
-  await client.commands.get(`guildmgr_${options.getSubcommand(true)}`).run(client, interaction, options);
+  await client.commands.get(`guildmgr_${options.getSubcommand(true)}`).execute({ client, interaction, options });
   return;
 }

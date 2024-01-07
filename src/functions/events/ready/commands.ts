@@ -18,17 +18,23 @@ export async function execute(client: CustomClient<true>): Promise<void> {
   // For each file, load the command
   const cmds: ReturnType<SlashCommandBuilder['toJSON']>[] = [];
   client.logs.debug(`F | ✦ Expecting ${files.length} command files`);
-  for (const file of files) {
+  // Initially use the raw filename
+  for (let name of files) {
     try {
-      const command: CommandFile = await import(`../../../commands/${file}`);
-      // Rewrite cmd name if development and push if found
+      const command: CommandFile = await import(`../../../commands/${name}`);
+      // Rewrite cmd name if development
       if (command.data && NODE_ENV === 'development') command.data.setName(`d_${command.data.name}`);
-      if (command.data) cmds.push(command.data.toJSON());
-      const n = file.replace(/\.js$/, '').replace(/\//g, '_');
-      client.commands.set(n, command);
-      client.logs.info(`F | ✓ ${n}`);
+      // If the command has data, use that and push data
+      if (command.data) {
+        name = command.data.name;
+        cmds.push(command.data.toJSON());
+      }
+      // Reassign to function-friendly name
+      name = name.replace(/\.js$/, '').replace(/\//g, '_');
+      client.commands.set(name, command);
+      client.logs.info(`F | ✓ ${name}`);
     } catch (err) {
-      client.logs.error({ msg: `F | ✘ ${file}`, err });
+      client.logs.error({ msg: `F | ✘ ${name}`, err });
     }
   }
   // Register the commands

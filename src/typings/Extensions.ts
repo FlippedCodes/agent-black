@@ -19,18 +19,14 @@ export interface CustomClient<Ready extends boolean = boolean> extends Client {
 }
 // Various types of file that will be imported
 export interface CommandFile {
-  name: string;
+  name?: string;
   ephemeral?: boolean;
   data?: SlashCommandBuilder;
-  run: (
-    client: CustomClient,
-    interaction: ChatInputCommandInteraction,
-    options: ChatInputCommandInteraction['options']
-  ) => Promise<void>;
+  execute: ({ client, interaction, options }: CmdFileArgs) => Promise<void>;
 }
 export interface FunctionFile {
   name: string;
-  execute: (client: CustomClient, ...args: unknown[]) => Promise<void>;
+  execute: (client: CustomClient, ...args: unknown[]) => Promise<unknown>;
 }
 
 export enum FlagEmoji {
@@ -52,9 +48,8 @@ export enum FlagEmoji {
   VerifiedBot = '<:DB_VerifiedBot:1118377792652980224>',
   VerifiedDeveloper = '<:DB_VerifiedDeveloper:1118377595277418576>'
 }
-
 /** @desc Messages to be sent to the masterMessage function */
-export enum MessageType {
+export enum BroadcastType {
   /** @desc Broadcast from Maintainer+ */
   Broadcast = 0x6699ff,
   /** @desc User banned alert */
@@ -68,3 +63,9 @@ export enum MessageType {
   /** @desc Other - All servers */
   Other = 0xffffff
 }
+
+export type CmdFileArgs = {
+  client: CustomClient<true>;
+  interaction: ChatInputCommandInteraction;
+  options: ChatInputCommandInteraction['options'];
+};

@@ -1,6 +1,6 @@
 import { Guild, GuildBan, PermissionFlagsBits, UserFlags } from 'discord.js';
 import { Sequelize } from 'sequelize';
-import { Ban } from '../typings/Models.js';
+import { ban } from '../typings/Models.js';
 
 /**
  * @description Ban manager data
@@ -72,9 +72,9 @@ class BanManager {
    * @description Syncs the manager with the database, adding bans that don't exist in the database
    * @returns {Promise<PromiseSettledResult[]>} Result from Sequelize
    */
-  sync(): Promise<PromiseSettledResult<[Ban, boolean]>[]> {
+  sync(): Promise<PromiseSettledResult<[ban, boolean]>[]> {
     this.clean(); // Clean bans
-    const p: Promise<[Ban, boolean]>[] = [];
+    const p: Promise<[ban, boolean]>[] = [];
     for (const ban of this.bans) {
       p.push(
         this.sequelize.models.ban.findOrCreate({
@@ -83,7 +83,7 @@ class BanManager {
             targetId: ban.user.id,
             reason: String(ban.reason)
           }
-        }) as Promise<[Ban, boolean]>
+        }) as Promise<[ban, boolean]>
       );
     }
     return Promise.allSettled(p);

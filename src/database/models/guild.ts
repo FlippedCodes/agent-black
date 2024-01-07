@@ -1,31 +1,26 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { ban, banId } from './ban.js';
-import type { warn, warnId } from './warn.js';
+import type { guildsettings, guildsettingsId } from './guildsettings.js';
 
 export interface guildAttributes {
   guildId: string;
   enabled: boolean;
   banned: boolean;
-  settings: guildSettings;
-  createdAt: Date;
-  updatedAt: Date;
+  settingsId: number;
 }
 
 export type guildPk = 'guildId';
 export type guildId = guild[guildPk];
-export type guildOptionalAttributes = 'enabled' | 'banned' | 'createdAt' | 'updatedAt';
+export type guildOptionalAttributes = 'enabled' | 'banned';
 export type guildCreationAttributes = Optional<guildAttributes, guildOptionalAttributes>;
-export type guildSettings = {
-  channel: string;
-  role: string;
-};
 
 export class guild extends Model<guildAttributes, guildCreationAttributes> implements guildAttributes {
+  //? Convert non null assertions to declare to prevent shadowing
   declare guildId: string;
   declare enabled: boolean;
   declare banned: boolean;
-  declare settings: guildSettings;
+  declare settingsId: number;
   declare createdAt: Date;
   declare updatedAt: Date;
 
@@ -41,24 +36,17 @@ export class guild extends Model<guildAttributes, guildCreationAttributes> imple
   declare hasBan: Sequelize.HasManyHasAssociationMixin<ban, banId>;
   declare hasBans: Sequelize.HasManyHasAssociationsMixin<ban, banId>;
   declare countBans: Sequelize.HasManyCountAssociationsMixin;
-  // guild hasMany warn via guildId
-  declare warns: warn[];
-  declare getWarns: Sequelize.HasManyGetAssociationsMixin<warn>;
-  declare setWarns: Sequelize.HasManySetAssociationsMixin<warn, warnId>;
-  declare addWarn: Sequelize.HasManyAddAssociationMixin<warn, warnId>;
-  declare addWarns: Sequelize.HasManyAddAssociationsMixin<warn, warnId>;
-  declare createWarn: Sequelize.HasManyCreateAssociationMixin<warn>;
-  declare removeWarn: Sequelize.HasManyRemoveAssociationMixin<warn, warnId>;
-  declare removeWarns: Sequelize.HasManyRemoveAssociationsMixin<warn, warnId>;
-  declare hasWarn: Sequelize.HasManyHasAssociationMixin<warn, warnId>;
-  declare hasWarns: Sequelize.HasManyHasAssociationsMixin<warn, warnId>;
-  declare countWarns: Sequelize.HasManyCountAssociationsMixin;
+  // guild belongsTo guildsettings via settingsId
+  declare setting: guildsettings;
+  declare getSetting: Sequelize.BelongsToGetAssociationMixin<guildsettings>;
+  declare setSetting: Sequelize.BelongsToSetAssociationMixin<guildsettings, guildsettingsId>;
+  declare createSetting: Sequelize.BelongsToCreateAssociationMixin<guildsettings>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof guild {
     return guild.init(
       {
         guildId: {
-          type: DataTypes.CHAR(20),
+          type: DataTypes.STRING(30),
           allowNull: false,
           primaryKey: true
         },
@@ -72,31 +60,30 @@ export class guild extends Model<guildAttributes, guildCreationAttributes> imple
           allowNull: false,
           defaultValue: false
         },
-        settings: {
-          type: DataTypes.JSON,
-          allowNull: false
-        },
-        createdAt: {
-          type: DataTypes.DATE,
+        settingsId: {
+          type: DataTypes.INTEGER,
           allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+          references: {
+            model: 'guildsettings',
+            key: 'settingsId'
+          }
         }
       },
       {
         sequelize,
         tableName: 'guild',
-        timestamps: false,
+        timestamps: true,
         indexes: [
           {
             name: 'PRIMARY',
             unique: true,
             using: 'BTREE',
             fields: [{ name: 'guildId' }]
+          },
+          {
+            name: 'guild_fk_1',
+            using: 'BTREE',
+            fields: [{ name: 'settingsId' }]
           }
         ]
       }

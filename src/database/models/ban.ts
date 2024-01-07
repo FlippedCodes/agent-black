@@ -7,23 +7,22 @@ export interface banAttributes {
   guildId: string;
   targetId: string;
   reason: string;
-  active: boolean;
 }
 
 export type banPk = 'banId';
 export type banId = ban[banPk];
-export type banOptionalAttributes = banPk | 'active';
+export type banOptionalAttributes = 'banId';
 export type banCreationAttributes = Optional<banAttributes, banOptionalAttributes>;
 
 export class ban extends Model<banAttributes, banCreationAttributes> implements banAttributes {
+  //? Convert non null assertions to declare to prevent shadowing
   declare banId: number;
   declare guildId: string;
   declare targetId: string;
   declare reason: string;
-  declare active: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
-  declare deletedAt: Date | null;
+  declare deletedAt?: Date;
 
   // ban belongsTo guild via guildId
   declare guild: guild;
@@ -35,13 +34,13 @@ export class ban extends Model<banAttributes, banCreationAttributes> implements 
     return ban.init(
       {
         banId: {
+          autoIncrement: true,
           type: DataTypes.INTEGER,
           allowNull: false,
-          primaryKey: true,
-          autoIncrement: true
+          primaryKey: true
         },
         guildId: {
-          type: DataTypes.CHAR(20),
+          type: DataTypes.STRING(30),
           allowNull: false,
           references: {
             model: 'guild',
@@ -49,18 +48,12 @@ export class ban extends Model<banAttributes, banCreationAttributes> implements 
           }
         },
         targetId: {
-          type: DataTypes.CHAR(20),
+          type: DataTypes.STRING(30),
           allowNull: false
         },
         reason: {
           type: DataTypes.TEXT,
           allowNull: false
-        },
-        active: {
-          type: DataTypes.VIRTUAL,
-          get() {
-            return this.isSoftDeleted();
-          }
         }
       },
       {

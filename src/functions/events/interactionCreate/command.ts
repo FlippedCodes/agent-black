@@ -4,9 +4,8 @@ import { CustomClient } from '../../../typings/Extensions.js';
 export const name = 'command';
 export async function execute(client: CustomClient<true>, interaction: ChatInputCommandInteraction) {
   if (!interaction.isChatInputCommand()) return;
-  // Use subcommand if it exists
-  const sc = interaction.options.getSubcommand(false);
-  const name = `${interaction.commandName.replace('d_', '')}${sc === null ? '' : `_${sc}`}`;
+  // Create name for command
+  const name = interaction.commandName.replace('d_', '');
   // Get command
   const cmd = client.commands.get(name);
   if (!cmd) return;
@@ -27,7 +26,7 @@ export async function execute(client: CustomClient<true>, interaction: ChatInput
   }
   // Run command
   try {
-    cmd.run(client, interaction, interaction.options);
+    cmd.execute({ client, interaction, options: interaction.options });
   } catch (err) {
     interaction.editReply({ content: 'Something went wrong while replying! This error has been logged' });
     client.logs.error({ msg: `E | ✘ ${name}`, err });

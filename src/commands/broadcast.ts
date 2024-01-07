@@ -1,19 +1,35 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 
-export const name = 'broadcast';
-export const ephemeral = false;
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('broadcast')
   .setDescription('Broadcasts a message to all participating servers')
+  .addNumberOption((option) => {
+    return option.setName('type').setDescription('Type of message').setRequired(true).setChoices(
+      {
+        name: 'Broadcast',
+        value: 0x6699ff
+      },
+      {
+        name: 'Maintenance',
+        value: 0x77b300
+      },
+      {
+        name: 'Security Alert',
+        value: 0xff0000
+      },
+      {
+        name: 'Other',
+        value: 0x000000
+      }
+    );
+  })
   .addStringOption((option) => {
     return option.setName('message').setDescription('Content to message to servers').setRequired(true);
   });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
+  const kind = options.getNumber('type', true);
   const dbUser = await client.models.user.findOne({
     where: { userId: interaction.user.id }
   });
@@ -30,39 +46,9 @@ export async function run(
     });
     return;
   }
-  // Convert body
+  // Clean body
   const body = options.getString('message', true).replace(/\\n/g, '\n');
   // Send message
-  interaction.editReply({ content: 'Sending messages...' });
-  const guilds = await client.models.guild.findAll({
-    where: { enabled: true, banned: false }
-  });
-  const errors: { guildId: string; error: string }[] = [];
-  guilds.forEach((g) => {
-    client.channels
-      .fetch(g.settings.channel)
-      .then((c) => {
-        if (!c || !c.isTextBased()) {
-          errors.push({
-            guildId: g.guildId,
-            error: 'Invalid channel provided'
-          });
-          return;
-        }
-        c.send({
-          content: `Message from Maintainer ${interaction.user.toString()}`,
-          embeds: [new EmbedBuilder().setDescription(body).setColor(4182379)]
-        }).catch((e) => errors.push({ guildId: g.guildId, error: e.message }));
-      })
-      .catch((e) => errors.push({ guildId: g.guildId, error: e.message }));
-  });
-  if (errors.length > 0) {
-    interaction.editReply({
-      content: 'Success! Messages are being broadcast to all servers, but some errors occurred'
-    });
-  } else {
-    interaction.editReply({
-      content: 'Success! Messages are being broadcast to all servers without errors'
-    });
-  }
+  client.functions.get('utils_masterMessage').execute(client, kind, body);
+  interaction.editReply({ content: 'Messages are being sent!' });
 }

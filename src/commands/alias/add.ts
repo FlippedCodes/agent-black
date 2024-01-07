@@ -1,20 +1,14 @@
-import { Alias, AliasCreationAttributes } from '../../typings/Models.js';
 import { Op, UniqueConstraintError } from 'sequelize';
-import { CustomClient } from '../../typings/Extensions.js';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
+import { alias, aliasCreationAttributes } from '../../typings/Models.js';
 
 export const name = 'add';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
-  if (
-    options.getUser('user', true).id === options.getUser('alias', true).id ||
-    options.getUser('user', true).id === interaction.user.id ||
-    options.getUser('alias', true).id === interaction.user.id
-  ) {
-    interaction.editReply({ content: 'You cannot alias yourself or the same two users' });
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
+  const optUser = options.getUser('user', true);
+  const optAlias = options.getUser('alias', true);
+  // Check if aliasing the same two users
+  if (optUser.id === optAlias.id) {
+    interaction.editReply({ content: 'You cannot alias the same two users' });
     return;
   }
   // Check if the alias already exists or exists in reverse
@@ -22,12 +16,12 @@ export async function run(
     where: {
       [Op.or]: [
         {
-          user: options.getUser('user', true).id,
-          alternative: options.getUser('alias', true).id
+          user: optUser.id,
+          alternative: optAlias.id
         },
         {
-          user: options.getUser('alias', true).id,
-          alternative: options.getUser('user', true).id
+          user: optAlias.id,
+          alternative: optUser.id
         }
       ]
     }
@@ -39,20 +33,20 @@ export async function run(
     return;
   }
   // Create the alias
-  const attr: AliasCreationAttributes = {
-    user: options.getUser('user', true).id,
-    alternative: options.getUser('alias', true).id,
+  const attr: aliasCreationAttributes = {
+    user: optUser.id,
+    alternative: optAlias.id,
     moderator: interaction.user.id
   };
   // Check if alternative has an alias. If so, set the alternative to the primary account
-  const alt = await client.models.alias.findOne({ where: { user: options.getUser('alias', true).id } });
+  const alt = await client.models.alias.findOne({ where: { user: optAlias.id } });
   if (alt !== null) {
     attr.user = alt.user;
-    attr.alternative = options.getUser('user', true).id;
+    attr.alternative = optUser.id;
   }
   // Create and handle the alias
   await client.models.alias.create(attr).then(
-    (dbAlias: Alias) => {
+    (dbAlias: alias) => {
       if (!dbAlias) {
         interaction.editReply({
           content: 'Failed to create the association in the database. Please try again later'
@@ -60,7 +54,7 @@ export async function run(
         return;
       }
       interaction.editReply({
-        content: `Success! ${options.getUser('user', true).toString()} has been aliased to ${options
+        content: `Success! ${optUser.toString()} has been aliased to ${options
           .getUser('alias', true)
           .toString()} with ID \`${dbAlias.aliasId}\``
       });

@@ -1,12 +1,7 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'info';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const m = await options.getUser('user');
   const u = await client.models.user.findOne({ where: { userId: m.id } });
   if (!u) {

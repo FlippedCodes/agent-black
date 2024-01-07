@@ -12,7 +12,7 @@ export async function execute(_client: CustomClient<true>, interaction: MessageC
   await new Promise((resolve) => setTimeout(resolve, 2000));
   if (!messageEqual(m, interaction.message)) return;
   // Remove components and mark expired
-  interaction.message.edit({
+  interaction.update({
     components: [],
     content: `This embed has timed out. Please run the command again`
   });

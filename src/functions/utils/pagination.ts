@@ -114,13 +114,10 @@ export async function execute(
   });
   coll.on('end', () => {
     interaction
-      .fetchReply()
-      .then((m) =>
-        m.edit({
-          content: `This embed has timed out. Please run the command again: </${interaction.commandName}:${interaction.commandId}>`,
-          components: []
-        })
-      )
+      .editReply({
+        content: `This embed has timed out. Please run the command again: </${interaction.commandName}:${interaction.commandId}>`,
+        components: []
+      })
       .catch(() => null);
   });
   //#endregion

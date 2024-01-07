@@ -1,22 +1,18 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { CustomClient, FlagEmoji } from '../typings/Extensions.js';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { FlagEmoji, CmdFileArgs } from '../typings/Extensions.js';
 // Load functions from other files
-import { run as aliasOverview } from './lookup/aliasOverview.js';
-import { run as userBans } from './lookup/userBans.js';
-import { run as userWarns } from './lookup/userWarns.js';
+import { execute as aliasOverview } from './lookup/aliasOverview.js';
+import { execute as userBans } from './lookup/userBans.js';
+import { execute as userWarns } from './lookup/userWarns.js';
 
-export const name = 'lookup';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('lookup')
   .setDescription('Fetches data from the Discord API and Agent Black database')
   .addUserOption((option) => {
     return option.setName('user').setDescription('The user to search').setRequired(true);
   });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   // Definitions
   const user = options.getUser('user', true),
     aliases = (await client.models.alias.findAll({ where: { user: user.id } })) || [];

@@ -1,35 +1,39 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
-import { GuildCreationAttributes } from '../../typings/Models.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'setup';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
-  const attr: GuildCreationAttributes = {
-    guildId: interaction.guild.id as string,
-    settings: {
-      channel: options.getChannel('staff_channel', true).id,
-      role: options.getRole('authorised_role', true).id
-    }
-  };
-
-  const dbResponse = await client.models.guild.findOrCreate({
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
+  const existingGuild = await client.models.guild.findOne({
     where: {
-      guildId: attr.guildId
+      guildId: interaction.guildId
     },
-    defaults: attr
+    include: [{ model: client.models.guildsettings, as: 'setting' }]
   });
-  if (!dbResponse) {
-    interaction.editReply({
-      content: 'An error occurred while performing setup. Please try again later'
-    });
-    return;
+  // Update the database if it exists
+  if (existingGuild) {
+    existingGuild.setting.staffRole = options.getRole('staff_role').id;
+    existingGuild.setting.logChannel = options.getChannel('staff_channel').id;
+    await existingGuild.setting.save();
+  } else {
+    // Create guild settings first
+    await client.models.guildsettings
+      .create({
+        staffRole: options.getRole('staff_role').id,
+        logChannel: options.getChannel('staff_channel').id
+      })
+      // And use that to create the guild entry
+      .then((s) =>
+        client.models.guild.create({
+          guildId: interaction.guildId,
+          settingsId: s.settingsId,
+          enabled: true
+        })
+      )
+      // Safely catch and log errors
+      .catch((err) => client.logs.error({ err }));
   }
+  // User reply
   interaction.editReply({
-    content: `Success! ${dbResponse[1] ? 'Created' : 'Updated'} guild settings for ${dbResponse[0].guildId}`
+    content: `Success! ${existingGuild !== null ? 'Updated' : 'Registered and created'} the settings for this server!`
   });
   return;
 }

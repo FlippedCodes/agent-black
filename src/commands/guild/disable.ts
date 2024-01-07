@@ -1,10 +1,9 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'disable';
-export async function run(client: CustomClient, interaction: ChatInputCommandInteraction): Promise<void> {
+export async function execute({ client, interaction }: CmdFileArgs): Promise<void> {
   const guild = await client.models.guild.findOne({
-    where: { guildId: interaction.guildId as string }
+    where: { guildId: interaction.guildId }
   });
   if (!guild) {
     interaction.editReply({

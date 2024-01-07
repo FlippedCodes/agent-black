@@ -1,12 +1,7 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'block';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const guildId = options.getString('server', true);
   const guild = client.guilds.cache.get(guildId);
   if (!guild) {

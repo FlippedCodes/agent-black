@@ -10,8 +10,9 @@
       "lowerQuerryLimit": 5,
       "botBadge": "<:system_bot_notifier:813101401646432298>"
     },
-    "about": "./ABOUT.md",
-    "changelog": "./CHANGELOG.md"
+    "about": "../ABOUT.md",
+    "changelog": "../CHANGELOG.md",
+    "avatar": "../assets/agentBlack.jpg"
   },
   "functions": {
     "userTagRecord": {

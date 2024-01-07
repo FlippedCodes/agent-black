@@ -20,11 +20,7 @@ const StaffFlags = {
   /**
    * Moderator
    */
-  Moderator: BigInt(1 << 2),
-  /**
-   * Donator
-   */
-  Donator: BigInt(1 << 5)
+  Moderator: BigInt(1 << 2)
 } as const;
 
 export { StaffFlags };

@@ -1,5 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 // Safely escapes backticks and backslashes
 function escape(str: string): string {
@@ -7,11 +6,7 @@ function escape(str: string): string {
 }
 
 export const name = 'edit';
-export async function run(
-  client: CustomClient<true>,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const entry = await client.models.warn.findOne({
     where: {
       warnId: options.getNumber('id', true),

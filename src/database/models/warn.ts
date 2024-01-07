@@ -1,55 +1,45 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
-import type { guild, guildId } from './guild.js';
 
 export interface warnAttributes {
   warnId: number;
   guildId: string;
   targetId: string;
   reason: string;
-  active: boolean;
+  readonly active: boolean;
 }
 
 export type warnPk = 'warnId';
 export type warnId = warn[warnPk];
-export type warnOptionalAttributes = warnPk;
+export type warnOptionalAttributes = 'warnId';
 export type warnCreationAttributes = Optional<warnAttributes, warnOptionalAttributes>;
 
 export class warn extends Model<warnAttributes, warnCreationAttributes> implements warnAttributes {
+  //? Convert non null assertions to declare to prevent shadowing
   declare warnId: number;
   declare guildId: string;
   declare targetId: string;
   declare reason: string;
-  declare active: boolean;
+  declare readonly active: boolean;
   declare createdAt: Date;
   declare updatedAt: Date;
-  declare deletedAt: Date;
-
-  // warn belongsTo guild via guildId
-  declare guild: guild;
-  declare getGuild: Sequelize.BelongsToGetAssociationMixin<guild>;
-  declare setGuild: Sequelize.BelongsToSetAssociationMixin<guild, guildId>;
-  declare createGuild: Sequelize.BelongsToCreateAssociationMixin<guild>;
+  declare deletedAt?: Date;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof warn {
     return warn.init(
       {
         warnId: {
+          autoIncrement: true,
           type: DataTypes.INTEGER,
           allowNull: false,
-          primaryKey: true,
-          autoIncrement: true
+          primaryKey: true
         },
         guildId: {
-          type: DataTypes.CHAR(20),
-          allowNull: false,
-          references: {
-            model: 'guild',
-            key: 'guildId'
-          }
+          type: DataTypes.STRING(30),
+          allowNull: false
         },
         targetId: {
-          type: DataTypes.CHAR(20),
+          type: DataTypes.STRING(30),
           allowNull: false
         },
         reason: {
@@ -59,7 +49,7 @@ export class warn extends Model<warnAttributes, warnCreationAttributes> implemen
         active: {
           type: DataTypes.VIRTUAL,
           get() {
-            return this.isSoftDeleted();
+            return !this.isSoftDeleted();
           }
         }
       },
@@ -76,7 +66,7 @@ export class warn extends Model<warnAttributes, warnCreationAttributes> implemen
             fields: [{ name: 'warnId' }]
           },
           {
-            name: 'warns_ibfk_1',
+            name: 'warns_index_1',
             using: 'BTREE',
             fields: [{ name: 'guildId' }]
           }

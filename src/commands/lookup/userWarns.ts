@@ -6,7 +6,7 @@ function escape(str: string): string {
 }
 
 export const name = 'userWarns';
-export async function run(client: CustomClient, user: string): Promise<EmbedBuilder[]> {
+export async function execute(client: CustomClient, user: string): Promise<EmbedBuilder[]> {
   const warns = await client.models.warn.findAll({ where: { targetId: user } });
   const u = await client.users.fetch(user);
   if (!u) return [];

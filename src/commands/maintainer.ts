@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 
-export const name = 'maintainer';
+export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('maintainer')
   .setDescription('Manages the maintainers [STAFF ONLY]')
   .addUserOption((option) => option.setName('user').setDescription('Target user').setRequired(true))
   .addStringOption((option) =>
@@ -26,22 +26,13 @@ export const data = new SlashCommandBuilder()
       )
       .setRequired(true)
   );
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
-  const u = await client.models.user.findOne({ where: { userId: interaction.user.id } });
-  if (!u || !u.flags.has('Moderator')) {
-    interaction.editReply({ content: 'You are not authorised to use this command' });
-    return;
-  }
-  // -- //
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   const act = options.getString('action', true);
+  const u = await client.models.user.findOne({ where: { userId: interaction.user.id } });
   if (act !== 'info' && !u.flags.has('Owner')) {
     interaction.editReply({ content: 'You are not authorised to use perform that action' });
     return;
   }
   // -- //
-  client.commands.get(`${name}_${act}`).run(client, interaction, options);
+  client.commands.get(`${interaction.commandName}_${act}`).execute({ client, interaction, options });
 }

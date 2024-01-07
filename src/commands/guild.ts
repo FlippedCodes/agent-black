@@ -1,16 +1,9 @@
-import {
-  ChannelType,
-  ChatInputCommandInteraction,
-  PermissionFlagsBits,
-  PermissionsBitField,
-  SlashCommandBuilder
-} from 'discord.js';
-import { CustomClient } from '../typings/Extensions.js';
+import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { CmdFileArgs } from '../typings/Extensions.js';
 
-export const name = 'guild';
 export const ephemeral = true;
 export const data = new SlashCommandBuilder()
-  .setName(name)
+  .setName('guild')
   .setDescription('Manages your server')
   .addSubcommand((subcommand) => {
     return subcommand
@@ -25,7 +18,7 @@ export const data = new SlashCommandBuilder()
       })
       .addRoleOption((option) => {
         return option
-          .setName('authorised_role')
+          .setName('staff_role')
           .setDescription('Role that is required when running staff-only commands')
           .setRequired(true);
       });
@@ -38,18 +31,9 @@ export const data = new SlashCommandBuilder()
   })
   .addSubcommand((subcommand) => {
     return subcommand.setName('stats').setDescription('Returns statistics of the guild');
-  });
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-) {
-  if ((interaction.member.permissions as PermissionsBitField).has(PermissionFlagsBits.ManageGuild)) {
-    interaction.editReply({
-      content: 'You are not authorised to run this command'
-    });
-    return;
-  }
-  await client.commands.get(`guild_${options.getSubcommand()}`).run(client, interaction, options);
+  })
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+export async function execute({ client, interaction, options }: CmdFileArgs) {
+  await client.commands.get(`guild_${options.getSubcommand()}`).execute({ client, interaction, options });
   return;
 }

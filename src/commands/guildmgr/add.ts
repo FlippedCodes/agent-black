@@ -1,45 +1,56 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { CustomClient } from '../../typings/Extensions.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'add';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
-  const rawChannel = options.getString('channel', true);
-  const rawGuild = options.getString('server', true);
-  const rawRole = options.getString('role', true);
-  const guild = await client.guilds.fetch(rawGuild);
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
+  // Options
+  const guildId = options.getString('server', true);
+  const channelId = options.getString('channel', true);
+  const roleId = options.getString('role', true);
+  // Try to find guild
+  const guild = await client.guilds.fetch(guildId);
   if (!guild) {
     await interaction.editReply('Invalid argument: Guild not found');
     return;
   }
-  const channel = guild.channels.cache.get(rawChannel);
-  if (!channel) {
-    await interaction.editReply('Invalid argument: Channel not found');
+  // Try to find channel and role
+  const channel = guild.channels.cache.get(channelId);
+  const role = guild.roles.cache.get(roleId);
+  if (!channel || !role) {
+    await interaction.editReply('Invalid argument: Channel and/or role not found');
     return;
   }
-  const role = guild.roles.cache.get(rawRole);
-  if (!role) {
-    await interaction.editReply('Invalid argument: Role not found');
-    return;
-  }
-  if (!client.models) return; // Suppress ESLint unsafe optional chaining
-  const [, created] = await client.models.guild.findOrCreate({
-    where: {
-      guildId: guild.id
-    },
-    defaults: {
-      guildId: guild.id,
-      banned: false,
-      enabled: true,
-      settings: {
-        channel: channel.id,
-        role: role.id
-      }
-    }
+  // Check if guild already exists
+  const dbGuild = await client.models.guild.findOne({
+    where: { guildId },
+    include: [{ model: client.models.guildsettings, as: 'setting' }]
   });
-  interaction.editReply(`Guild ${guild.name} has been ${created ? 'added' : 'updated'} with the settings provided`);
+  // If it does, update settings
+  if (dbGuild) {
+    dbGuild.setting.logChannel = channelId;
+    dbGuild.setting.staffRole = roleId;
+    await dbGuild.setting.save();
+  } else {
+    // Otherwise create settings
+    await client.models.guildsettings
+      .create({
+        staffRole: roleId,
+        logChannel: channelId
+      })
+      // And use that to create the guild entry
+      .then((s) =>
+        client.models.guild.create({
+          guildId,
+          settingsId: s.settingsId
+        })
+      )
+      // Safely catch and log errors
+      .catch((err) => client.logs.error({ err }));
+  }
+  // User reply
+  await interaction.editReply({
+    content: `Success! ${dbGuild !== null ? 'Updated' : 'Registered and created'} the settings for ${
+      guild.name
+    } (${guildId})!`
+  });
   return;
 }

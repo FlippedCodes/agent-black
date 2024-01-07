@@ -1,9 +1,13 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { CustomClient } from '../../typings/Extensions.js';
-import { Ban } from '../../typings/Models.js';
+import { ban } from '../../typings/Models.js';
 
 export const name = 'handler';
-export async function run(client: CustomClient, interaction: ChatInputCommandInteraction, bans: Ban[]): Promise<void> {
+export async function execute(
+  client: CustomClient,
+  interaction: ChatInputCommandInteraction,
+  bans: ban[]
+): Promise<void> {
   // Split the bans into groups of 5
   const banGroups: EmbedBuilder[][] = [];
   let temp: EmbedBuilder[] = [];

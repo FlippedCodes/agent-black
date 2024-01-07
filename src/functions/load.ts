@@ -1,53 +1,43 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { CustomClient, FunctionFile } from '../typings/Extensions.js';
 
+export const name = 'load';
 // This loads all functions
-export async function run(client: CustomClient<false>): Promise<void> {
+export async function execute(client: CustomClient<false>): Promise<Map<string, FunctionFile>> {
   // Check for functions folder
   if (!existsSync('./functions')) {
     console.warn('F | ! No functions were found! Make sure you are running index.js from the dist directory');
-    return;
+    return new Map() as Map<never, never>;
   }
   client.logs.debug('F | ✦ Loading all functions');
-  // Initialise variable
-  const functionFiles: { [key: string]: string[] } = {};
   // Read the directory
-  const types: string[] = readdirSync('./functions').filter((f: string) => !f.endsWith('.js'));
-  // For each type, load the files
-  for (const type of types) {
-    functionFiles[type] = readdirSync(`./functions/${type}`, { recursive: true })
-      // Map Buffers to string
-      .map((f: unknown) => String(f))
-      // Trim directory
-      .map((f: string) => f.replace(`./functions/${type}/`, ''))
-      // Remove Windows backslashes
-      .map((f: string) => f.replace('\\', '/'))
-      // Filter out non-JS files
-      .filter((f: string) => f.endsWith('.js'));
-  }
+  const functionFiles: string[] = readdirSync(`./functions`, { recursive: true })
+    // Ensure all file names are strings
+    .map((f: unknown) => String(f))
+    // Trim directory
+    .map((f: string) => f.replace(`./functions/`, ''))
+    // Remove Windows backslashes
+    .map((f: string) => f.replace(/\\/g, '/'))
+    // Filter out non-JS files
+    .filter((f: string) => f.endsWith('.js'));
   // Load the functions
+  client.logs.debug(`F | ✦ Found ${functionFiles.length} function`);
+  // Initialise variables
+  // deepcode ignore CollectionUpdatedButNeverQueried: Used in return
   const functions = new Map();
-  for (const [type, files] of Object.entries(functionFiles)) {
-    client.logs.debug(`F | ✦ Found ${files.length} ${type} function`);
+  for (const file of functionFiles) {
     // Set the file
-    for (const file of files) {
-      try {
-        const f: FunctionFile = await import(`../functions/${type}/${file}`);
-        const n = file.replace(/\.js$/, '').replace(/\//g, '_');
-        // Skip if it's an archive
-        if (n.includes('archive_')) continue;
-        functions.set(type + '_' + n, f);
-        client.logs.debug(`F | ✓ ${n}`);
-      } catch (err) {
-        client.logs.error({ msg: `F | ✗ ${file}`, err });
-      }
+    try {
+      const func: FunctionFile = await import(`../functions/${file}`);
+      const name = file.replace(/\.js$/, '').replace(/\//g, '_');
+      // Skip if it's an archive
+      if (name.includes('archive_')) continue;
+      functions.set(name, func);
+      client.logs.debug(`F | ✓ ${name}`);
+    } catch (err) {
+      client.logs.error({ msg: `F | ✗ ${file}`, err });
     }
   }
-  // Attach the functions
-  client.functions = functions;
-  client.ready = true;
-  // Return void
-  return;
+  // Return values
+  return functions;
 }
-
-// if name has archive_, drop it

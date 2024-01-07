@@ -1,12 +1,7 @@
-import { CustomClient } from '../../typings/Extensions.js';
-import { ChatInputCommandInteraction } from 'discord.js';
+import { CmdFileArgs } from '../../typings/Extensions.js';
 
 export const name = 'update';
-export async function run(
-  client: CustomClient,
-  interaction: ChatInputCommandInteraction,
-  options: ChatInputCommandInteraction['options']
-): Promise<void> {
+export async function execute({ client, interaction, options }: CmdFileArgs): Promise<void> {
   if (
     options.getUser('user', true).id === options.getUser('alias', true).id ||
     options.getUser('user', true).id === interaction.user.id ||
