@@ -44,6 +44,8 @@ async function prepareMessage(serverID, userID, userTag, userBans, userWarns, al
 }
 
 module.exports.run = async (member) => {
+  // check if member is a bot
+  if (member.user.bot) return;
   // check if server is setup
   if (!await client.functions.get('GET_DB_registered').run(member.guild.id, false)) return;
   // record user tag
