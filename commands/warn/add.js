@@ -10,7 +10,7 @@ module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuil
   if (userID === client.user.id) return messageFail(interaction, 'You can\'t warn the bot itself!');
   // add warn
   await addWarn(Warn, interaction.guild.id, userID, warnMessage);
-  messageSuccess(interaction, `The user with the ID \`${userID}\` got a new warning added.\nWarning other servers.\nPlease keep in mind: The warning feature is not a way to reach out the user!`);
+  messageSuccess(interaction, `The user with the ID \`${userID}\` got a new warning added.\nWarning other servers.\nPlease keep in mind: The warning feature is not a way to reach out to the user!`);
   checkforInfectedGuilds(interaction.guild, userID, warnMessage);
 };
 
