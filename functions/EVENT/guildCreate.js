@@ -18,7 +18,10 @@ module.exports.run = async (guild) => {
   if (DEBUG) return;
   const serverID = guild.id;
   // check if was alreads added: add a server entry in the DB
-  if (!await getServerEntry(serverID)) await addServerEntry(serverID, guild.name);
+  const foundServer = await getServerEntry(serverID);
+  if (!foundServer) await addServerEntry(serverID, guild.name);
+  else if (foundServer.blocked) return;
+  // check if server is blacklisted before continuing
   // message owner about adding the bot and how to procceed
   const owner = await guild.members.fetch(guild.ownerId);
   const embed = new MessageEmbed()
