@@ -26,10 +26,5 @@ services:
       MYSQL_USER: agentBlack
       MYSQL_PASSWORD: ${DB_PASSWORD}
 
-# networks:
-#   default:
-#     external:
-#       name: nginx_backend
-
 volumes:
   db_data:
