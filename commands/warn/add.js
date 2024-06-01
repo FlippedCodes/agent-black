@@ -5,7 +5,10 @@ async function addWarn(Warn, serverID, userID, reason) {
 
 module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuilds) => {
   // get information
-  const userID = interaction.options.getUser('user', true).id;
+  const user = interaction.options.getUser('user', true);
+  const userID = user.id;
+  // check if user is a bot
+  if (user.bot) return messageFail(interaction, 'This user is a bot and cannot be warned.');
   // checking if user is AB
   if (userID === client.user.id) return messageFail(interaction, 'You can\'t warn the bot itself!');
   // add warn
