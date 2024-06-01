@@ -22,12 +22,17 @@ module.exports.run = async (interaction) => {
     return;
   }
 
-  const mainUser = interaction.options.getUser('mainuser').id;
+  const mainUser = interaction.options.getUser('mainuser');
+  const mainUserID = mainUser.id;
   const aliasUser = interaction.options.getUser('user2').id;
+  const aliasUserID = aliasUser.id;
+
+  // check if user is a bot
+  if (mainUser.bot || aliasUser.bot) return messageFail(interaction, 'One or both users is/are bots and cannot be linked.');
 
   // get entries for both IDs
-  const resultMainID = await checkAlias(mainUser);
-  const resultAliasID = await checkAlias(aliasUser);
+  const resultMainID = await checkAlias(mainUserID);
+  const resultAliasID = await checkAlias(aliasUserID);
   // check if borth are already in aliases
   if (resultMainID && resultAliasID) {
     messageFail(interaction, 'Both users are already linked or in two different groupings!');
@@ -36,20 +41,20 @@ module.exports.run = async (interaction) => {
   // add both if not found
   if (!resultMainID && !resultAliasID) {
     const groupingID = await interaction.id;
-    [mainUser, aliasUser].forEach((uID) => addAlias(uID, groupingID, interaction.user.id));
+    [mainUserID, aliasUserID].forEach((uID) => addAlias(uID, groupingID, interaction.user.id));
     messageSuccess(interaction, 'Entry added!');
     return;
   }
   // add mainUser if not found
   if (!resultMainID && resultAliasID) {
-    addAlias(mainUser, resultAliasID.groupingID, interaction.user.id);
+    addAlias(mainUserID, resultAliasID.groupingID, interaction.user.id);
     messageSuccess(interaction, 'Entry added!');
     return;
   }
   // add aliasUser if not found
   if (resultMainID && !resultAliasID) {
     console.log(resultAliasID);
-    addAlias(aliasUser, resultMainID.groupingID, interaction.user.id);
+    addAlias(aliasUserID, resultMainID.groupingID, interaction.user.id);
     messageSuccess(interaction, 'Entry added!');
     return;
   }
