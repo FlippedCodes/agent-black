@@ -24,7 +24,7 @@ module.exports.run = async (interaction) => {
 
   const mainUser = interaction.options.getUser('mainuser');
   const mainUserID = mainUser.id;
-  const aliasUser = interaction.options.getUser('user2').id;
+  const aliasUser = interaction.options.getUser('user2');
   const aliasUserID = aliasUser.id;
 
   // check if user is a bot
