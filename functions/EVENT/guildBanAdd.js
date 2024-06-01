@@ -32,13 +32,15 @@ async function messageBanSuccess(channelID, body) {
 // creates a embed messagetemplate for failed actions
 async function messageBannedUserInGuild(channelID, userTag, userID, banReason, serverName) {
   const channel = await client.channels.cache.get(channelID);
-  sendMessage(channel,
+  sendMessage(
+    channel,
     `Tag: \`${userTag}\`
     ID: \`${userID}\`
     Reason: \`\`\`${banReason || 'none'}\`\`\``,
     `A user on your server has been banned on '${serverName}'!`,
     'ORANGE',
-    `For more information and other bans and warns use '/lookup ${userID}'`);
+    `For more information and other bans and warns use '/lookup ${userID}'`,
+  );
 }
 
 // warns other servers for aliases
@@ -83,9 +85,10 @@ module.exports.run = async ({ guild, user }) => {
   // check if entry is already on DB
   if (await !banEntry.isNewRecord) {
     // update DB entry
-    Ban.update({ reason: fixedReason, userTag, userBanned },
-      { where: { userTag, userID, serverID } })
-      .catch(ERR);
+    Ban.update(
+      { reason: fixedReason, userTag, userBanned },
+      { where: { userTag, userID, serverID } },
+    ).catch(ERR);
   }
   // logic, to only output if not banned, is active and has a log channel
   if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
