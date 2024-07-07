@@ -64,6 +64,8 @@ module.exports.run = async ({ guild, user }) => {
   const userTag = user.tag;
   const serverID = guild.id;
 
+  // check if member is a bot
+  if (user.bot) return;
   // checking if user is AB
   if (userID === client.user.id) return;
   // check if server is blacklsited before sending api request
