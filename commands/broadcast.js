@@ -8,11 +8,11 @@ function getChannels() {
 }
 
 async function sendMessage(channel, author, body) {
-    const embed = new MessageEmbed()
-      .setAuthor({ name: `${author} broadcasted` })
-      .setDescription(body)
-      .setColor(4182379);
-    channel.send({ embeds: [embed] });
+  const embed = new MessageEmbed()
+    .setAuthor({ name: `${author} broadcasted` })
+    .setDescription(body)
+    .setColor(4182379);
+  channel.send({ embeds: [embed] });
 }
 
 module.exports.run = async (interaction) => {
@@ -43,9 +43,9 @@ module.exports.run = async (interaction) => {
       });
     }
     if (errCreateWebhook) return;
-    await hook.send({
-      content: body, username, avatarURL,
-    }).catch(ERR);
+    // await hook.send({
+    //   content: body, username, avatarURL,
+    // }).catch(ERR);
   });
 
   await messageSuccess(interaction, 'Sent messages to all servers!');
