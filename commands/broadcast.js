@@ -7,17 +7,12 @@ function getChannels() {
     .catch(ERR);
 }
 
-async function sendMessage(author, body) {
-  const channels = await getChannels();
-  channels.forEach((DBchannel) => {
-    const channelID = DBchannel.logChannelID;
-    const channel = client.channels.cache.find((channel) => channel.id === channelID);
+async function sendMessage(channel, author, body) {
     const embed = new MessageEmbed()
       .setAuthor({ name: `${author} broadcasted` })
       .setDescription(body)
       .setColor(4182379);
     channel.send({ embeds: [embed] });
-  });
 }
 
 module.exports.run = async (interaction) => {
@@ -37,14 +32,14 @@ module.exports.run = async (interaction) => {
     let errCreateWebhook = false;
     const channelWebhooks = await channel.fetchWebhooks().catch((err) => {
       errCreateWebhook = true;
-      return sendMessage(interaction.user.tag, body);
+      return sendMessage(channel, interaction.user.tag, body);
     });
     if (errCreateWebhook) return;
     let hook = channelWebhooks.find((hook) => hook.owner.id === client.user.id);
     if (!hook) {
       hook = await channel.createWebhook(config.name).catch((err) => {
         errCreateWebhook = true;
-        return sendMessage(interaction.user.tag, body);
+        return sendMessage(channel, interaction.user.tag, body);
       });
     }
     if (errCreateWebhook) return;
