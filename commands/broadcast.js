@@ -32,12 +32,16 @@ module.exports.run = async (interaction) => {
   const avatarURL = interaction.user.avatarURL({ format: 'png', dynamic: true, size: 512 });
   const channels = await getChannels();
   channels.forEach(async (postChannel) => {
-    const channel = client.channels.cache.find((channel) => channel.id === postChannel.channelID);
-    const channelWebhooks = await channel.fetchWebhooks();
-    let hook = channelWebhooks.find((hook) => hook.owner.id === client.user.id);
+    const channel = client.channels.cache.get(postChannel.logChannelID);
     let errCreateWebhook = false;
+    const channelWebhooks = await channel.fetchWebhooks().catch((err) => {
+      errCreateWebhook = true;
+      return sendMessage(interaction.user.tag, body);
+    });
+    if (errCreateWebhook) return;
+    let hook = channelWebhooks.find((hook) => hook.owner.id === client.user.id);
     if (!hook) {
-      hook = await channel.createWebhook({ name: config.name }).catch((err) => {
+      hook = await channel.createWebhook(config.name).catch((err) => {
         errCreateWebhook = true;
         return sendMessage(interaction.user.tag, body);
       });
