@@ -43,9 +43,9 @@ module.exports.run = async (interaction) => {
       });
     }
     if (errCreateWebhook) return;
-    // await hook.send({
-    //   content: body, username, avatarURL,
-    // }).catch(ERR);
+    await hook.send({
+      content: body, username, avatarURL,
+    }).catch(ERR);
   });
 
   await messageSuccess(interaction, 'Sent messages to all servers!');
