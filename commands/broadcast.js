@@ -26,10 +26,28 @@ module.exports.run = async (interaction) => {
     messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
-  const body = interaction.options.getString('message', true);
+  const body = interaction.options.getString('message', true).replaceAll('\\n', '\n');
   await messageSuccess(interaction, 'Sending messages...');
-  await sendMessage(interaction.user.tag, body.replaceAll('\\n', `
-  `));
+  const username = interaction.user.username;
+  const avatarURL = interaction.user.avatarURL({ format: 'png', dynamic: true, size: 512 });
+  const channels = await getChannels();
+  channels.forEach(async (postChannel) => {
+    const channel = client.channels.cache.find((channel) => channel.id === postChannel.channelID);
+    const channelWebhooks = await channel.fetchWebhooks();
+    let hook = channelWebhooks.find((hook) => hook.owner.id === client.user.id);
+    let errCreateWebhook = false;
+    if (!hook) {
+      hook = await channel.createWebhook({ name: config.name }).catch((err) => {
+        errCreateWebhook = true;
+        return sendMessage(interaction.user.tag, body);
+      });
+    }
+    if (errCreateWebhook) return;
+    await hook.send({
+      content: body, username, avatarURL,
+    }).catch(ERR);
+  });
+
   await messageSuccess(interaction, 'Sent messages to all servers!');
 };
 
