@@ -33,6 +33,7 @@ module.exports.run = async (interaction) => {
   const channels = await getChannels();
   channels.forEach(async (postChannel) => {
     const channel = client.channels.cache.get(postChannel.logChannelID);
+    if (!channel) return console.log(`${postChannel.logChannelID} doesn't exist.`);
     let errCreateWebhook = false;
     const channelWebhooks = await channel.fetchWebhooks().catch((err) => {
       errCreateWebhook = true;
