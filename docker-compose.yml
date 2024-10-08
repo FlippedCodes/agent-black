@@ -20,7 +20,6 @@ services:
       - "${DB_IP}:${DB_PORT}:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./db-backup:/backup
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT}
       MYSQL_DATABASE: agentBlack
