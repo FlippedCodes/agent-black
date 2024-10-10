@@ -25,6 +25,12 @@ services:
       MYSQL_DATABASE: agentBlack
       MYSQL_USER: agentBlack
       MYSQL_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - default
+      - grafana
+
+networks:
+  grafana:
 
 volumes:
   db_data:
