@@ -27,10 +27,11 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     networks:
       - default
-      - grafana
+      - grafana_exposed
 
 networks:
-  grafana:
+  grafana_exposed:
+    external: true
 
 volumes:
   db_data:
