@@ -18,6 +18,7 @@ jobs:
       DB_PASSWORD_ROOT: ${{ secrets.DB_PASSWORD_ROOT }}
       DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
       TOKEN_UPTIME: ${{ secrets.TOKEN_UPTIME }}
+      SENTRY_LINK: ${{ secrets.SENTRY_LINK }}
 
     steps:
       - uses: actions/checkout@v3

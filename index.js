@@ -1,3 +1,4 @@
+require('./functions/telemetry');
 // init Discord
 const { Client, Intents, Collection } = require('discord.js');
 // init file system
