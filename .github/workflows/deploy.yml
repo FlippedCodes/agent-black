@@ -21,7 +21,7 @@ jobs:
       SENTRY_LINK: ${{ secrets.SENTRY_LINK }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Update 3rd party docker containers
         run: docker compose pull
