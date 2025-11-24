@@ -12,7 +12,7 @@ module.exports.run = async (searchInput) => {
   if (!isNaN(searchInput)) {
     const found = guilds.find((guild) => guild.id === searchInput);
     if (found) return [{ name: found.name, value: found.id }];
-    return [{ name: 'Unkown', value: searchInput }];
+    return [{ name: 'Unknown', value: searchInput }];
   }
 
   // text search
