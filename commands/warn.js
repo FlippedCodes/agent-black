@@ -6,11 +6,7 @@ module.exports.run = async (interaction) => {
     messageFail(interaction, `You are not authorized to use \`/${module.exports.data.name}\``);
     return;
   }
-  const embed = new MessageEmbed();
-  embed.setColor(16755456);
-  embed.setDescription('This command has been deprecated. Use `/memo` instead');
-  const channel = await client.channels.cache.get(channelID);
-  channel.send({ embeds: [embed] });
+  messageFail(interaction, 'This command has been deprecated. Use `/memo` instead');
 };
 
 module.exports.data = new CmdBuilder()
