@@ -42,7 +42,7 @@ async function postUserinfo(message, userID, bans, warns) {
       .addField('Account Creation Date', discordUser.createdAt, true)
       .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
     if (bans) embed.addField('Bans', bans, true);
-    if (warns) embed.addField('Warns', warns, true);
+    if (warns) embed.addField('Memos', warns, true);
     if (sharedServers.size) embed.addField(`Shared servers - ${sharedServers.size}`, `\`\`\`${sharedServers.map((sharedMember) => sharedMember.name).join('\n')}\`\`\``, false);
     return message.channel.send({ embed });
   }

@@ -8,12 +8,12 @@ module.exports.run = async (interaction, warnMessage, Warn, checkforInfectedGuil
   const user = interaction.options.getUser('user', true);
   const userID = user.id;
   // check if user is a bot
-  if (user.bot) return messageFail(interaction, 'This user is a bot and cannot be warned.');
+  if (user.bot) return messageFail(interaction, 'This user is a bot and you can\'t add a memo to them.');
   // checking if user is AB
-  if (userID === client.user.id) return messageFail(interaction, 'You can\'t warn the bot itself!');
+  if (userID === client.user.id) return messageFail(interaction, 'You can\'t add a memo the bot itself!');
   // add warn
   await addWarn(Warn, interaction.guild.id, userID, warnMessage);
-  messageSuccess(interaction, `The user with the ID \`${userID}\` got a new warning added.\nWarning other servers.\nPlease keep in mind: The warning feature is not a way to reach out to the user!`);
+  messageSuccess(interaction, `The memo got added to the user with the ID \`${userID}\`.\nWarning other servers.\nPlease keep in mind: The memo feature is not a way to reach out to the user!`);
   checkforInfectedGuilds(interaction.guild, userID, warnMessage);
 };
 

@@ -39,7 +39,7 @@ async function prepareMessage(serverID, userID, userTag, userBans, userWarns, al
   sendMessage(logChannel, `tag: \`${userTag}\`
   ID: \`${userID}\`
   bans: \`${userBans}\`
-  warns: \`${userWarns}\`
+  memos: \`${userWarns}\`
   For more information use \`/lookup ${userID}\``, title, 'ORANGE');
 }
 

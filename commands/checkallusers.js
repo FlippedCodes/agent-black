@@ -68,7 +68,7 @@ module.exports.run = async (interaction) => {
   if (allBans.length < 5) return postBans(allBans, interaction);
 
   const message = await new MessageEmbed()
-    .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through. \nAre you sure?`)
+    .setDescription(`The bot is about to spam ${allBans.length} listed bans into this channel! This action can not be stopped midway through.\nAre you sure?`)
     .setColor('ORANGE');
   const confirmMessage = await reply(interaction, {
     embeds: [message], components: [buttons], fetchReply: true, ephemeral: true,

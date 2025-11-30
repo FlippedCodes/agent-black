@@ -18,7 +18,7 @@ module.exports.run = async (interaction) => {
     return;
   }
   // commands to block, when guild has not been setup yet
-  const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn'];
+  const mgmtCMDs = ['alias', 'ban', 'broadcast', 'eval', 'lookup', 'maintainer', 'warn', 'memo'];
   // check if active and if its a management command
   if (mgmtCMDs.includes(mainCMD) && !await client.functions.get('GET_DB_server').run(interaction.guild.id, false)) {
     messageFail(interaction,

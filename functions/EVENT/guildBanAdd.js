@@ -39,7 +39,7 @@ async function messageBannedUserInGuild(channelID, userTag, userID, banReason, s
     Reason: \`\`\`${banReason || 'none'}\`\`\``,
     `A user on your server has been banned on '${serverName}'!`,
     'ORANGE',
-    `For more information and other bans and warns use '/lookup ${userID}'`,
+    `For more information and other bans and memos use '/lookup ${userID}'`,
   );
 }
 
@@ -52,7 +52,7 @@ async function messageBannedAliasUserInGuild(channelID, userTag, userID, warnRea
   ID: \`${userID}\`
   Reason: \`\`\`${warnReason || 'none'}\`\`\``;
   const title = `A alias of a user on your server has been banned on '${serverName}'!`;
-  const footer = `For more information and other bans and warns use '/lookup ${orgUserTag}'`;
+  const footer = `For more information and other bans and memos use '/lookup ${orgUserTag}'`;
   sendMessage(channel, body, title, 'ORANGE', footer);
 }
 

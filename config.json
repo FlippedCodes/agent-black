@@ -18,7 +18,7 @@
             "text": "./about.txt"
         },
         "changelog": {
-            "text": "./changelog.txt"
+            "text": "./changelog.md"
         }
     },
     "functions": {

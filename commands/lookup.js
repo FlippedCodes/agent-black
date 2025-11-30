@@ -43,7 +43,7 @@ async function postUserinfo(interaction, userID, bans, warns, followUp = false) 
     .addField('Account Creation Date', date(discordUser.createdAt), true)
     .setThumbnail(discordUser.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }));
   if (bans) embed.addField('Bans', `${bans}`, true);
-  if (warns) embed.addField('Warns', `${warns}`, true);
+  if (warns) embed.addField('Memos', `${warns}`, true);
   if (sharedServers.size) {
     // FIXME: check if it really only shows one server
     const serverlist = sharedServers.map((sharedMember) => sharedMember.name).join('\n');
@@ -111,13 +111,13 @@ function postWarns(interaction, warns) {
   warns.forEach(async (warn) => {
     const serverName = await getServerName(warn.serverID);
     const embed = new MessageEmbed()
-      .setColor(16755456) // yellow
+      .setColor('YELLOW') // yellow
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
-      .setAuthor({ name: `Warned on ${serverName}` })
+      .setAuthor({ name: `Memo created in ${serverName}` })
       .addField('ServerID', `\`${warn.serverID}\``, true)
-      .addField('WarnID', `\`${warn.warnID}\``, true)
-      .addField('Warning creation date', date(warn.createdAt));
-    if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addField('Warning updated date', date(warn.updatedAt));
+      .addField('MemoID', `\`${warn.warnID}\``, true)
+      .addField('Memo creation date', date(warn.createdAt));
+    if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addField('Memo updated date', date(warn.updatedAt));
     reply(interaction, { embeds: [embed] }, true);
   });
 }
