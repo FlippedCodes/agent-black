@@ -37,10 +37,10 @@ async function prepareMessage(serverID, userID, userTag, userBans, userWarns, al
   const title = alias ? `Alias of '${orgUserTag}'` : `Known user joined '${serverName}'`;
 
   sendMessage(logChannel, `tag: \`${userTag}\`
-  ID: \`${userID}\`
-  bans: \`${userBans}\`
-  memos: \`${userWarns}\`
-  For more information use \`/lookup ${userID}\``, title, 'ORANGE');
+ID: \`${userID}\`
+bans: \`${userBans}\`
+memos: \`${userWarns}\`
+For more information use \`/lookup ${userID}\``, title, 'ORANGE');
 }
 
 module.exports.run = async (member) => {
