@@ -74,11 +74,37 @@ module.exports.run = async ({ guild, user }) => {
   // declaring so ban reason can be used in foreach loop
   // getting newly added ban
   const ban = await guild.bans.fetch(user);
+  // fix ban reason by filtering new line breaks
+  const reason = ban.reason;
+  const fixedReason = reason === null ? reason : reason.replace(/'/g, '`');
+  // get logChannel
+  const logChannel = await client.channels.cache.get(bannedGuild.logChannelID);
+  // check ban reason is valid
+  if (reason === null
+    || reason.length <= 2
+    || config.functions.banList.blacklistedBanReasons.some((blacklistReason) => reason.toLowerCase().includes(blacklistReason.toLowerCase()))) {
+    if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
+      const mainLogChannel = client.channels.cache.get(config.logChannel);
+      if (!DEBUG) {
+        await sendMessage(
+          mainLogChannel,
+          `ServerID: \`${serverID}\`\nUserTag: \`${userTag}\`\nUserID: \`${userID}\`\nReason: \`${fixedReason}\``,
+          'Invalid ban rejected!',
+          'ORANGE',
+          'Invalid ban rejected.',
+        );
+      }
+      return sendMessage(
+        logChannel,
+        `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server,\nbut has not been added to the Agent Black Blacklist!\n**Other servers are NOT getting warned.**\nYour ban reason was rejected: \`${fixedReason}\``,
+        'A user has been banned but not reported!',
+        'ORANGE',
+        'Try re-banning the user with a valid reason.',
+      );
+    }
+  }
   // assign simpler values
   const userBanned = '1';
-  const reason = ban.reason;
-  // fix ban reason by filtering new line breaks
-  const fixedReason = reason === null ? reason : reason.replace(new RegExp('\'', 'g'), '`');
   // create of find DB entry
   const [banEntry] = await Ban.findOrCreate({
     where: { userID, serverID },
@@ -94,7 +120,7 @@ module.exports.run = async ({ guild, user }) => {
   }
   // logic, to only output if not banned, is active and has a log channel
   if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
-    messageBanSuccess(bannedGuild.logChannelID, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\``);
+    sendMessage(logChannel, `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server!\nReason: \`${fixedReason}\`\n\nIf this is a personal ban, please re-ban the user and use "Personal:" at the start your reason. Thank you.`, 'A user has been banned!', 'GREEN', 'The ban has been recorded and other servers are getting warned!');
   }
   // post for other servers
   let aliases = await user.client.functions.get('GET_DB_alias').run(userID);

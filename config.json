@@ -30,6 +30,22 @@
                 "interval": 60,
                 "endpoint": "https://status.flipped.codes/api/push/"
             }
+        },
+        "banList": {
+            "blacklistedBanReasons": [
+                "Personal:",
+                "test",
+                "Dyno Autoban ",
+                "No reason given.",
+                "No%20reason%20given.",
+                "Unspecified",
+                "sus",
+                "no reason specified",
+                "Mass ban command executed.",
+                "No reason provided",
+                "not interested",
+                "Massban."
+            ]
         }
     }
 }
