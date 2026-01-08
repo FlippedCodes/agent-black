@@ -79,6 +79,8 @@ module.exports.run = async ({ guild, user }) => {
   const fixedReason = reason === null ? reason : reason.replace(/'/g, '`');
   // get logChannel
   const logChannel = await client.channels.cache.get(bannedGuild.logChannelID);
+
+
   // check ban reason is valid
   if (reason === null
     || reason.length <= 2
@@ -94,6 +96,12 @@ module.exports.run = async ({ guild, user }) => {
           'Invalid ban rejected.',
         );
       }
+      // delete ban from DB if existing
+      await Ban.destroy({
+        limit: 1,
+        where: { userID, serverID },
+      }).catch(ERR);
+      // inform server
       return sendMessage(
         logChannel,
         `The user \`${userTag}\` with the ID \`${userID}\` has been banned from this server,\nbut has not been added to the Agent Black Blacklist!\n**Other servers are NOT getting warned.**\nYour ban reason was rejected: \`${fixedReason}\``,
