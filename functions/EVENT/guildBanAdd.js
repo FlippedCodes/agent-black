@@ -80,22 +80,21 @@ module.exports.run = async ({ guild, user }) => {
   // get logChannel
   const logChannel = await client.channels.cache.get(bannedGuild.logChannelID);
 
-
   // check ban reason is valid
   if (reason === null
     || reason.length <= 2
     || config.functions.banList.blacklistedBanReasons.some((blacklistReason) => reason.toLowerCase().includes(blacklistReason.toLowerCase()))) {
     if (bannedGuild && bannedGuild.active && bannedGuild.logChannelID) {
       const mainLogChannel = client.channels.cache.get(config.logChannel);
-      if (!DEBUG) {
-        await sendMessage(
-          mainLogChannel,
-          `ServerID: \`${serverID}\`\nUserTag: \`${userTag}\`\nUserID: \`${userID}\`\nReason: \`${fixedReason}\``,
-          'Invalid ban rejected!',
-          'ORANGE',
-          'Invalid ban rejected.',
-        );
-      }
+      // DISABLED: audit-logs not needed anymore
+      // if (!DEBUG) {
+      //   await sendMessage(
+      //     mainLogChannel,
+      //     `ServerID: \`${serverID}\`\nUserTag: \`${userTag}\`\nUserID: \`${userID}\`\nReason: \`${fixedReason}\``,
+      //     'Invalid ban rejected!',
+      //     'ORANGE',
+      //   );
+      // }
       // delete ban from DB if existing
       await Ban.destroy({
         limit: 1,
