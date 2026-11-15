@@ -15,6 +15,7 @@ module.exports.run = async (interaction, ParticipatingServer, serverID) => {
     const channel = await client.channels.fetch(serverFound.logChannelID);
     await channel.send(`Hello <@&${serverFound.teamRoleID}>!
 A maintainer of our bot is trying to reach out to your server.
+
 \`\`\`
 ${message}
 \`\`\`
