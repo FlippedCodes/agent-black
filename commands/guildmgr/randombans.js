@@ -13,7 +13,7 @@ module.exports.run = async (interaction, ParticipatingServer, serverID) => {
   const serverFound = await findServer(ParticipatingServer, serverID);
   if (serverFound) {
     // get 5 random bans
-    const bans = await Ban.findAll({ where: { serverID: serverFound.serverID, userBanned: 1 }, order: random(), limit: 5 });
+    const bans = await Ban.findAll({ where: { serverID: serverFound.serverID, userBanned: 1 }, order: 'rand()', limit: 5 });
     // post bans
     messageSuccess(interaction, `Bans on ${serverID}
 \`\`\`
