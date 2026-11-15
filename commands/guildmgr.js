@@ -49,6 +49,19 @@ module.exports.data = new CmdBuilder()
       .setAutocomplete(true)
       .setRequired(true)))
   .addSubcommand((SC) => SC
+    .setName('contact')
+    .setDescription('Text a guild. [MAINTAINER ONLY]')
+    .addStringOption((option) => option
+      .setName('server')
+      .setDescription('Provide a guild ID you want to contact.')
+      .setAutocomplete(true)
+      .setRequired(true))
+    .addStringOption((option) => option
+      .setName('message')
+      .setDescription('Message you want to text them with.')
+      .setAutocomplete(true)
+      .setRequired(true)))
+  .addSubcommand((SC) => SC
     .setName('block')
     .setDescription('Block guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
