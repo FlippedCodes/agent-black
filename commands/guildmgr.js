@@ -62,6 +62,14 @@ module.exports.data = new CmdBuilder()
       .setAutocomplete(true)
       .setRequired(true)))
   .addSubcommand((SC) => SC
+    .setName('randombans')
+    .setDescription('Gets 5 random bans from a guild. [MAINTAINER ONLY]')
+    .addStringOption((option) => option
+      .setName('server')
+      .setDescription('Provide a guild ID you want to probe.')
+      .setAutocomplete(true)
+      .setRequired(true)))
+  .addSubcommand((SC) => SC
     .setName('block')
     .setDescription('Block guild. [MAINTAINER ONLY]')
     .addStringOption((option) => option
