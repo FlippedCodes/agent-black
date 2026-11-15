@@ -59,7 +59,6 @@ module.exports.data = new CmdBuilder()
     .addStringOption((option) => option
       .setName('message')
       .setDescription('Message you want to text them with.')
-      .setAutocomplete(true)
       .setRequired(true)))
   .addSubcommand((SC) => SC
     .setName('randombans')
