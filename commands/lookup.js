@@ -82,61 +82,65 @@ async function getServerName(serverID) {
 }
 
 async function getGuildPoints(serverID) {
-  let totalPoints = 0;
-  const guild = await client.guilds.fetch(serverID).catch();
-  if (!guild) return NaN;
-  // required due to data missing in the cache
-  await guild.members.fetch();
-
-  // small checks
-  if (guild.mfaLevel === 'ELEVATED') totalPoints += 2;
-  if (guild.verificationLevel !== 'NONE') totalPoints += 1;
-  if (guild.explicitContentFilter === 'ALL_MEMBERS') totalPoints += 1;
-  totalPoints += guild.premiumSubscriptionCount / 3;
-  totalPoints += guild.memberCount / 100;
-  const bots = guild.members.cache.filter((member) => member.user.bot);
-  totalPoints += bots.size / -4;
-
-  // warnings/memos and bans
-  const bans = await Ban.count({ where: { serverID } }).catch(ERR);
-  totalPoints += bans / -6;
-  const warns = await Warn.count({ where: { serverID } }).catch(ERR);
-  totalPoints += warns / 5;
-
-  // bot in guild and guild age
-  const now = new Date();
   function calcMonths(date) {
     let months = (now.getFullYear() - date.getFullYear()) * 12;
     months += (now.getMonth() - date.getMonth());
     return months;
   }
-  totalPoints += calcMonths(guild.me.joinedAt) / 2;
-  totalPoints += calcMonths(guild.createdAt) / 6;
+  try {
+    let totalPoints = 0;
+    const guild = await client.guilds.fetch(serverID).catch;
+    if (!guild) return null;
+    // required due to data missing in the cache
+    await guild.members.fetch();
 
-  // get team member count
-  const serverSettings = await ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);
-  const role = await guild.roles.fetch(serverSettings.teamRoleID).catch();
-  if (!role) Math.floor(totalPoints);
-  totalPoints += role.members.size / 2;
+    // small checks
+    if (guild.mfaLevel === 'ELEVATED') totalPoints += 2;
+    if (guild.verificationLevel !== 'NONE') totalPoints += 1;
+    if (guild.explicitContentFilter === 'ALL_MEMBERS') totalPoints += 1;
+    totalPoints += guild.premiumSubscriptionCount / 3;
+    totalPoints += guild.memberCount / 100;
+    const bots = guild.members.cache.filter((member) => member.user.bot);
+    totalPoints += bots.size / -4;
 
-  // get members that are part of main guild
-  const logChannel = await client.channels.fetch(config.logChannel);
-  const mainGuild = logChannel.guild;
-  const membersOnMainServer = role.members.filter((member) => mainGuild.members.cache.filter((memberMain) => memberMain.id === member.id));
-  totalPoints += membersOnMainServer.size;
+    // warnings/memos and bans
+    const bans = await Ban.count({ where: { serverID } }).catch(ERR);
+    totalPoints += bans / -6;
+    const warns = await Warn.count({ where: { serverID } }).catch(ERR);
+    totalPoints += warns / 5;
 
-  // get owner
-  const owner = await guild.fetchOwner().catch();
-  if (owner) {
-    // check if they are already counted add only a point
-    if (role.members.has(owner.id)) totalPoints += 1;
-    else {
-      const ownerFound = await mainGuild.members.fetch(owner.id).catch();
-      if (ownerFound) totalPoints += 2;
+    // bot in guild and guild age
+    const now = new Date();
+    totalPoints += calcMonths(guild.me.joinedAt) / 2;
+    totalPoints += calcMonths(guild.createdAt) / 6;
+
+    // get team member count
+    const serverSettings = await ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);
+    const role = await guild.roles.fetch(serverSettings.teamRoleID).catch();
+    if (!role) Math.floor(totalPoints);
+    totalPoints += role.members.size / 2;
+
+    // get members that are part of main guild
+    const logChannel = await client.channels.fetch(config.logChannel);
+    const mainGuild = logChannel.guild;
+    const membersOnMainServer = role.members.filter((member) => mainGuild.members.cache.filter((memberMain) => memberMain.id === member.id));
+    totalPoints += membersOnMainServer.size;
+
+    // get owner
+    const owner = await guild.fetchOwner().catch();
+    if (owner) {
+      // check if they are already counted add only a point
+      if (role.members.has(owner.id)) totalPoints += 1;
+      else {
+        const ownerFound = await mainGuild.members.fetch(owner.id).catch();
+        if (ownerFound) totalPoints += 2;
+      }
     }
-  }
 
-  return Math.floor(totalPoints);
+    return Math.floor(totalPoints);
+  } catch (err) {
+    return null;
+  }
 }
 
 // final ban posting function
@@ -145,11 +149,12 @@ function postBans(interaction, banns) {
     const embed = new MessageEmbed()
       .setDescription(`**Reason**:\n\`\`\`${ban.reason || 'None'}\`\`\``)
       .addField('ServerID', `\`${ban.serverID}\``, true)
-      .addField('Server Trust Points', `\`${await getGuildPoints(ban.serverID)}\``, true)
       .addField('Is banned', `\`${ban.userBanned}\``, true)
       .addField('BanID', `\`${ban.banID}\``, true)
       .addField('Ban creation date', date(ban.createdAt));
     if (date(ban.createdAt) !== date(ban.updatedAt)) embed.addField('Ban updated date', date(ban.updatedAt));
+    const points = await getGuildPoints(ban.serverID);
+    if (points) embed.addField('Server Trust Points', `\`${points}\``, true);
     const serverName = await getServerName(ban.serverID);
     // check if user is still banned
     if (ban.userBanned) {
@@ -174,10 +179,11 @@ function postWarns(interaction, warns) {
       .setDescription(`**Reason**:\n\`\`\`${warn.reason || 'None'}\`\`\``)
       .setAuthor({ name: `Memo created in ${serverName}` })
       .addField('ServerID', `\`${warn.serverID}\``, true)
-      .addField('Server Trust Points', `\`${await getGuildPoints(warn.serverID)}\``, true)
       .addField('MemoID', `\`${warn.warnID}\``, true)
       .addField('Memo creation date', date(warn.createdAt));
     if (date(warn.createdAt) !== date(warn.updatedAt)) embed.addField('Memo updated date', date(warn.updatedAt));
+    const points = await getGuildPoints(warn.serverID);
+    if (points) embed.addField('Server Trust Points', `\`${points}\``, true);
     reply(interaction, { embeds: [embed] }, true);
   });
 }
