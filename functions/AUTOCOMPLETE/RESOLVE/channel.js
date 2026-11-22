@@ -2,6 +2,11 @@
 This function provides a autocomplete for channels in another server.
 This is needed, as discords built in search only searches the server where the command is executed in
 */
+const VALID_TYPES = [
+  ChannelType.GuildText,
+  ChannelType.PrivateThread,
+  ChannelType.PublicThread
+];
 
 module.exports.run = async (searchInput, guildId) => {
   // if (searchInput.length <= 2) return [];
@@ -10,7 +15,14 @@ module.exports.run = async (searchInput, guildId) => {
   if (!guild) return [{ name: 'Define server first.', value: '0' }];
 
   const channels = guild.channels.cache
-    .filter((channel) => channel.type === 'GUILD_TEXT');
+    .filter((channel) => VALID_TYPES.includes(channel.type))
+    .map((channel) => {
+      if (channel.type !== ChannelType.GuildText) {
+        // Notify maintainers this is a thread
+        channel.name += channel.Name + ` (Thread in ${channel.parent.name || "???"})`
+      }
+      return channel;
+    });
 
   // id search
   if (searchInput !== '' && !isNaN(searchInput)) {

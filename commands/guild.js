@@ -1,4 +1,5 @@
 const ParticipatingServer = require('../database/models/ParticipatingServer');
+const { ChannelType } = require('discord.js');
 
 // check if server has feature enabled.
 async function checkFeature(serverID) {
@@ -31,7 +32,11 @@ module.exports.data = new CmdBuilder()
     .addChannelOption((option) => option
       .setName('channel')
       .setDescription('Provide a channel you want Agent Black to report to.')
-      .addChannelType(0)
+      .addChannelType(
+        ChannelType.GuildText,
+        ChannelType.PrivateThread,
+        ChannelType.PublicThread
+      )
       .setRequired(true))
     .addRoleOption((option) => option
       .setName('role')
