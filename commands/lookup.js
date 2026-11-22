@@ -83,6 +83,7 @@ async function getServerName(serverID) {
 
 async function getGuildPoints(serverID) {
   function calcMonths(date) {
+    const now = new Date();
     let months = (now.getFullYear() - date.getFullYear()) * 12;
     months += (now.getMonth() - date.getMonth());
     return months;
@@ -110,7 +111,6 @@ async function getGuildPoints(serverID) {
     totalPoints += warns / 5;
 
     // bot in guild and guild age
-    const now = new Date();
     totalPoints += calcMonths(guild.me.joinedAt) / 2;
     totalPoints += calcMonths(guild.createdAt) / 6;
 
