@@ -89,7 +89,7 @@ async function getGuildPoints(serverID) {
   }
   try {
     let totalPoints = 0;
-    const guild = await client.guilds.fetch(serverID).catch;
+    const guild = await client.guilds.fetch(serverID).catch();
     if (!guild) return null;
     // required due to data missing in the cache
     await guild.members.fetch();
