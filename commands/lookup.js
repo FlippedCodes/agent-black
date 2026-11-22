@@ -90,6 +90,8 @@ async function getGuildPoints(serverID) {
   }
   try {
     let totalPoints = 0;
+    const serverSettings = await ParticipatingServer.findOne({ where: { serverID, active: true } }).catch(ERR);
+    if (!serverSettings) return null;
     const guild = await client.guilds.fetch(serverID).catch();
     if (!guild) return null;
     // required due to data missing in the cache
@@ -115,7 +117,6 @@ async function getGuildPoints(serverID) {
     totalPoints += calcMonths(guild.createdAt) / 6;
 
     // get team member count
-    const serverSettings = await ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);
     const role = await guild.roles.fetch(serverSettings.teamRoleID).catch();
     if (!role) Math.floor(totalPoints);
     totalPoints += role.members.size / 2;
