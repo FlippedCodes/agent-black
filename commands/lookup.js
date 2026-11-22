@@ -83,7 +83,8 @@ async function getServerName(serverID) {
 
 async function getGuildPoints(serverID) {
   let totalPoints = 0;
-  const guild = await client.guilds.fetch(serverID).catch(() => NaN);
+  const guild = await client.guilds.fetch(serverID).catch();
+  if (!guild) return NaN;
   // required due to data missing in the cache
   await guild.members.fetch();
 
@@ -102,26 +103,6 @@ async function getGuildPoints(serverID) {
   const warns = await Warn.count({ where: { serverID } }).catch(ERR);
   totalPoints += warns / 5;
 
-  // get team member count
-  const serverSettings = await ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);
-  const role = await guild.roles.fetch(serverSettings.teamRoleID);
-  totalPoints += role.members.size / 2;
-
-  // get members that are part of main guild
-  const logChannel = await client.channels.fetch(config.logChannel);
-  const mainGuild = logChannel.guild;
-  const membersOnMainServer = role.members.filter((member) => mainGuild.members.cache.filter((memberMain) => memberMain.id === member.id));
-  totalPoints += membersOnMainServer.size;
-
-  // get owner
-  const owner = await guild.fetchOwner();
-  // check if they are already counted add only a point
-  if (role.members.has(owner.id)) totalPoints += 1;
-  else {
-    const ownerFound = await mainGuild.members.fetch(owner.id);
-    if (ownerFound) totalPoints += 2;
-  }
-
   // bot in guild and guild age
   const now = new Date();
   function calcMonths(date) {
@@ -131,6 +112,29 @@ async function getGuildPoints(serverID) {
   }
   totalPoints += calcMonths(guild.me.joinedAt) / 2;
   totalPoints += calcMonths(guild.createdAt) / 6;
+
+  // get team member count
+  const serverSettings = await ParticipatingServer.findOne({ where: { serverID } }).catch(ERR);
+  const role = await guild.roles.fetch(serverSettings.teamRoleID).catch();
+  if (!role) Math.floor(totalPoints);
+  totalPoints += role.members.size / 2;
+
+  // get members that are part of main guild
+  const logChannel = await client.channels.fetch(config.logChannel);
+  const mainGuild = logChannel.guild;
+  const membersOnMainServer = role.members.filter((member) => mainGuild.members.cache.filter((memberMain) => memberMain.id === member.id));
+  totalPoints += membersOnMainServer.size;
+
+  // get owner
+  const owner = await guild.fetchOwner().catch();
+  if (owner) {
+    // check if they are already counted add only a point
+    if (role.members.has(owner.id)) totalPoints += 1;
+    else {
+      const ownerFound = await mainGuild.members.fetch(owner.id).catch();
+      if (ownerFound) totalPoints += 2;
+    }
+  }
 
   return Math.floor(totalPoints);
 }
